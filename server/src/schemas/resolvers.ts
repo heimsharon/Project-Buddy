@@ -6,7 +6,7 @@ import UserModel from '../models/User.js';
 
 interface User {
     _id: string;
-    username: string;
+    name: string;
     email: string;
     password: string;
 }
@@ -20,24 +20,45 @@ interface BudgetItem {
 
 interface Project {
     _id: string;
-    name: string;
+    title: string;
     description: string;
-    budgetId: string;
-    userId: string;
+    type: string;
+    dimensions?: {
+        length?: number;
+        width?: number;
+        height?: number;
+    };
+    createdBy: string;
+    checklist: string[];
+    budget: string[];
+    createdAt: Date;
 }
 
 interface Material {
     _id: string;
     name: string;
-    quantity: number;
-    projectId: string;
+    category: 'fencing' | 'paint' | 'drywall' | 'hardware' | 'flooring' | 'tools';
+    unit: string;
+    unitCoverage: {
+        length_ft: number;
+        width_ft: number;
+        height_ft: number;
+        sqft: number;
+        quantity: number;
+    };
+    priceUSD: number;
+    vendor?: string;
+    lastUpdated: Date;
+    projectId?: Number;
 }
 
 interface Task {
     _id: string;
-    name: string;
-    description: string;
     projectId: string;
+    title: string;
+    dueDate?: Date;
+    completed: boolean;
+    notes?: string;
 }
 
 const resolvers = {
