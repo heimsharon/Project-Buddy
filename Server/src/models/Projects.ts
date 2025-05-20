@@ -10,9 +10,11 @@ interface IProject extends Document {
       height?: number;
     };
     createdBy: Types.ObjectId;
+    materials: Types.ObjectId[];
     checklist: Types.ObjectId[];
     budget: Types.ObjectId[];
     createdAt: Date;
+    dueDate?: Date;
   }
   
   const projectSchema = new Schema<IProject>({
@@ -29,6 +31,10 @@ interface IProject extends Document {
       ref: 'User',
       required: true
     },
+    materials: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Material'
+    }],
     checklist: [{
       type: Schema.Types.ObjectId,
       ref: 'Task'
@@ -40,6 +46,10 @@ interface IProject extends Document {
     createdAt: {
       type: Date,
       default: Date.now
+    },
+    dueDate: {
+      type: Date,
+      default: null
     }
   });
   
