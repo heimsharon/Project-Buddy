@@ -18,7 +18,7 @@ const messageSchema = new Schema<IMessage>({
         enum: ['user', 'bot'],
         required: true
     },
-    messages: {
+    message: {
         type: String,
         required: true
     },
