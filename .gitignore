@@ -1,25 +1,71 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-.yml
+# Node dependencies
+/node_modules/
+/client/node_modules/
+/server/node_modules/
 
-# testing
-/coverage
+# Yarn/PNPM
+.pnp*
+.yarn/
+.yarnrc.yml
+.pnpm-debug.log
 
-# production
-/build
+# Build output
+/dist/
+/build/
+/client/dist/
+/server/dist/
+/server/build/
+/client/build/
 
-# misc
-.DS_Store
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# TypeScript
+*.tsbuildinfo
 
+# Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+/coverage/
+client/coverage/
+server/coverage/
+
+# Env files
+.env
+.env.*
+client/.env
+client/.env.*
+server/.env
+server/.env.*
+
+# Misc
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor/IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Build artifacts (exclude src/ for source maps)
+*.js
+*.js.map
+*.d.ts
+!server/src/**/*.js
+!server/src/**/*.js.map
+!server/src/**/*.d.ts
+!client/src/**/*.js
+!client/src/**/*.js.map
+!client/src/**/*.d.ts
