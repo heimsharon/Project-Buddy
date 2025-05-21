@@ -59,8 +59,9 @@ const typeDefs = `
         getMaterialById(id: ID!): Material
         getAllTasks: [Task]
         getTaskById(id: ID!): Task
-        getAllChatLogs: [ChatLog]
         getChatLogById(id: ID!): ChatLog
+        getChatLogsByProjectId(projectId: ID!): [ChatLog]
+        getChatLogs: [ChatLog]
     }
 
     type Mutation {
