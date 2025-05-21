@@ -3,7 +3,6 @@ import Project from '../models/Projects.js';
 import Material from '../models/Material.js';
 import Task from '../models/Task.js';
 import UserModel from '../models/User.js';
-import ChatLog from '../models/Message.js';
 
 interface User {
     _id: string;
@@ -62,17 +61,6 @@ interface Task {
     notes?: string;
 }
 
-interface ChatLog {
-    _id: string;
-    projectId: string;
-    messages: {
-        sender: 'user' | 'bot';
-        message: string;
-        timestamp: Date;
-    }[];
-    createdAt: Date;
-}
-
 const resolvers = {
     Query: {
         getAllUsers: async () => {
@@ -105,15 +93,6 @@ const resolvers = {
         getTaskById: async (_: any, { id }: { id: string }) => {
             return await Task.findById(id);
         },
-        getChatLogById: async (_: any, { id }: { id: string }) => {
-            return await ChatLog.findById(id);
-        },
-        getChatLogByProjectId: async (_: any, { projectId }: { projectId: string }) => {
-            return await ChatLog.findOne({ projectId });
-        },
-        getChatLogs: async () => {
-            return await ChatLog.find();
-        }
     },
     Mutations: {
         createUser: async (_: any, { User }: { User: User }) => {
@@ -167,16 +146,6 @@ const resolvers = {
         deleteTask: async (_: any, { id }: { id: string }) => {
             return await Task.findByIdAndDelete(id);
         },
-        createChatLog: async (_: any, { chatLog }: { chatLog: ChatLog }) => {
-            const newChatLog = new ChatLog(chatLog);
-            return await newChatLog.save();
-        },
-        updateChatLog: async (_: any, { id, chatLog }: { id: string; chatLog: ChatLog }) => {
-            return await ChatLog.findByIdAndUpdate(id, chatLog, { new: true });
-        },
-        deleteChatLog: async (_: any, { id }: { id: string }) => {
-            return await ChatLog.findByIdAndDelete(id);
-        }
     },
 };
 
