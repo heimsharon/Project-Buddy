@@ -16,6 +16,7 @@ interface IMaterial extends Document {
     priceUSD: number;
     vendor?: string;
     lastUpdated: Date;
+    projectId?: Number;
 }
 
 
@@ -58,6 +59,10 @@ const materialSchema = new Schema<IMaterial>({
   lastUpdated: {
     type: Date,
     default: Date.now
+  },
+  projectId: {
+    type: Number,
+    ref : 'Project'
   }
 });
 
