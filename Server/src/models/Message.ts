@@ -41,8 +41,21 @@ const chatlogSchema = new Schema<IChatLog>({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
     }
 })
+
+// automatically update the updatedAt field on message "push"
+chatlogSchema.pre('save', function (next) {
+    this.updatedAt = new Date();
+    next();
+});
+
+//index updatedAt field for faster queries
+chatlogSchema.index({updatedAt: -1});
 
 const ChatLog = model<IChatLog>('ChatLog', chatlogSchema);
 export default ChatLog;
