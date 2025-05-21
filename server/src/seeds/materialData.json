@@ -1,0 +1,321 @@
+[
+  {
+    "name": "8ft Fence Panel",
+    "catagory": "fencing",
+    "unit": "panel",
+    "unitCoverage": {
+      "length_ft": 8      
+    },
+    "priceUSD": 79.98,
+    "vender": "Home Depot"
+  },
+  {
+    "name": "Valspar Signature Paint (Gallon)",
+    "category": "paint",
+    "unit": "gallon",
+    "unitCoverage": {
+      "sqft": 400
+    },
+    "priceUSD": 48.98,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Drywall Sheet 4x8",
+    "category": "drywall",
+    "unit": "sheet",
+    "unitCoverage": {
+      "width_ft": 4,
+      "height_ft": 8,
+      "sqft": 32
+    },
+    "priceUSD": 15.75,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "2x4x8 Lumber",
+    "category": "lumber",
+    "unit": "board",
+    "unitCoverage": {
+      "length_ft": 8,
+      "width_in": 2,
+      "thickness_in": 4
+    },
+    "priceUSD": 3.50,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Concrete Mix (80 lb bag)",
+    "category": "concrete",
+    "unit": "bag",
+    "unitCoverage": {
+      "weight_lb": 80
+    },
+    "priceUSD": 5.98,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Roofing Shingles (bundle)",
+    "category": "roofing",
+    "unit": "bundle",
+    "unitCoverage": {
+      "sqft": 33.3
+    },
+    "priceUSD": 29.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "4 inch PVC Pipe (10 ft)",
+    "category": "plumbing",
+    "unit": "pipe",
+    "unitCoverage": {
+      "length_ft": 10
+    },
+    "priceUSD": 12.50,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Electrical Wire (250 ft)",
+    "category": "electrical",
+    "unit": "roll",
+    "unitCoverage": {
+      "length_ft": 250
+    },
+    "priceUSD": 89.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Ceramic Tile (1 sq ft)",
+    "category": "flooring",
+    "unit": "tile",
+    "unitCoverage": {
+      "sqft": 1
+    },
+    "priceUSD": 2.50,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Insulation Batts (R-13)",
+    "category": "insulation",
+    "unit": "batt",
+    "unitCoverage": {
+      "width_in": 15,
+      "length_ft": 4,
+      "thickness_in": 3.5
+    },
+    "priceUSD": 12.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Decking Board (5/4x6x8)",
+    "category": "decking",
+    "unit": "board",
+    "unitCoverage": {
+      "length_ft": 8,
+      "width_in": 5.4,
+      "thickness_in": 1.25
+    },
+    "priceUSD": 9.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Deck Stain (5 Gallon)",
+    "category": "stain",
+    "unit": "gallon",
+    "unitCoverage": {
+      "sqft": 1500
+    },
+    "priceUSD": 149.99,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Patio Pavers (12x12)",
+    "category": "landscaping",
+    "unit": "paver",
+    "unitCoverage": {
+      "width_in": 12,
+      "length_in": 12,
+      "sqft": 1
+    },
+    "priceUSD": 3.00,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Gravel (1 ton)",
+    "category": "landscaping",
+    "unit": "ton",
+    "unitCoverage": {
+      "weight_ton": 1
+    },
+    "priceUSD": 45.00,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Siding Panel (4x8)",
+    "category": "siding",
+    "unit": "panel",
+    "unitCoverage": {
+      "width_ft": 4,
+      "height_ft": 8,
+      "sqft": 32
+    },
+    "priceUSD": 25.00,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Caulk (10 oz tube)",
+    "category": "tools",
+    "unit": "tube",
+    "unitCoverage": {
+      "length_ft": 50
+    },
+    "priceUSD": 4.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Hammer",
+    "category": "tools",
+    "unit": "each",
+    "priceUSD": 12.99,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Dewalt Cordless Drill",
+    "category": "tools",
+    "unit": "each",
+    "priceUSD": 129.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Circular Saw",
+    "category": "tools",
+    "unit": "each",
+    
+    "priceUSD": 99.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Decking nails (1 lb box)",
+    "category": "hardware",
+    "unit": "box",
+    "unitCoverage": {
+      "weight_lb": 1,
+      "length_in": 2.5,
+      "quantity": 100
+    },
+    "priceUSD": 5.99,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Hvac Filter (16x20x1)",
+    "category": "HVAC",
+    "unit": "filter",
+    "unitCoverage": {
+      "width_in": 16,
+      "height_in": 20,
+      "thickness_in": 1
+    },
+    "priceUSD": 9.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "brick (standard size)",
+    "category": "masonry",
+    "unit": "brick",
+    "unitCoverage": {
+      "width_in": 3.5,
+      "length_in": 7.5,
+      "height_in": 2.25
+    },
+    "priceUSD": 0.50,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Mortar Mix (60 lb bag)",
+    "category": "masonry",
+    "unit": "bag",
+    "unitCoverage": {
+      "weight_lb": 60
+    },
+    "priceUSD": 6.50,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Plywood Sheet (4x8)",
+    "category": "lumber",
+    "unit": "sheet",
+    "unitCoverage": {
+      "width_ft": 4,
+      "height_ft": 8,
+      "sqft": 32
+    },
+    "priceUSD": 25.00,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Roofing Nails (1 lb box)",
+    "category": "hardware",
+    "unit": "box",
+    "unitCoverage": {
+      "weight_lb": 1,
+      "length_in": 1,
+      "quantity": 100
+    },
+    "priceUSD": 3.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Wood Screws (1 lb box)",
+    "category": "hardware",
+    "unit": "box",
+    "unitCoverage": {
+      "weight_lb": 1,
+      "length_in": 1,
+      "quantity": 100
+    },
+    "priceUSD": 4.49,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Screws (1 lb box)",
+    "category": "hardware",
+    "unit": "box",
+    "unitCoverage": {
+      "weight_lb": 1,
+      "length_in": 1,
+      "quantity": 100
+    },
+    "priceUSD": 4.99,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Pressure Treated Lumber (4x4x4)",
+    "category": "lumber",
+    "unit": "board",
+    "unitCoverage": {
+      "length_ft": 8,
+      "width_in": 4,
+      "thickness_in": 4
+    },
+    "priceUSD": 17.12,
+    "vendor": "Lowe's"
+  },
+  {
+    "name": "Joist Hanger 2x6",
+    "category": "hardware",
+    "unit": "each",
+    "priceUSD": 1.50,
+    "vendor": "Home Depot"
+  },
+  {
+    "name": "Pressure Treated Lumber (2x6x10)",
+    "category": "lumber",
+    "unit": "board",
+    "unitCoverage": {
+      "length_ft": 10,
+      "width_in": 2,
+      "thickness_in": 6
+    },
+    "priceUSD": 8.50,
+    "vendor": "Lowe's"
+  }
+]
