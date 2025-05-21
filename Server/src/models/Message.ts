@@ -10,6 +10,7 @@ interface IChatLog extends Document {
     projectId: Types.ObjectId;
     messages: IMessage[];
     createdAt: Date;
+    updatedAt: Date;
 }
 
 const messageSchema = new Schema<IMessage>({
