@@ -105,13 +105,15 @@ const resolvers = {
         getTaskById: async (_: any, { id }: { id: string }) => {
             return await Task.findById(id);
         },
-        getAllChatLogs: async () => {
-            return await ChatLog.find();
-        },
         getChatLogById: async (_: any, { id }: { id: string }) => {
             return await ChatLog.findById(id);
         },
-
+        getChatLogByProjectId: async (_: any, { projectId }: { projectId: string }) => {
+            return await ChatLog.findOne({ projectId });
+        },
+        getChatLogs: async () => {
+            return await ChatLog.find();
+        }
     },
     Mutations: {
         createUser: async (_: any, { User }: { User: User }) => {
