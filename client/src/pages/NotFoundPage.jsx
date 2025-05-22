@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function NotFoundPage() {
     return (
       <div className="not-found">
@@ -5,4 +7,4 @@ export default function NotFoundPage() {
         <p>Page not found</p>
       </div>
     );
-  }
+  }458*10//*/
