@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import OpenAI from 'openai';
-import Material from '../../models/Material.js'; //Mongoose model
+import Material from '../models/Material.js'; //Mongoose model
 
 const router = express.Router();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY as string });
