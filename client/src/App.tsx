@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import {
     ApolloClient,
@@ -8,8 +9,8 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
 
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './components/Header.tsx';
+import Footer from './components/Footer.tsx';
 import ProjectBuddyBot from './components/chatbot/ProjectBuddyBot';
 
 // Construct our main GraphQL API endpoint
