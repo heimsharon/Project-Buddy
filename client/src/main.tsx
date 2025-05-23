@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-
+import './assets/styles/index.css';
 
 import App from './App.jsx';
 import Home from './pages/Homepage';
