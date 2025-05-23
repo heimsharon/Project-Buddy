@@ -61,7 +61,3 @@ chatlogSchema.index({updatedAt: -1});
 
 const ChatLog = model<IChatLog>('ChatLog', chatlogSchema);
 export default ChatLog;
-
-
-
-

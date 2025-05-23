@@ -1,26 +1,14 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# Node dependencies
-/node_modules/
-/client/node_modules/
-/server/node_modules/
-
-# Yarn/PNPM
-.pnp*
-.yarn/
-.yarnrc.yml
-.pnpm-debug.log
+# Dependencies
+node_modules/
+.github
 
 # Build output
-/dist/
-/build/
-/client/dist/
-/server/dist/
-/server/build/
-/client/build/
+dist/
+build/
 
-# TypeScript
-*.tsbuildinfo
+# Env files
+.env
+.env.*
 
 # Logs
 logs/
@@ -32,40 +20,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Testing
-/coverage/
-client/coverage/
-server/coverage/
-
-# Env files
-.env
-.env.*
-client/.env
-client/.env.*
-server/.env
-server/.env.*
+coverage/
 
 # Misc
 .DS_Store
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# Editor/IDE
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Build artifacts (exclude src/ for source maps)
-*.js
-*.js.map
-*.d.ts
-!server/src/**/*.js
-!server/src/**/*.js.map
-!server/src/**/*.d.ts
-!client/src/**/*.js
-!client/src/**/*.js.map
-!client/src/**/*.d.ts

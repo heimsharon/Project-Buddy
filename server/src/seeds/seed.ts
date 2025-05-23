@@ -1,6 +1,6 @@
 import db from '../config/connection.js';
 import { Material } from '../models/index.js';
-import materialSeeds from './materialData.json' assert { type: "json" };
+import materialSeeds from './materialData.json' with { type: "json" };
 import cleanDB from './cleanDB.js';
 
 const seedDatabase = async (): Promise<void> => {
