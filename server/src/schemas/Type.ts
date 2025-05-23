@@ -75,8 +75,8 @@ const typeDefs = `
     }
 
     type Mutation {
-        createUser(username: String!, email: String!, password: String!): Auth
-        updateUser(id: ID!, username: String, email: String, password: String): User
+        createUser(name: String!, email: String!, password: String!): Auth
+        updateUser(id: ID!, name: String, email: String, password: String): User
         deleteUser(id: ID!): User
 
         createBudgetItem(name: String!, amount: Float!, projectId: ID!): BudgetItem

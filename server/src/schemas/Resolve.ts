@@ -120,7 +120,7 @@ const resolvers = {
         createUser: async (_: any, args : { email: string, password: string, username: string }) => {
             const newUser = new UserModel(args);
             newUser.save();
-            const token = signToken(newUser.username, newUser.email, newUser._id);
+            const token = signToken(newUser.name, newUser.email, newUser._id);
             return { user: newUser, token };
         },
         updateUser: async (_: any, { id, User }: { id: string; User: User }) => {

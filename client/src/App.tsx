@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+// import './App.css';
 import {
     ApolloClient,
     InMemoryCache,
@@ -12,7 +12,6 @@ import { Outlet } from 'react-router-dom';
 import Header from './components/shared/Header';
 import Footer from './components/shared/Footer';
 import ProjectBuddyBot from './components/chatbot/ProjectBuddyBot';
-import React from 'react';
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
