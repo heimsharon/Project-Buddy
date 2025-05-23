@@ -12,9 +12,9 @@ export const LOGIN_USER = gql`
   }
 `;
 
-export const ADD_USER = gql`
-  mutation Mutation($input: UserInput!) {
-  addUser(input: $input) {
+export const CREATE_USER = gql`
+  mutation Mutation($username: String!, $email: String!, $password: String!) {
+  createUser(username: $username, email: $email, password: $password) {
     user {
       username
       _id
