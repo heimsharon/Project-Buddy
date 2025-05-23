@@ -9,7 +9,7 @@ import React from 'react';
 
 const Signup = () => {
   const [formState, setFormState] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
   });
@@ -56,7 +56,7 @@ const Signup = () => {
                   placeholder="Your username"
                   name="username"
                   type="text"
-                  value={formState.name}
+                  value={formState.username}
                   onChange={handleChange}
                 />
                 <input
@@ -98,4 +98,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
