@@ -117,9 +117,9 @@ const resolvers = {
         }
     },
     Mutation: {
-        createUser: async (_: any, args : { email: string, password: string, username: string }) => {
+        createUser: async (_: any, args : { email: string, password: string, name: string }) => {
             const newUser = new UserModel(args);
-            newUser.save();
+            await newUser.save();
             const token = signToken(newUser.username, newUser.email, newUser._id);
             return { user: newUser, token };
         },
