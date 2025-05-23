@@ -1,13 +1,27 @@
-import React from "react";
+import React from 'react';
+interface ProjectCardProps {
+  id: string;
+  name: string;
+  budget: number;
+  status: 'planning' | 'in-progress' | 'completed';
+  onClick?: (id: string) => void;
+}
 
-export default function ProjectCard() {
-    return (
-      <div className="project-card">
-        <h3>Build a Bookshelf</h3>
-        <p>Status: Planning</p>
-        <div className="progress-bar">
-          <div style={{ width: "30%" }}></div> {/* Static progress */}
-        </div>
-      </div>
-    );
-  }
+export default function ProjectCard({
+  id,
+  name,
+  budget,
+  status,
+  onClick,
+}: ProjectCardProps) {
+  return (
+    <div 
+      className={`project-card ${status}`}
+      onClick={() => onClick?.(id)}
+    >
+      <h3>{name}</h3>
+      <p>Budget: ${budget.toFixed(2)}</p>
+      <span className="status-badge">{status}</span>
+    </div>
+  );
+}
