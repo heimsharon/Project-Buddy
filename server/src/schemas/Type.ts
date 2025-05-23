@@ -1,126 +1,104 @@
-const TypeDefs = `
+const typeDefs = `
     type User {
-        _id: ID
-        username: String
-        email: String
-        password: String
-        skills: [String]
-    }
-
-    type Project {
-        _id: ID
-        name: String
-        description: String
-        type: String
-        dimensions: [Dimensions]
-        createdBy: [User]
-        materials: [Material]
-        checklist: [Task]
-        budget: [BudgetItem]
-        createdAt: String
-        dueDate: String
-    }
-
-    type Dimensions {
-        _id: ID
-        length: Float
-        width: Float
-        height: Float
-    }
-
-    type Task {
-        _id: ID
-        title: String
-        dueDate: String
-        completed: Boolean
-        notes: String
+        _id: ID!
+        name: String!
+        email: String!
+        password: String!
     }
 
     type BudgetItem {
-        _id: ID
-        projectId: [Project]
-        material: [Material]
-        name: String
-        cost: Float
-        quantity: Int
-        notes: String
+        _id: ID!
+        name: String!
+        amount: Float!
+        projectId: ID!
+    }
+
+    type Project {
+        _id: ID!
+        name: String!
+        description: String!
+        budgetId: ID!
+        userId: ID!
     }
 
     type Material {
-        _id: ID
-        name: String
-        category: String
-        unit: String
-        unitCoverage: UnitCoverage
-        priceUSD: Float
-        vendor: String
-        lastUpdated: String
-        projectId: [Project]
+        _id: ID!
+        name: String!
+        quantity: Int!
+        projectId: ID!
     }
 
-    type UnitCoverage {
-        length_ft: Float
-        width_ft: Float
-        height_ft: Float
-        sqft: Float
-        quantity: Float
+    type Task {
+        _id: ID!
+        name: String!
+        description: String!
+        projectId: ID!
     }
 
     type ChatLog {
-        _id: ID
-        projectId: [Project]
-        messages: [Message]
+        _id: ID!
+        projectId: ID!
+        messages: [Message!]!
+        createdAt: String!
     }
 
     type Message {
-        _id: ID
-        sender: User
-        content: String
+        sender: String!
+        message: String!
+        timestamp: String!
     }
-
     type Auth {
         token: ID!
         user: User
     }
+    
+    input MessageInput {
+        sender: String!
+        message: String!
+        timestamp: String!
+    }
 
     type Query {
-        getUser(_id: ID!): [User]
         getAllUsers: [User]
-        getProject(_id: ID!): [Project]
-        getAllProjects: [Project]
-        getMaterial(_id: ID!): [Material]
-        getAllMaterials: [Material]
-        getTask(_id: ID!): [Task]
-        getAllTasks: [Task]
-        getBudgetItem(_id: ID!): [BudgetItem]
+        getUserById(id: ID!): User
         getAllBudgetItems: [BudgetItem]
-        getChatLog(_id: ID!): [ChatLog]
-        getAllChatLogs: [ChatLog]
-        getMessages(chatLogId: ID!): [Message]
-        getallMessages: [Message]
+        getBudgetItemById(id: ID!): BudgetItem
+        getAllProjects: [Project]
+        getProjectById(id: ID!): Project
+        getAllMaterials: [Material]
+        getMaterialById(id: ID!): Material
+        getAllTasks: [Task]
+        getTaskById(id: ID!): Task
+        getChatLogById(id: ID!): ChatLog
+        getChatLogsByProjectId(projectId: ID!): [ChatLog]
+        getChatLogs: [ChatLog]
     }
 
     type Mutation {
-        createUser(username: String!, email: String!, password: String!): User
-        login(email: String!, password: String!): Auth
-        updateUser(_id: ID!, username: String, email: String, password: String): User
-        deleteUser(_id: ID!): User
-        createProject(name: String!, description: String, type: String, dimensions: Dimensions): Project
-        updateProject(_id: ID!, name: String, description: String, type: String, dimensions: Dimensions): Project
-        deleteProject(_id: ID!): Project
-        createTask(title: String!, dueDate: String, completed: Boolean, notes: String): Task
-        updateTask(_id: ID!, title: String, dueDate: String, completed: Boolean, notes: String): Task
-        deleteTask(_id: ID!): Task
-        createBudgetItem(projectId: ID!, material: Material, name: String!, cost: Float!, quantity: Int!, notes: String): BudgetItem
-        updateBudgetItem(_id: ID!, projectId: ID, material: Material, name: String, cost: Float, quantity: Int, notes: String): BudgetItem
-        deleteBudgetItem(_id: ID!): BudgetItem
-        createMaterial(name: String!, category: String!, unit: String!, unitCoverage: UnitCoverage, priceUSD: Float!, vendor: String): Material
-        updateMaterial(_id: ID!, name: String, category: String, unit: String, unitCoverage: UnitCoverage, priceUSD: Float, vendor: String): Material
-        deleteMaterial(_id: ID!): Material
-        createChatLog(projectId: ID!, messages: [Message]): ChatLog
-        updateChatLog(_id: ID!, projectId: ID, messages: [Message]): ChatLog
-        deleteChatLog(_id: ID!): ChatLog
+        createUser(username: String!, email: String!, password: String!): Auth
+        updateUser(id: ID!, username: String, email: String, password: String): User
+        deleteUser(id: ID!): User
+
+        createBudgetItem(name: String!, amount: Float!, projectId: ID!): BudgetItem
+        updateBudgetItem(id: ID!, name: String, amount: Float): BudgetItem
+        deleteBudgetItem(id: ID!): BudgetItem
+
+        createProject(name: String!, description: String!, budgetId: ID!, userId: ID!): Project
+        updateProject(id: ID!, name: String, description: String, budgetId: ID, userId: ID): Project
+        deleteProject(id: ID!): Project
+
+        createMaterial(name: String!, quantity: Int!, projectId: ID!): Material
+        updateMaterial(id: ID!, name: String, quantity: Int): Material
+        deleteMaterial(id: ID!): Material
+
+        createTask(name: String!, description: String!, projectId: ID!): Task
+        updateTask(id: ID!, name: String, description: String, projectId: ID): Task
+        deleteTask(id: ID!): Task
+
+        createChatLog(projectId: ID!, messages: [MessageInput]!): ChatLog
+        updateChatLog(id: ID!, messages: [MessageInput]!): ChatLog
+        deleteChatLog(id: ID!): ChatLog
     }
 `;
 
-export default TypeDefs;
+export default typeDefs;
