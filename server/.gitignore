@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-.github
 
 # Build output
 dist/
