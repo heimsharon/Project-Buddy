@@ -9,7 +9,7 @@ import React from 'react';
 
 const Signup = () => {
   const [formState, setFormState] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
   });
@@ -98,4 +98,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
