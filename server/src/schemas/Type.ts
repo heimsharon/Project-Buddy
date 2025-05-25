@@ -51,7 +51,7 @@ const typeDefs = `
         token: ID!
         user: User
     }
-    
+
     input MessageInput {
         sender: String!
         message: String!
