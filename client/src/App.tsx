@@ -1,3 +1,5 @@
+import React from 'react';
+import './App.css';
 import {
     ApolloClient,
     InMemoryCache,
@@ -6,7 +8,6 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
-
 import Header from './components/shared/Header';
 import Footer from './components/shared/Footer';
 import ProjectBuddyBot from './components/chatbot/ProjectBuddyBot';

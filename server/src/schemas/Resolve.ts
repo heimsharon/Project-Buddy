@@ -16,14 +16,17 @@ interface User {
 interface BudgetItem {
     _id: string;
     name: string;
-    amount: number;
+    cost: number;
+    quantity: number;
     projectId: string;
+    materialId?: string;
+    notes?: string;
 }
 
 interface Project {
     _id: string;
     title: string;
-    description: string;
+    description?: string;
     type: string;
     dimensions?: {
         length?: number;
@@ -31,27 +34,52 @@ interface Project {
         height?: number;
     };
     createdBy: string;
+    materials: string[];
     checklist: string[];
     budget: string[];
     createdAt: Date;
+    dueDate?: Date;
 }
 
 interface Material {
     _id: string;
     name: string;
-    category: 'fencing' | 'paint' | 'drywall' | 'hardware' | 'flooring' | 'tools';
+    category:
+        | 'fencing'
+        | 'paint'
+        | 'drywall'
+        | 'lumber'
+        | 'concrete'
+        | 'roofing'
+        | 'plumbing'
+        | 'electrical'
+        | 'flooring'
+        | 'insulation'
+        | 'decking'
+        | 'stain'
+        | 'landscaping'
+        | 'hardware'
+        | 'tools'
+        | 'HVAC'
+        | 'siding'
+        | 'masonry';
     unit: string;
     unitCoverage: {
-        length_ft: number;
-        width_ft: number;
-        height_ft: number;
-        sqft: number;
-        quantity: number;
+        length_ft?: number;
+        width_ft?: number;
+        height_ft?: number;
+        width_in?: number;
+        length_in?: number;
+        thickness_in?: number;
+        weight_lb?: number;
+        weight_ton?: number;
+        sqft?: number;
+        quantity?: number;
     };
     priceUSD: number;
     vendor?: string;
     lastUpdated: Date;
-    projectId?: Number;
+    projectId?: string;
 }
 
 interface Task {
@@ -72,114 +100,105 @@ interface ChatLog {
         timestamp: Date;
     }[];
     createdAt: Date;
+    updatedAt: Date;
 }
 
 const resolvers = {
     Query: {
-        getAllUsers: async () => {
-            return await UserModel.find();
-        },
-        getUserById: async (_: any, { id }: { id: string }) => {
-            return await UserModel.findById(id);
-        },
-        getAllBudgetItems: async () => {
-            return await BudgetItem.find();
-        },
-        getBudgetItemById: async (_: any, { id }: { id: string }) => {
-            return await BudgetItem.findById(id);
-        },
-        getAllProjects: async () => {
-            return await Project.find();
-        },
-        getProjectById: async (_: any, { id }: { id: string }) => {
-            return await Project.findById(id);
-        },
-        getAllMaterials: async () => {
-            return await Material.find();
-        },
-        getMaterialById: async (_: any, { id }: { id: string }) => {
-            return await Material.findById(id);
-        },
-        getAllTasks: async () => {
-            return await Task.find();
-        },
-        getTaskById: async (_: any, { id }: { id: string }) => {
-            return await Task.findById(id);
-        },
-        getChatLogById: async (_: any, { id }: { id: string }) => {
-            return await ChatLog.findById(id);
-        },
-        getChatLogsByProjectId: async (_: any, { projectId }: { projectId: string }) => {
-            return await ChatLog.findOne({ projectId });
-        },
-        getChatLogs: async () => {
-            return await ChatLog.find();
-        }
+        getAllUsers: async () => UserModel.find(),
+        getUserById: async (_: any, { id }: { id: string }) =>
+            UserModel.findById(id),
+        getAllBudgetItems: async () => BudgetItem.find(),
+        getBudgetItemById: async (_: any, { id }: { id: string }) =>
+            BudgetItem.findById(id),
+        getAllProjects: async () => Project.find(),
+        getProjectById: async (_: any, { id }: { id: string }) =>
+            Project.findById(id),
+        getAllMaterials: async () => Material.find(),
+        getMaterialById: async (_: any, { id }: { id: string }) =>
+            Material.findById(id),
+        getAllTasks: async () => Task.find(),
+        getTaskById: async (_: any, { id }: { id: string }) =>
+            Task.findById(id),
+        getChatLogById: async (_: any, { id }: { id: string }) =>
+            ChatLog.findById(id),
+        getChatLogsByProjectId: async (
+            _: any,
+            { projectId }: { projectId: string }
+        ) => ChatLog.find({ projectId }),
+        getChatLogs: async () => ChatLog.find(),
     },
     Mutation: {
-        createUser: async (_: any, args : { email: string, password: string, username: string }) => {
+
+        createUser: async (
+            _: any,
+            args: { email: string; password: string; name: string }
+        ) => {
             const newUser = new UserModel(args);
-            newUser.save();
-            const token = signToken(newUser.name, newUser.email, newUser._id);
+            await newUser.save();
+            const token = signToken(newUser.username, newUser.email, newUser._id);
+
+       
             return { user: newUser, token };
         },
-        updateUser: async (_: any, { id, User }: { id: string; User: User }) => {
-            return await UserModel.findByIdAndUpdate(id, User, { new: true });
-        },
-        deleteUser: async (_: any, { id }: { id: string }) => {
-            return await UserModel.findByIdAndDelete(id);
-        },
-        createBudgetItem: async (_: any, { budgetItem }: { budgetItem: BudgetItem }) => {
+        updateUser: async (_: any, { id, User }: { id: string; User: User }) =>
+            UserModel.findByIdAndUpdate(id, User, { new: true }),
+        deleteUser: async (_: any, { id }: { id: string }) =>
+            UserModel.findByIdAndDelete(id),
+        createBudgetItem: async (
+            _: any,
+            { budgetItem }: { budgetItem: BudgetItem }
+        ) => {
             const newBudgetItem = new BudgetItem(budgetItem);
             return await newBudgetItem.save();
         },
-        updateBudgetItem: async (_: any, { id, budgetItem }: { id: string; budgetItem: BudgetItem }) => {
-            return await BudgetItem.findByIdAndUpdate(id, budgetItem, { new: true });
-        },
-        deleteBudgetItem: async (_: any, { id }: { id: string }) => {
-            return await BudgetItem.findByIdAndDelete(id);
-        },
+        updateBudgetItem: async (
+            _: any,
+            { id, budgetItem }: { id: string; budgetItem: BudgetItem }
+        ) => BudgetItem.findByIdAndUpdate(id, budgetItem, { new: true }),
+        deleteBudgetItem: async (_: any, { id }: { id: string }) =>
+            BudgetItem.findByIdAndDelete(id),
         createProject: async (_: any, { project }: { project: Project }) => {
             const newProject = new Project(project);
             return await newProject.save();
         },
-        updateProject: async (_: any, { id, project }: { id: string; project: Project }) => {
-            return await Project.findByIdAndUpdate(id
-                , project, { new: true });
-        },
-        deleteProject: async (_: any, { id }: { id: string }) => {
-            return await Project.findByIdAndDelete(id);
-        },
-        createMaterial: async (_: any, { material }: { material: Material }) => {
+        updateProject: async (
+            _: any,
+            { id, project }: { id: string; project: Project }
+        ) => Project.findByIdAndUpdate(id, project, { new: true }),
+        deleteProject: async (_: any, { id }: { id: string }) =>
+            Project.findByIdAndDelete(id),
+        createMaterial: async (
+            _: any,
+            { material }: { material: Material }
+        ) => {
             const newMaterial = new Material(material);
             return await newMaterial.save();
         },
-        updateMaterial: async (_: any, { id, material }: { id: string; material: Material }) => {
-            return await Material.findByIdAndUpdate(id, material, { new: true });
-        },
-        deleteMaterial: async (_: any, { id }: { id: string }) => {
-            return await Material.findByIdAndDelete(id);
-        },
+        updateMaterial: async (
+            _: any,
+            { id, material }: { id: string; material: Material }
+        ) => Material.findByIdAndUpdate(id, material, { new: true }),
+        deleteMaterial: async (_: any, { id }: { id: string }) =>
+            Material.findByIdAndDelete(id),
         createTask: async (_: any, { task }: { task: Task }) => {
             const newTask = new Task(task);
             return await newTask.save();
         },
-        updateTask: async (_: any, { id, task }: { id: string; task: Task }) => {
-            return await Task.findByIdAndUpdate(id, task, { new: true });
-        },
-        deleteTask: async (_: any, { id }: { id: string }) => {
-            return await Task.findByIdAndDelete(id);
-        },
+        updateTask: async (_: any, { id, task }: { id: string; task: Task }) =>
+            Task.findByIdAndUpdate(id, task, { new: true }),
+        deleteTask: async (_: any, { id }: { id: string }) =>
+            Task.findByIdAndDelete(id),
         createChatLog: async (_: any, { chatLog }: { chatLog: ChatLog }) => {
             const newChatLog = new ChatLog(chatLog);
             return await newChatLog.save();
         },
-        updateChatLog: async (_: any, { id, chatLog }: { id: string; chatLog: ChatLog }) => {
-            return await ChatLog.findByIdAndUpdate(id, chatLog, { new: true });
-        },
-        deleteChatLog: async (_: any, { id }: { id: string }) => {
-            return await ChatLog.findByIdAndDelete(id);
-        }
+        updateChatLog: async (
+            _: any,
+            { id, chatLog }: { id: string; chatLog: ChatLog }
+        ) => ChatLog.findByIdAndUpdate(id, chatLog, { new: true }),
+        deleteChatLog: async (_: any, { id }: { id: string }) =>
+            ChatLog.findByIdAndDelete(id),
     },
 };
 
