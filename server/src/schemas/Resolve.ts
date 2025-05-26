@@ -136,7 +136,7 @@ const resolvers = {
         ) => {
             const newUser = new UserModel(args);
             await newUser.save();
-            const token = signToken(newUser.name, newUser.email, newUser._id);
+            const token = signToken(newUser.username, newUser.email, newUser._id);
 
        
             return { user: newUser, token };
