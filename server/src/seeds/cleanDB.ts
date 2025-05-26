@@ -1,9 +1,9 @@
-import { Material } from '../models/index.js';
+import mongoose from 'mongoose';
 
 const cleanDB = async (): Promise<void> => {
   try {
-    await Material.deleteMany({});
-    console.log('Material collection cleaned.');
+    await mongoose.connection.dropDatabase();
+    console.log('Database cleaned successfully.');
 
   } catch (err) {
     console.error('Error cleaning collections:', err);
