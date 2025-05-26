@@ -2,13 +2,13 @@ import BudgetItem from '../models/BudgetItem.js';
 import Project from '../models/Projects.js';
 import Material from '../models/Material.js';
 import Task from '../models/Task.js';
-import UserModel from '../models/User.js';
+import User from '../models/User.js';
 import ChatLog from '../models/Message.js';
 import { signToken } from '../utils/auth.js';
 
 interface User {
     _id: string;
-    name: string;
+    username: string;
     email: string;
     password: string;
 }
@@ -105,9 +105,9 @@ interface ChatLog {
 
 const resolvers = {
     Query: {
-        getAllUsers: async () => UserModel.find(),
+        getAllUsers: async () => User.find(),
         getUserById: async (_: any, { id }: { id: string }) =>
-            UserModel.findById(id),
+            User.findById(id),
         getAllBudgetItems: async () => BudgetItem.find(),
         getBudgetItemById: async (_: any, { id }: { id: string }) =>
             BudgetItem.findById(id),
@@ -132,19 +132,31 @@ const resolvers = {
 
         createUser: async (
             _: any,
-            args: { email: string; password: string; name: string }
+            args: { email: string; password: string; username: string }
         ) => {
-            const newUser = new UserModel(args);
+            const newUser = new User(args);
             await newUser.save();
             const token = signToken(newUser.username, newUser.email, newUser._id);
 
        
             return { user: newUser, token };
         },
-        updateUser: async (_: any, { id, User }: { id: string; User: User }) =>
-            UserModel.findByIdAndUpdate(id, User, { new: true }),
+        login: async (
+            _: any,
+            { email, password }: { email: string; password: string }
+        ) => {
+            const user = await User.findOne({ email });
+            await user?.isCorrectPassword(password);
+            if (!user) {
+                throw new Error('Invalid credentials');
+            }
+            const token = signToken(user.username, user.email, user._id);
+            return { user, token };
+        },
+        updateUser: async (_: any, { id, User: userInput }: { id: string; User: User }) =>
+            User.findByIdAndUpdate(id, userInput, { new: true }),
         deleteUser: async (_: any, { id }: { id: string }) =>
-            UserModel.findByIdAndDelete(id),
+            User.findByIdAndDelete(id),
         createBudgetItem: async (
             _: any,
             { budgetItem }: { budgetItem: BudgetItem }

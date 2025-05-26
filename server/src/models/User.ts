@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 
 // Define an interface for the Profile document
 interface IUser extends Document {
-  _id: string;
   username: string;
   email: string;
   password:string;
