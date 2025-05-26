@@ -10,29 +10,48 @@ const typeDefs = `
         _id: ID!
         name: String!
         amount: Float!
-        projectId: ID!
+        projectId: Project!
     }
 
     type Project {
         _id: ID!
         name: String!
         description: String!
-        budgetId: ID!
-        userId: ID!
+        budgetId: BudgetItem!
+        userId: User!
     }
 
     type Material {
         _id: ID!
         name: String!
-        quantity: Int!
-        projectId: ID!
+        category: String!
+        unit: String!
+        unitCoverage: UnitCoverage
+        quantity: Int
+        priceUSD: Float
+        vendor: String
+        lastUpdated: String
+    }
+
+    type UnitCoverage {
+        length_ft: Float
+        width_ft: Float
+        height_ft: Float
+        width_in: Float
+        length_in: Float
+        thickness_in: Float
+        weight_lb: Float
+        weight_ton: Float
+        sqft: Float
     }
 
     type Task {
         _id: ID!
-        name: String!
-        description: String!
-        projectId: ID!
+        projectId: Project!
+        title: String!
+        dueDate: String
+        completed: Boolean!
+        notes: String
     }
 
     type ChatLog {

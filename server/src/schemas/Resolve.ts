@@ -74,12 +74,11 @@ interface Material {
         weight_lb?: number;
         weight_ton?: number;
         sqft?: number;
-        quantity?: number;
     };
+    quantity?: number;
     priceUSD: number;
     vendor?: string;
     lastUpdated: Date;
-    projectId?: string;
 }
 
 interface Task {
