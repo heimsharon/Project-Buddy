@@ -1,295 +1,186 @@
 import BudgetItem from '../models/BudgetItem.js';
-import User from '../models/User.js';
 import Project from '../models/Projects.js';
-import Task from '../models/Task.js';
 import Material from '../models/Material.js';
+import Task from '../models/Task.js';
+import UserModel from '../models/User.js';
 import ChatLog from '../models/Message.js';
-import { signToken, AuthenticationError } from '../utils/auth.js';
+import { signToken } from '../utils/auth.js';
 
-interface AddUser {
-    input: {
-        name: string;
-        email: string;
-        password: string;
-    }
-}
-
-interface UserArgs {
+interface User {
+    _id: string;
     name: string;
-}
-
-
-interface LoginUser {
-    name: string;
+    email: string;
     password: string;
 }
 
-interface BudgetItemArgs {
-    name: string
+interface BudgetItem {
+    _id: string;
+    name: string;
+    amount: number;
+    projectId: string;
 }
 
-interface AddBudgetItem {
-    input: {
-        name: string;
-        amount: number;
-        projectId: typeof Project;
-    }
+interface Project {
+    _id: string;
+    title: string;
+    description: string;
+    type: string;
+    dimensions?: {
+        length?: number;
+        width?: number;
+        height?: number;
+    };
+    createdBy: string;
+    checklist: string[];
+    budget: string[];
+    createdAt: Date;
 }
 
-interface MaterialArgs {
-    name: string
+interface Material {
+    _id: string;
+    name: string;
+    category: 'fencing' | 'paint' | 'drywall' | 'hardware' | 'flooring' | 'tools';
+    unit: string;
+    unitCoverage: {
+        length_ft: number;
+        width_ft: number;
+        height_ft: number;
+        sqft: number;
+        quantity: number;
+    };
+    priceUSD: number;
+    vendor?: string;
+    lastUpdated: Date;
+    projectId?: Number;
 }
 
-interface AddMaterial {
-    input: {
-        name: string;
-        category: 'fencing' | 'paint' | 'drywall' | 'lumber' | 'concrete' | 'roofing' | 'plumbing' | 'electrical' | 'flooring' | 'insulation' | 'decking' | 'stain' | 'landscaping' | 'hardware' | 'tools' | 'HVAC' | 'siding' | 'masonry';
-        unit: string;  
-        unitCoverage: Array<{ 
-            length_ft: number;
-            width_ft: number;
-            height_ft: number;
-            width_in: number;
-            length_in: number;
-            thickness_in: number;
-            weight_lb: number;
-            weight_ton: number;
-            sqft: number;
-            quantity: number;
-        }>;
-        priceUSD: number;
-        vendor?: string;
-        lastUpdated: Date;
-        projectId?: Number;
-    }
+interface Task {
+    _id: string;
+    projectId: string;
+    title: string;
+    dueDate?: Date;
+    completed: boolean;
+    notes?: string;
 }
 
-interface AddTask {
-    input: {
-        ProjectId: typeof Project;
-        title: string;
-        dueDate?: Date;
-        completed: boolean;
-        notes?: string;
-    }
+interface ChatLog {
+    _id: string;
+    projectId: string;
+    messages: {
+        sender: 'user' | 'bot';
+        message: string;
+        timestamp: Date;
+    }[];
+    createdAt: Date;
 }
 
-interface TaskArgs {
-    title: string
-}
-
-interface AddProject {
-    input : {
-        title: string;
-        description?: string;
-        type: string;
-        dimensions?: {
-            length?: number;
-            width?: number;
-            height?: number;
-        };
-        createdBy: typeof User;
-        materials: typeof Material[];
-        checklist: typeof Task[];
-        budget: typeof BudgetItem[];
-        createdAt: Date;
-        dueDate?: Date;
-    }
-}
-
-interface ProjectArgs {
-    title: string
-}
-
-interface AddChatLog {
-    input: {
-        projectId: typeof Project;
-        messages: Array<{
-            sender: string;
-            content: string;
-            timestamp: Date;
-        }>;
-        createdAt: Date;
-        updatedAt: Date;
-    }
-}
-
-interface ChatLogArgs {
-    projectId: typeof Project;
-}
-
-
-const Resolvers = {
+const resolvers = {
     Query: {
-        // Get all users
-        users: async () => {
-            return await User.find();
+        getAllUsers: async () => {
+            return await UserModel.find();
         },
-        // Get a user by ID
-        user: async (_parent: any, { name }: UserArgs) => {
-            return User.findOne({ name });
+        getUserById: async (_: any, { id }: { id: string }) => {
+            return await UserModel.findById(id);
         },
-        // authentication check
-        me: async (_: any, __: any, context: any) => {
-            if (context.user) {
-                return await User.findById(context.user._id);
-            }
-            throw new AuthenticationError('Not logged in');
-        },
-        // Get all projects
-        projects: async () => {
-            return await Project.find();
-        },
-        // Get a project by ID
-        project: async (_parent: any, { title }: ProjectArgs) => {
-            return User.findOne({ title });
-        },
-        // Get all tasks
-        tasks: async () => {
-            return await Task.find();
-        },
-        // Get a task by ID
-        task: async (_parent: any, { title }: TaskArgs) => {
-            return User.findOne({ title });
-        },
-        budgetItems: async () => {
+        getAllBudgetItems: async () => {
             return await BudgetItem.find();
         },
-        // Get a budget item by ID
-        budgetItem: async (_parent: any, { name }: BudgetItemArgs) => {
-            return User.findOne({ name });
+        getBudgetItemById: async (_: any, { id }: { id: string }) => {
+            return await BudgetItem.findById(id);
         },
-        // Get all materials
-        materials: async () => {
+        getAllProjects: async () => {
+            return await Project.find();
+        },
+        getProjectById: async (_: any, { id }: { id: string }) => {
+            return await Project.findById(id);
+        },
+        getAllMaterials: async () => {
             return await Material.find();
         },
-        // Get a material by ID
-        material: async (_parent: any, { name }: MaterialArgs) => {
-            return User.findOne({ name });
+        getMaterialById: async (_: any, { id }: { id: string }) => {
+            return await Material.findById(id);
         },
-        // Get all chat logs
-        chatLogs: async () => {
+        getAllTasks: async () => {
+            return await Task.find();
+        },
+        getTaskById: async (_: any, { id }: { id: string }) => {
+            return await Task.findById(id);
+        },
+        getChatLogById: async (_: any, { id }: { id: string }) => {
+            return await ChatLog.findById(id);
+        },
+        getChatLogsByProjectId: async (_: any, { projectId }: { projectId: string }) => {
+            return await ChatLog.findOne({ projectId });
+        },
+        getChatLogs: async () => {
             return await ChatLog.find();
-        },
-        // Get a chat log by ID
-        chatLog: async (_parent: any, { projectId }: ChatLogArgs) => {
-            return User.findOne({ projectId });
-        },
-    },
-    
-    Mutations: {
-        // Create a new user
-        createUser: async (_parent: any, { input }: AddUser) => {
-            const user = await User.create({ ...input });
-            const token = signToken(user.name, user.email, user._id);
-            return { token, user };
-        },
-    //Login a user
-        login: async (_parent: any, { name, password }: LoginUser) => {
-            const user = await User.findOne({ name });
-            if (!user) {
-                throw new AuthenticationError('Could not authenticate user.');
-            }
-            const correctPw = await user.isCorrectPassword(password);
-            if (!correctPw) {
-                throw new AuthenticationError('Could not authenticate user.');
-            }
-            const token = signToken(user.name, user.email, user._id);
-            return { token, user };
-        },
-        // Update a user
-        updateUser: async (_parent: any, { input }: AddUser) => {
-            return await User.findOneAndUpdate(
-                { name: input.name },
-                { $set: { ...input } },
-                { new: true }
-            );
-        },
-        // Delete a user
-        deleteUser: async (_parent: any, { name }: UserArgs) => {
-            return await User.findOneAndDelete({ name });
         }
-        // Create a new project
-        , createProject: async (_parent: any, { input }: AddProject) => {
-            return await Project.create({ ...input });
+    },
+    Mutation: {
+        createUser: async (_: any, args : { email: string, password: string, username: string }) => {
+            const newUser = new UserModel(args);
+            newUser.save();
+            const token = signToken(newUser.username, newUser.email, newUser._id);
+            return { user: newUser, token };
         },
-        // Update a project
-        updateProject: async (_parent: any, { input }: AddProject) => {
-            return await Project.findOneAndUpdate(
-                { title: input.title },
-                { $set: { ...input } },
-                { new: true }
-            );
+        updateUser: async (_: any, { id, User }: { id: string; User: User }) => {
+            return await UserModel.findByIdAndUpdate(id, User, { new: true });
         },
-        // Delete a project
-        deleteProject: async (_parent: any, { title }: ProjectArgs) => {
-            return await Project.findOneAndDelete({ title });
+        deleteUser: async (_: any, { id }: { id: string }) => {
+            return await UserModel.findByIdAndDelete(id);
         },
-        // Create a new task
-        createTask: async (_parent: any, { input }: AddTask) => {
-            return await Task.create({ ...input });
+        createBudgetItem: async (_: any, { budgetItem }: { budgetItem: BudgetItem }) => {
+            const newBudgetItem = new BudgetItem(budgetItem);
+            return await newBudgetItem.save();
         },
-        // Update a task
-        updateTask: async (_parent: any, { input }: AddTask) => {
-            return await Task.findOneAndUpdate(
-                { title: input.title },
-                { $set: { ...input } },
-                { new: true }
-            );
+        updateBudgetItem: async (_: any, { id, budgetItem }: { id: string; budgetItem: BudgetItem }) => {
+            return await BudgetItem.findByIdAndUpdate(id, budgetItem, { new: true });
         },
-        // Delete a task
-        deleteTask: async (_parent: any, { title }: TaskArgs) => {
-            return await Task.findOneAndDelete({ title });
+        deleteBudgetItem: async (_: any, { id }: { id: string }) => {
+            return await BudgetItem.findByIdAndDelete(id);
         },
-        // Create a new budget item
-        createBudgetItem: async (_parent: any, { input }: AddBudgetItem) => {
-            return await BudgetItem.create({ ...input });
+        createProject: async (_: any, { project }: { project: Project }) => {
+            const newProject = new Project(project);
+            return await newProject.save();
         },
-        // Update a budget item
-        updateBudgetItem: async (_parent: any, { input }: AddBudgetItem) => {
-            return await BudgetItem.findOneAndUpdate
-                ({ name: input.name },
-                { $set: { ...input } },
-                { new: true }
-            );
+        updateProject: async (_: any, { id, project }: { id: string; project: Project }) => {
+            return await Project.findByIdAndUpdate(id
+                , project, { new: true });
         },
-        // Delete a budget item
-        deleteBudgetItem: async (_parent: any, { name }: BudgetItemArgs) => {
-            return await BudgetItem.findOneAndDelete({ name });
+        deleteProject: async (_: any, { id }: { id: string }) => {
+            return await Project.findByIdAndDelete(id);
         },
-        // Create a new material
-        createMaterial: async (_parent: any, { input }: AddMaterial) => {
-            return await Material.create({ ...input });
+        createMaterial: async (_: any, { material }: { material: Material }) => {
+            const newMaterial = new Material(material);
+            return await newMaterial.save();
         },
-        // Update a material
-        updateMaterial: async (_parent: any, { input }: AddMaterial) => {
-            return await Material.findOneAndUpdate(
-                { name: input.name },
-                { $set: { ...input } },
-                { new: true }
-            );
+        updateMaterial: async (_: any, { id, material }: { id: string; material: Material }) => {
+            return await Material.findByIdAndUpdate(id, material, { new: true });
         },
-        // Delete a material
-        deleteMaterial: async (_parent: any, { name }: MaterialArgs) => {
-            return await Material.findOneAndDelete({ name });
+        deleteMaterial: async (_: any, { id }: { id: string }) => {
+            return await Material.findByIdAndDelete(id);
         },
-        // Create a new chat log
-        createChatLog: async (_parent: any, { input }: AddChatLog) => {
-            return await ChatLog.create({ ...input });
+        createTask: async (_: any, { task }: { task: Task }) => {
+            const newTask = new Task(task);
+            return await newTask.save();
         },
-        // Update a chat log
-        updateChatLog: async (_parent: any, { input }: AddChatLog) => {
-            return await ChatLog.findOneAndUpdate(
-                { projectId: input.projectId },
-                { $set: { ...input } },
-                { new: true }
-            );
+        updateTask: async (_: any, { id, task }: { id: string; task: Task }) => {
+            return await Task.findByIdAndUpdate(id, task, { new: true });
         },
-        // Delete a chat log
-        deleteChatLog: async (_parent: any, { projectId }: ChatLogArgs) => {
-            return await ChatLog.findOneAndDelete({ projectId });
+        deleteTask: async (_: any, { id }: { id: string }) => {
+            return await Task.findByIdAndDelete(id);
+        },
+        createChatLog: async (_: any, { chatLog }: { chatLog: ChatLog }) => {
+            const newChatLog = new ChatLog(chatLog);
+            return await newChatLog.save();
+        },
+        updateChatLog: async (_: any, { id, chatLog }: { id: string; chatLog: ChatLog }) => {
+            return await ChatLog.findByIdAndUpdate(id, chatLog, { new: true });
+        },
+        deleteChatLog: async (_: any, { id }: { id: string }) => {
+            return await ChatLog.findByIdAndDelete(id);
         }
     },
 };
 
-export default Resolvers;
+export default resolvers;
