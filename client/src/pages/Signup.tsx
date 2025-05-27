@@ -13,7 +13,7 @@ const Signup = () => {
     email: '',
     password: '',
   });
-  const [addUser, { error, data }] = useMutation(CREATE_USER);
+  const [createUser, { error, data }] = useMutation(CREATE_USER);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -28,13 +28,14 @@ const Signup = () => {
     event.preventDefault();
 
     try {
-      const { data } = await addUser({
+      const { data } = await createUser({
         variables: { ...formState  },
-      });
-
-      Auth.login(data.addUser.token);
+      }); console.log(data);
+console.log(data.createUser.token);
+      Auth.login(data.createUser.token);
     } catch (e) {
       console.error(e);
+      console.log(error);
     }
   };
 
