@@ -1,0 +1,9 @@
+.footer {
+    background-image: url('../orange-with-some-tools-background.jpg');
+    padding: 1.5rem 2rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}

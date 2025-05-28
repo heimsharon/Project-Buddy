@@ -96,6 +96,8 @@ const resolvers = {
             const newUser = new User(args);
             await newUser.save();
             const token = signToken(newUser.username, newUser.email, newUser._id);
+
+            console.log(token)
             return { user: newUser, token };
         },
         login: async (

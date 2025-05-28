@@ -3,6 +3,9 @@ node_modules/
 .hintrc
 
 
+# VS Code settings
+.vscode/
+
 # Build output
 dist/
 build/
