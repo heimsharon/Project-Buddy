@@ -1,54 +1,95 @@
 import express, { Request, Response } from 'express';
 import OpenAI from 'openai';
-import Material from '../models/Material.js'; //Mongoose model
+import Material from '../models/Material.js';
+
+// Load the assistant ID from environment variables
+const assistantId = process.env.OPENAI_ASSISTANT_ID;
+
+if (!assistantId) {
+    throw new Error('OPENAI_ASSISTANT_ID is not set in environment variables!');
+}
 
 const router = express.Router();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY as string });
 
-// regex for intent and material extraction
-const materialRegex = /\b(price|cost|how much|material|worth)\b/i;
+// Regex to detect price/cost questions
+const priceRegex =
+    /\b(price|cost|how much is|what is the price of|how much does)\s+([\w\s]+)\b/i;
 
 router.post('/', async (req: Request, res: Response) => {
     const { message } = req.body;
+    console.log('Received message:', message);
 
     if (!message) {
         return res.status(400).json({ error: 'Message is required.' });
     }
 
-    if (materialRegex.test(message)) {
-        // material extraction
-        const materialMatch = message.match(
-            /\b(?:price of|cost of|how much is|what is the price of|how much for)\s+([\w\s]+)/i
-        );
-        console.log('Material match:', materialMatch?.[1]);
-        if (!materialMatch) {
-            return res.json({
-                reply: "I couldn't identify the material you're asking about. Can you rephrase or specify it?",
-            });
-        }
-        const materialName = materialMatch[1].trim();
+    // Check if the user is asking for the price/cost of a material
+    const priceMatch = message.match(priceRegex);
+    if (priceMatch) {
+        // Try to extract the material name
+        const materialName = priceMatch[2].trim();
         const material = await Material.findOne({
             name: new RegExp(materialName, 'i'),
         }).lean();
+
         if (material) {
             return res.json({
                 reply: `The price of ${material.name} is $${material.priceUSD} per ${material.unit}.`,
             });
+        } else {
+            return res.json({
+                reply: `Sorry, I couldn't find information about "${materialName}" in the database. Please check with a local supplier.`,
+            });
         }
     }
 
-    // Fallback to OpenAI for general questions
+    // Fallback: Use OpenAI Assistant for all other questions
     try {
-        const completion = await openai.chat.completions.create({
-            model: 'gpt-4',
-            messages: [{ role: 'user', content: message }],
+        // 1. Create a thread (or reuse an existing one for context)
+        const thread = await openai.beta.threads.create();
+
+        // 2. Add the user's message to the thread
+        await openai.beta.threads.messages.create(thread.id, {
+            role: 'user',
+            content: message,
         });
-        const reply =
-            completion.choices[0]?.message?.content ||
-            "Sorry, I couldn't find an answer.";
-        res.json({ reply });
+
+        // 3. Run the assistant on the thread
+        const run = await openai.beta.threads.runs.create(thread.id, {
+            assistant_id: assistantId,
+        });
+
+        // 4. Wait for the run to complete and get the response
+        let runStatus;
+        do {
+            runStatus = await openai.beta.threads.runs.retrieve(
+                thread.id,
+                run.id
+            );
+            if (runStatus.status !== 'completed') {
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+            }
+        } while (runStatus.status !== 'completed');
+
+        // 5. Get the assistant's reply
+        const messages = await openai.beta.threads.messages.list(thread.id);
+        const assistantReply = messages.data
+            .filter((msg) => msg.role === 'assistant')
+            .map((msg) =>
+                msg.content
+                    .filter((block: any) => block.type === 'text')
+                    .map((block: any) => block.text.value)
+                    .join('\n')
+            )
+            .join('\n');
+
+        return res.json({ reply: assistantReply });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to process chatbot request.' });
+        console.error('OpenAI error:', error);
+        return res
+            .status(500)
+            .json({ error: 'Failed to process chatbot request.' });
     }
 });
 

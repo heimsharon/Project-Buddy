@@ -4,10 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "node server/server.js",
-        "start:dev": "concurrently \"cd server && npm run watch\" \"wait-on tcp:3001 && cd client && npm run dev\"",
+        "start": "npm run client:build && npm run server",
+        "start:dev": "concurrently \"npm run server:dev\" \"wait-on tcp:3001 && npm run client:dev\"",
         "server": "cd server && npm start",
-        "server:dev": "cd server && npm run dev",
+        "server:dev": "cd server && npm run watch",
         "install": "cd server && npm i && cd ../client && npm i",
         "client:build": "cd client && npm run build",
         "client:dev": "cd client && npm run dev",
@@ -28,6 +28,7 @@
         "@types/react-dom": "^19.1.5",
         "mongodb": "^6.16.0",
         "react": "^19.1.0",
-        "react-dom": "^19.1.0"
+        "react-dom": "^19.1.0",
+        "react-markdown": "^10.1.0"
     }
 }

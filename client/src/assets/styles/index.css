@@ -1,0 +1,100 @@
+/* Chatbot Styles */
+body {
+    background: linear-gradient(135deg, #e0eafc 0%, #105a5b 100%);
+    min-height: 100vh;
+}
+
+.bot-container {
+    border: 1px solid #35b487;
+    padding: 1rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 2rem auto;
+    background: #fafafa;
+    border-radius: 8px;
+}
+
+.chat-box {
+    max-height: 400px;
+    min-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    word-break: break-word;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message.user {
+    text-align: right;
+    color: #222;
+    background: #e6f7ff;
+    margin-left: 30%;
+    margin-right: 0;
+    border-radius: 16px 16px 4px 16px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.message.bot {
+    text-align: left;
+    color: #0077cc;
+    background: #f0f4f8;
+    margin-right: 30%;
+    margin-left: 0;
+    border: 1.5px solid #b3d4fc;
+    border-radius: 16px 16px 16px 4px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.chat-input {
+    display: flex;
+    gap: 0.5rem;
+    background: #f8fafd;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.chat-input input[type='text'] {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    font-size: 1.2rem; /* larger text */
+    height: 3.5rem; /* larger input box */
+}
+
+.chat-input button {
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    border: none;
+    background: #0077cc;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.chat-input button:hover {
+    background: #005fa3;
+}

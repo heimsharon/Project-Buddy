@@ -1,4 +1,4 @@
-import {Schema, model, Document, Types} from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 
 interface IMessage {
     sender: 'user' | 'bot';
@@ -14,41 +14,44 @@ interface IChatLog extends Document {
     updatedAt: Date;
 }
 
-const messageSchema = new Schema<IMessage>({
-    sender: {
-        type: String,
-        enum: ['user', 'bot'],
-        required: true
+const messageSchema = new Schema<IMessage>(
+    {
+        sender: {
+            type: String,
+            enum: ['user', 'bot'],
+            required: true,
+        },
+        message: {
+            type: String,
+            required: true,
+        },
+        timestamp: {
+            type: Date,
+            default: Date.now,
+        },
     },
-    message: {
-        type: String,
-        required: true
-    },
-    timestamp: {
-        type: Date,
-        default: Date.now
-    }
-}, {_id: false});
+    { _id: false }
+);
 
 const chatlogSchema = new Schema<IChatLog>({
     projectId: {
         type: Schema.Types.ObjectId,
         ref: 'Project',
-        required: true
+        required: true,
     },
     messages: {
         type: [messageSchema],
-        default: []
+        default: [],
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     updatedAt: {
         type: Date,
-        default: Date.now
-    }
-})
+        default: Date.now,
+    },
+});
 
 // automatically update the updatedAt field on message "push"
 chatlogSchema.pre('save', function (next) {
@@ -57,7 +60,7 @@ chatlogSchema.pre('save', function (next) {
 });
 
 //index updatedAt field for faster queries
-chatlogSchema.index({updatedAt: -1});
+chatlogSchema.index({ updatedAt: -1 });
 
 const ChatLog = model<IChatLog>('ChatLog', chatlogSchema);
 export default ChatLog;
