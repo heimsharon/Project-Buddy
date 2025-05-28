@@ -4,13 +4,13 @@ interface IProject extends Document {
     title: string;
     description?: string;
     type: string;
-    dimensions?: {
-      length?: number;
-      width?: number;
-      height?: number;
+    dimensions: {
+      length: number;
+      width: number;
+      height: number;
     };
     userId: ObjectId;
-    materialId: ObjectId[];
+    materialIds: ObjectId[];
     createdAt: Date;
     dueDate?: Date;
   }
@@ -28,18 +28,28 @@ interface IProject extends Document {
       type: String 
     },
     dimensions: {
-      length: Number,
-      width: Number,
-      height: Number
+      length: {
+        type: Number,
+        default: null
+      },
+      width: {
+        type: Number,
+        default: null 
+      },
+      height: {
+        type: Number,
+        default: null
+      }
     },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true
     },
-    materialId: [{
+    materialIds: [{
       type: Schema.Types.ObjectId,
-      ref: 'Material'
+      ref: 'Material',
+      required: true
     }],
     createdAt: {
       type: Date,

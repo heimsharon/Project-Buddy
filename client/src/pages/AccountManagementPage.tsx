@@ -13,7 +13,7 @@ const AccountPage: React.FC = () => {
                 id: '123',
                 username: 'john_doe',
                 email: 'john_doe@example.com',
-                avatar: 'https://example.com/avatar.jpg',
+                avatar: '../assets/default-avatar.png',
                 createdAt: new Date(),
                 updatedAt: new Date(),
             });

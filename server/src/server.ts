@@ -6,7 +6,6 @@ import { fileURLToPath } from 'node:url';
 import { typeDefs, resolvers } from './schemas/index.js';
 import db from './config/connection.js';
 
-const NODE_ENV = 'production';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -24,7 +23,7 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  if (NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../../client/dist')));
 
     app.get('*', (_req, res) => {
@@ -32,7 +31,6 @@ const startApolloServer = async () => {
     });
     console.log('Running in production mode at http://localhost:3001');
   }
-
   app.use('/graphql', expressMiddleware(server));
 
   app.listen(PORT, () => {

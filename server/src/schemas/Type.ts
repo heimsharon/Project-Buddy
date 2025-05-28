@@ -20,6 +20,12 @@ const typeDefs = `
         height: Float
     }
 
+    input DimensionsInput {
+        length: Float
+        width: Float
+        height: Float
+    }
+
     type Project {
         _id: ID!
         title: String!
@@ -27,12 +33,24 @@ const typeDefs = `
         type: String
         dimensions: Dimensions
         userId: ID!
-        materialId: ID
+        materialIds: [ID]
         createdAt: String!
         dueDate: String
     }
 
      type UnitCoverage {
+        length_ft: Float
+        width_ft: Float
+        height_ft: Float
+        width_in: Float
+        length_in: Float
+        thickness_in: Float
+        weight_lb: Float
+        weight_ton: Float
+        sqft: Float
+    }
+
+    input UnitCoverageInput {
         length_ft: Float
         width_ft: Float
         height_ft: Float
@@ -73,12 +91,16 @@ const typeDefs = `
     type Query {
         getAllUsers: [User]
         getUserById(id: ID!): User
+
         getAllBudgetItems: [BudgetItem]
         getBudgetItemById(id: ID!): BudgetItem
+
         getAllProjects: [Project]
         getProjectById(id: ID!): Project
+
         getAllMaterials: [Material]
         getMaterialById(id: ID!): Material
+
         getAllTasks: [Task]
         getTaskById(id: ID!): Task
     }
@@ -89,24 +111,49 @@ const typeDefs = `
         updateUser(id: ID!, username: String, email: String, password: String): User
         deleteUser(id: ID!): User
 
-        createBudgetItem(name: String!, amount: Float!, projectId: ID!): BudgetItem
-        updateBudgetItem(id: ID!, name: String, amount: Float): BudgetItem
+        createBudgetItem(name: String!, cost: Float!, quantity: Int!, notes: String): BudgetItem
+        updateBudgetItem(id: ID!, name: String, cost: Float, quantity: Int, notes: String): BudgetItem
         deleteBudgetItem(id: ID!): BudgetItem
 
-        createProject(title: String!, description: String!, userid: ID!): Project
-        updateProject(
-            id: ID!,
-            title: String,
+        createProject(
+            title: String!,
             description: String,
             type: String,
-            dimensions: Float,
+            dimensions: DimensionsInput,
             dueDate: String,
-            materialId: ID
+            materialIds: [ID],
+            userId: ID!
+        ): Project
+        updateProject(
+            id: ID!,
+            title: String!,
+            description: String,
+            type: String,
+            dimensions: DimensionsInput,
+            dueDate: String,
+            materialIds: [ID],
         ): Project
         deleteProject(id: ID!): Project
 
-        createMaterial(name: String!, category: String!, unit: String!): Material
-        updateMaterial(id: ID!, name: String, quantity: Int): Material
+        createMaterial(
+            name: String!, 
+            category: String!, 
+            unit: String!,
+            unitCoverage: UnitCoverageInput,
+            quantity: Int,
+            priceUSD: Float,
+            vendor: String
+        ): Material
+        updateMaterial(
+            id: ID!, 
+            name: String,
+            category: String,
+            unit: String,
+            unitCoverage: UnitCoverageInput,
+            quantity: Int,
+            priceUSD: Float,
+            vendor: String
+        ): Material
         deleteMaterial(id: ID!): Material
 
         createTask(title: String!, description: String!, projectId: ID!): Task
