@@ -9,7 +9,7 @@ interface IProject extends Document {
       width?: number;
       height?: number;
     };
-    userid: ObjectId;
+    userId: ObjectId;
     materialId: ObjectId[];
     createdAt: Date;
     dueDate?: Date;
@@ -32,7 +32,7 @@ interface IProject extends Document {
       width: Number,
       height: Number
     },
-    userid: {
+    userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true

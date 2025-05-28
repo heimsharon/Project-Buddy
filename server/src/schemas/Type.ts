@@ -26,7 +26,7 @@ const typeDefs = `
         description: String
         type: String
         dimensions: Dimensions
-        userid: ID!
+        userId: ID!
         materialId: ID
         createdAt: String!
         dueDate: String
