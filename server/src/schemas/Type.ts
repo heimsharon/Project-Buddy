@@ -4,6 +4,7 @@ const typeDefs = `
         username: String!
         email: String!
         password: String!
+        skills: [String]
     }
 
     type BudgetItem {
@@ -106,9 +107,9 @@ const typeDefs = `
     }
 
     type Mutation {
-        createUser(username: String!, email: String!, password: String!): Auth
+        createUser(username: String!, email: String!, password: String!, skills: [String]): Auth
         login(email: String!, password: String!): Auth
-        updateUser(id: ID!, username: String, email: String, password: String): User
+        updateUser(id: ID!, username: String!, email: String!, password: String!, skills: [String]): User
         deleteUser(id: ID!): User
 
         createBudgetItem(name: String!, cost: Float!, quantity: Int!, notes: String): BudgetItem

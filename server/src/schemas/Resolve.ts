@@ -115,7 +115,7 @@ const resolvers = {
     Mutation: {
         createUser: async (
             _: any,
-            args: { email: string; password: string; username: string }
+            args: { email: string; password: string; username: string, skills?: string[] }
         ) => {
             const newUser = new User(args);
             await newUser.save();
@@ -136,19 +136,18 @@ const resolvers = {
             const token = signToken(user.username, user.email, user._id);
             return { user, token };
         },
-        updateUser: async (_: any, args: { id: string; username?: string; email?: string; password?: string }) => {
-            const { id, ...updateFields } = args;
-            const updatedUser = await User.findByIdAndUpdate(
-                id,
-                updateFields,
-                { new: true }
-            );
-            if (!updatedUser) {
-                throw new Error('User not found');
-            }
-            const token = signToken(updatedUser.username, updatedUser.email, updatedUser._id);
-            return { user: updatedUser, token };
-        },
+        updateUser: async (_: any, args: { id: string; username: string; email: string; password: string, skills: string[] }) => 
+            await User.findByIdAndUpdate(
+                args.id,
+                {
+                    username: args.username,
+                    email: args.email,
+                    password: args.password,
+                    skills: args.skills
+                },
+                { new: true
+                }
+            ),        
         deleteUser: async (_: any, { id }: { id: string }) => User.findByIdAndDelete(id),
 
         createBudgetItem: async (_: any, { budgetItem }: { budgetItem: BudgetItem }) => {
