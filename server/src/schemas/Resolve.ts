@@ -132,10 +132,18 @@ const resolvers = {
             await newProject.save();
             return newProject;
         },
-        updateProject: async (
-            _: any,
-            { id, project }: { id: string; project: Project }
-        ) => Project.findByIdAndUpdate(id, project, { new: true }),
+        updateProject: async (_: any, args: { id: string, title: string; description: string, type: string, materialId: string, dimensions: string[], dueDate: string}) => Project.findByIdAndUpdate(
+            args.id,
+            {
+                title: args.title,
+                description: args.description,
+                type: args.type,
+                materialId: args.materialId,
+                dimensions: args.dimensions,
+                dueDate: args.dueDate 
+            },
+            { new: true }
+        ),
         deleteProject: async (_: any, { id }: { id: string }) =>
             Project.findByIdAndDelete(id),
         createMaterial: async ( _: any,

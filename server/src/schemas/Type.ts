@@ -94,7 +94,15 @@ const typeDefs = `
         deleteBudgetItem(id: ID!): BudgetItem
 
         createProject(title: String!, description: String!, userid: ID!): Project
-        updateProject(id: ID!, title: String, description: String): Project
+        updateProject(
+            id: ID!,
+            title: String,
+            description: String,
+            type: String,
+            dimensions: Float,
+            dueDate: String,
+            materialId: ID
+        ): Project
         deleteProject(id: ID!): Project
 
         createMaterial(name: String!, category: String!, unit: String!): Material
