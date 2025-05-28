@@ -32,7 +32,7 @@ interface Project {
         width?: number;
         height?: number;
     };
-    userId: typeof User;
+    userId: string;
     materialId: string[];
     createdAt: Date;
     dueDate?: Date;
@@ -127,7 +127,7 @@ const resolvers = {
         ) => BudgetItem.findByIdAndUpdate(id, budgetItem, { new: true }),
         deleteBudgetItem: async (_: any, { id }: { id: string }) =>
             BudgetItem.findByIdAndDelete(id),
-        createProject: async (_: any, args: { title: string; description: string; userId: string }) => {
+        createProject: async (_: any, args: { title: string; description: string, userId: string }) => {
             const newProject = new Project(args);
             await newProject.save();
             return newProject;

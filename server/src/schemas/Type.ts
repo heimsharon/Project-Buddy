@@ -26,7 +26,7 @@ const typeDefs = `
         description: String
         type: String
         dimensions: Dimensions
-        userId: ID!
+        userid: ID!
         materialId: ID
         createdAt: String!
         dueDate: String
@@ -93,7 +93,7 @@ const typeDefs = `
         updateBudgetItem(id: ID!, name: String, amount: Float): BudgetItem
         deleteBudgetItem(id: ID!): BudgetItem
 
-        createProject(title: String!, description: String!, userId: ID!): Project
+        createProject(title: String!, description: String!, userid: ID!): Project
         updateProject(id: ID!, title: String, description: String): Project
         deleteProject(id: ID!): Project
 
