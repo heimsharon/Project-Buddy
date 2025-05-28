@@ -4,64 +4,66 @@ import ProjectForm from '../components/projects/ProjectForm';
 import MaterialInput from '../components/projects/MaterialInput';
 
 interface Material {
-  id: string;
-  name: string;
-  quantity: number;
-  unit: 'sqft' | 'pieces' | 'gallons';
-  cost: number;
+    id: string;
+    name: string;
+    quantity: number;
+    unit: 'sqft' | 'pieces' | 'gallons';
+    cost: number;
 }
 
 interface ProjectData {
-  name: string;
-  description: string;
-  budget: number;
-  materials: Material[];
+    name: string;
+    description: string;
+    budget: number;
+    materials: Material[];
 }
 
 export default function CreateProjectPage() {
-  const [project, setProject] = useState<ProjectData>({
-    name: '',
-    description: '',
-    budget: 0,
-    materials: [],
-  });
+    const [project, setProject] = useState<ProjectData>({
+        name: '',
+        description: '',
+        budget: 0,
+        materials: [],
+    });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Submitting project:', project);
-    // Will replace with GraphQL mutation
-  };
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log('Submitting project:', project);
+        // Will replace with GraphQL mutation
+    };
 
-  return (
-    <div className="create-project-page">
-      <h1>Create New Project</h1>
-      
-      <form onSubmit={handleSubmit}>
-        <ProjectForm
-          values={{
-            name: project.name,
-            description: project.description,
-            budget: project.budget,
-          }}
-          onChange={({ name, description, budget }) =>
-            setProject(prev => ({
-              ...prev,
-              name,
-              description,
-              budget,
-            }))
-          }
-        />
+    return (
+        <div className="create-project-page">
+            <h1>Create New Project</h1>
 
-        <MaterialInput
-          materials={project.materials}
-          onMaterialsChange={(materials) => setProject(prev => ({ ...prev, materials }))}
-        />
+            <form onSubmit={handleSubmit}>
+                <ProjectForm
+                    values={{
+                        name: project.name,
+                        description: project.description,
+                        budget: project.budget,
+                    }}
+                    onChange={({ name, description, budget }) =>
+                        setProject((prev) => ({
+                            ...prev,
+                            name,
+                            description,
+                            budget,
+                        }))
+                    }
+                />
 
-        <button type="submit" className="submit-button">
-          Create Project
-        </button>
-      </form>
-    </div>
-  );
+                <MaterialInput
+                    materials={project.materials}
+                    onMaterialsChange={(materials) =>
+                        setProject((prev) => ({ ...prev, materials }))
+                    }
+                />
+
+                <button type="submit" className="submit-button">
+                    Create Project
+                </button>
+            </form>
+        </div>
+    );
 }

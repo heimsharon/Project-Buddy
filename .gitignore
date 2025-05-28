@@ -2,6 +2,9 @@
 node_modules/
 .github
 
+# VS Code settings
+.vscode/
+
 # Build output
 dist/
 build/

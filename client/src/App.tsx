@@ -8,8 +8,8 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
 import Header from './components/shared/Header';
+import Navbar from './components/shared/Navbar';
 import Footer from './components/shared/Footer';
-import ProjectBuddyBot from './components/chatbot/ProjectBuddyBot';
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -40,9 +40,11 @@ function App() {
         <ApolloProvider client={client}>
             <div className="flex-column justify-flex-start min-100-vh">
                 <Header />
-                <div className="container">
-                    <Outlet />
-                    <ProjectBuddyBot /> {/* Chatbot appears on all pages */}
+                <Navbar />
+                <div className="main-content">
+                    <main>
+                        <Outlet /> {/* This renders the current page */}
+                    </main>
                 </div>
                 <Footer />
             </div>

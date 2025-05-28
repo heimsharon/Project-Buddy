@@ -1,0 +1,122 @@
+.navbar {
+    position: fixed;
+    top: 80px; /* height of header */
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background: #ee941f;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    height: 56px;
+}
+
+.nav-menus {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    height: 100%;
+}
+
+.navbar a,
+.dropdown .dropbtn,
+.dropdown-action {
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+    margin: 0;
+    display: block;
+    transition: background 0.2s, color 0.2s;
+}
+
+.navbar a:hover,
+.dropdown .dropbtn:hover,
+.dropdown-action:hover {
+    background-color: #ffb300;
+    color: #fff;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f9f9f9;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    border-radius: 0 0 6px 6px;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: #222;
+    background: none;
+    padding: 12px 16px;
+    text-align: left;
+    text-decoration: none;
+    display: block;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.dropdown-content .dropdown-action {
+    color: black;
+    background: none;
+    padding: 12px 16px;
+    text-align: left;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    font-size: 15px;
+    display: block;
+    transition: background 0.2s, color 0.2s;
+}
+
+.dropdown-content a:hover,
+.dropdown-content .dropdown-action:hover {
+    background-color: #ffe0b2;
+    color: #222;
+}
+
+.dropdown:hover .dropdown-content,
+.dropdown:focus-within .dropdown-content {
+    display: block;
+}
+
+.dropdown-item-with-submenu {
+    position: relative;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    min-width: 180px;
+    background: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 0 6px 6px 6px;
+    z-index: 20;
+}
+
+.dropdown-item-with-submenu:hover > .submenu,
+.dropdown-item-with-submenu:focus-within > .submenu {
+    display: block;
+}
