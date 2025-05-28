@@ -1,8 +1,7 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model, Document, ObjectId } from 'mongoose';
 
 interface IBudgetItem extends Document {
-  projectId: Types.ObjectId;
-  materialId?: Types.ObjectId;
+  projectId: ObjectId;
   name: string;
   cost: number;
   quantity: number;
@@ -14,10 +13,6 @@ const budgetItemSchema = new Schema<IBudgetItem>({
     type: Schema.Types.ObjectId,
     ref: 'Project',
     required: true
-  },
-  materialId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Material'
   },
   name: {
     type: String,

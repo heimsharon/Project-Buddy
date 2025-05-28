@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model, Document, ObjectId } from 'mongoose';
 
 interface IProject extends Document {
     title: string;
@@ -9,39 +9,37 @@ interface IProject extends Document {
       width?: number;
       height?: number;
     };
-    createdBy: Types.ObjectId;
-    materials: Types.ObjectId[];
-    checklist: Types.ObjectId[];
-    budget: Types.ObjectId[];
+    userid: ObjectId;
+    materialId: ObjectId[];
     createdAt: Date;
     dueDate?: Date;
   }
   
   const projectSchema = new Schema<IProject>({
-    title: { type: String, required: true },
-    description: String,
-    type: { type: String },
+    title: { 
+      type: String, 
+      required: true 
+    },
+    description: {
+      type: String,
+      default: ''
+    },
+    type: {
+      type: String 
+    },
     dimensions: {
       length: Number,
       width: Number,
       height: Number
     },
-    createdBy: {
+    userid: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true
     },
-    materials: [{
+    materialId: [{
       type: Schema.Types.ObjectId,
       ref: 'Material'
-    }],
-    checklist: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Task'
-    }],
-    budget: [{
-      type: Schema.Types.ObjectId,
-      ref: 'BudgetItem'
     }],
     createdAt: {
       type: Date,

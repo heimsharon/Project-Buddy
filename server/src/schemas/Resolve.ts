@@ -3,7 +3,6 @@ import Project from '../models/Projects.js';
 import Material from '../models/Material.js';
 import Task from '../models/Task.js';
 import User from '../models/User.js';
-import ChatLog from '../models/Message.js';
 import { signToken } from '../utils/auth.js';
 
 interface User {
@@ -11,15 +10,15 @@ interface User {
     username: string;
     email: string;
     password: string;
+    skills?: string[];
 }
 
 interface BudgetItem {
-    _id: string;
+   _id: string;
+    projectId: string;
     name: string;
     cost: number;
     quantity: number;
-    projectId: string;
-    materialId?: string;
     notes?: string;
 }
 
@@ -33,10 +32,8 @@ interface Project {
         width?: number;
         height?: number;
     };
-    createdBy: string;
-    materials: string[];
-    checklist: string[];
-    budget: string[];
+    userId: typeof User;
+    materialId: string[];
     createdAt: Date;
     dueDate?: Date;
 }
@@ -44,38 +41,20 @@ interface Project {
 interface Material {
     _id: string;
     name: string;
-    category:
-        | 'fencing'
-        | 'paint'
-        | 'drywall'
-        | 'lumber'
-        | 'concrete'
-        | 'roofing'
-        | 'plumbing'
-        | 'electrical'
-        | 'flooring'
-        | 'insulation'
-        | 'decking'
-        | 'stain'
-        | 'landscaping'
-        | 'hardware'
-        | 'tools'
-        | 'HVAC'
-        | 'siding'
-        | 'masonry';
+    category: string;
     unit: string;
     unitCoverage: {
-        length_ft?: number;
-        width_ft?: number;
-        height_ft?: number;
-        width_in?: number;
-        length_in?: number;
-        thickness_in?: number;
-        weight_lb?: number;
-        weight_ton?: number;
-        sqft?: number;
+        length_ft: number;
+        width_ft: number;
+        height_ft: number;
+        width_in: number;
+        length_in: number;
+        thickness_in: number;
+        weight_lb: number;
+        weight_ton: number;
+        sqft: number;
     };
-    quantity?: number;
+    quantity: number;
     priceUSD: number;
     vendor?: string;
     lastUpdated: Date;
@@ -88,18 +67,6 @@ interface Task {
     dueDate?: Date;
     completed: boolean;
     notes?: string;
-}
-
-interface ChatLog {
-    _id: string;
-    projectId: string;
-    messages: {
-        sender: 'user' | 'bot';
-        message: string;
-        timestamp: Date;
-    }[];
-    createdAt: Date;
-    updatedAt: Date;
 }
 
 const resolvers = {
@@ -118,17 +85,10 @@ const resolvers = {
             Material.findById(id),
         getAllTasks: async () => Task.find(),
         getTaskById: async (_: any, { id }: { id: string }) =>
-            Task.findById(id),
-        getChatLogById: async (_: any, { id }: { id: string }) =>
-            ChatLog.findById(id),
-        getChatLogsByProjectId: async (
-            _: any,
-            { projectId }: { projectId: string }
-        ) => ChatLog.find({ projectId }),
-        getChatLogs: async () => ChatLog.find(),
+            Task.findById(id)
     },
-    Mutation: {
 
+    Mutation: {
         createUser: async (
             _: any,
             args: { email: string; password: string; username: string }
@@ -136,8 +96,6 @@ const resolvers = {
             const newUser = new User(args);
             await newUser.save();
             const token = signToken(newUser.username, newUser.email, newUser._id);
-
-       
             return { user: newUser, token };
         },
         login: async (
@@ -169,9 +127,10 @@ const resolvers = {
         ) => BudgetItem.findByIdAndUpdate(id, budgetItem, { new: true }),
         deleteBudgetItem: async (_: any, { id }: { id: string }) =>
             BudgetItem.findByIdAndDelete(id),
-        createProject: async (_: any, { project }: { project: Project }) => {
-            const newProject = new Project(project);
-            return await newProject.save();
+        createProject: async (_: any, args: { title: string; description: string; userId: string }) => {
+            const newProject = new Project(args);
+            await newProject.save();
+            return newProject;
         },
         updateProject: async (
             _: any,
@@ -179,12 +138,12 @@ const resolvers = {
         ) => Project.findByIdAndUpdate(id, project, { new: true }),
         deleteProject: async (_: any, { id }: { id: string }) =>
             Project.findByIdAndDelete(id),
-        createMaterial: async (
-            _: any,
-            { material }: { material: Material }
+        createMaterial: async ( _: any,
+            args: { name: string; category: string; unit: string }
         ) => {
-            const newMaterial = new Material(material);
-            return await newMaterial.save();
+            const newMaterial = new Material(args);
+            await newMaterial.save();
+            return newMaterial;
         },
         updateMaterial: async (
             _: any,
@@ -192,25 +151,16 @@ const resolvers = {
         ) => Material.findByIdAndUpdate(id, material, { new: true }),
         deleteMaterial: async (_: any, { id }: { id: string }) =>
             Material.findByIdAndDelete(id),
-        createTask: async (_: any, { task }: { task: Task }) => {
-            const newTask = new Task(task);
-            return await newTask.save();
+        createTask: async (_: any, args: { title: string; dueDate?: Date; notes?: string; projectId: string }) => {
+            const newTask = new Task(args);
+            await newTask.save();
+            return newTask;
         },
         updateTask: async (_: any, { id, task }: { id: string; task: Task }) =>
             Task.findByIdAndUpdate(id, task, { new: true }),
         deleteTask: async (_: any, { id }: { id: string }) =>
-            Task.findByIdAndDelete(id),
-        createChatLog: async (_: any, { chatLog }: { chatLog: ChatLog }) => {
-            const newChatLog = new ChatLog(chatLog);
-            return await newChatLog.save();
-        },
-        updateChatLog: async (
-            _: any,
-            { id, chatLog }: { id: string; chatLog: ChatLog }
-        ) => ChatLog.findByIdAndUpdate(id, chatLog, { new: true }),
-        deleteChatLog: async (_: any, { id }: { id: string }) =>
-            ChatLog.findByIdAndDelete(id),
-    },
+            Task.findByIdAndDelete(id)
+    }
 };
 
 export default resolvers;

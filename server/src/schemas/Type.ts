@@ -9,16 +9,39 @@ const typeDefs = `
     type BudgetItem {
         _id: ID!
         name: String!
-        amount: Float!
-        projectId: Project!
+        cost: Float!
+        quantity: Int!
+        notes: String
+    }
+
+    type Dimensions {
+        length: Float
+        width: Float
+        height: Float
     }
 
     type Project {
         _id: ID!
-        name: String!
-        description: String!
-        budgetId: BudgetItem!
-        userId: User!
+        title: String!
+        description: String
+        type: String
+        dimensions: Dimensions
+        userId: ID!
+        materialId: ID
+        createdAt: String!
+        dueDate: String
+    }
+
+     type UnitCoverage {
+        length_ft: Float
+        width_ft: Float
+        height_ft: Float
+        width_in: Float
+        length_in: Float
+        thickness_in: Float
+        weight_lb: Float
+        weight_ton: Float
+        sqft: Float
     }
 
     type Material {
@@ -33,18 +56,6 @@ const typeDefs = `
         lastUpdated: String
     }
 
-    type UnitCoverage {
-        length_ft: Float
-        width_ft: Float
-        height_ft: Float
-        width_in: Float
-        length_in: Float
-        thickness_in: Float
-        weight_lb: Float
-        weight_ton: Float
-        sqft: Float
-    }
-
     type Task {
         _id: ID!
         projectId: Project!
@@ -54,27 +65,9 @@ const typeDefs = `
         notes: String
     }
 
-    type ChatLog {
-        _id: ID!
-        projectId: ID!
-        messages: [Message!]!
-        createdAt: String!
-    }
-
-    type Message {
-        sender: String!
-        message: String!
-        timestamp: String!
-    }
     type Auth {
         token: ID!
         user: User
-    }
-
-    input MessageInput {
-        sender: String!
-        message: String!
-        timestamp: String!
     }
 
     type Query {
@@ -88,9 +81,6 @@ const typeDefs = `
         getMaterialById(id: ID!): Material
         getAllTasks: [Task]
         getTaskById(id: ID!): Task
-        getChatLogById(id: ID!): ChatLog
-        getChatLogsByProjectId(projectId: ID!): [ChatLog]
-        getChatLogs: [ChatLog]
     }
 
     type Mutation {
@@ -103,21 +93,17 @@ const typeDefs = `
         updateBudgetItem(id: ID!, name: String, amount: Float): BudgetItem
         deleteBudgetItem(id: ID!): BudgetItem
 
-        createProject(name: String!, description: String!, budgetId: ID!, userId: ID!): Project
-        updateProject(id: ID!, name: String, description: String, budgetId: ID, userId: ID): Project
+        createProject(title: String!, description: String!, userId: ID!): Project
+        updateProject(id: ID!, title: String, description: String): Project
         deleteProject(id: ID!): Project
 
-        createMaterial(name: String!, quantity: Int!, projectId: ID!): Material
+        createMaterial(name: String!, category: String!, unit: String!): Material
         updateMaterial(id: ID!, name: String, quantity: Int): Material
         deleteMaterial(id: ID!): Material
 
-        createTask(name: String!, description: String!, projectId: ID!): Task
-        updateTask(id: ID!, name: String, description: String, projectId: ID): Task
+        createTask(title: String!, description: String!, projectId: ID!): Task
+        updateTask(id: ID!, title: String, description: String, projectId: ID): Task
         deleteTask(id: ID!): Task
-
-        createChatLog(projectId: ID!, messages: [MessageInput]!): ChatLog
-        updateChatLog(id: ID!, messages: [MessageInput]!): ChatLog
-        deleteChatLog(id: ID!): ChatLog
     }
 `;
 

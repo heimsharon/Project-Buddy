@@ -1,7 +1,7 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model, Document, ObjectId } from 'mongoose';
 
 interface ITask extends Document {
-  projectId: Types.ObjectId;
+  projectId: ObjectId;
   title: string;
   dueDate?: Date;
   completed: boolean;
