@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
-.github
+.hintrc
+
 
 # VS Code settings
 .vscode/
