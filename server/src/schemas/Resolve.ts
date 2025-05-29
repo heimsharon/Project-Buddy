@@ -237,7 +237,27 @@ const resolvers = {
             await newTask.save();
             return newTask;
         },
-        updateTask: async (_: any, { id, task }: { id: string; task: Task }) => Task.findByIdAndUpdate(id, task, { new: true }),
+        updateTask: async (_: any, args:
+            {
+                id: string;
+                task: {
+                    title?: string;
+                    dueDate?: Date;
+                    completed?: boolean;
+                    notes?: string;
+                    projectId?: string;
+            }}) => {
+            const { id, ...updateTask } = args;
+            const updatedTask = await Task.findByIdAndUpdate(
+                id,
+                updateTask,
+                { new: true }
+            );
+            if (!updatedTask) {
+                throw new Error('Task not found');
+            }
+            return updatedTask;
+        },
         deleteTask: async (_: any, { id }: { id: string }) => Task.findByIdAndDelete(id)
     }
 };

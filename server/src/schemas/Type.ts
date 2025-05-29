@@ -157,8 +157,8 @@ const typeDefs = `
         ): Material
         deleteMaterial(id: ID!): Material
 
-        createTask(title: String!, description: String!, projectId: ID!): Task
-        updateTask(id: ID!, title: String, description: String, projectId: ID): Task
+        createTask(title: String!, notes: String!, projectId: ID!, dueDate: String): Task
+        updateTask(id: ID!, title: String, notes: String, projectId: ID, completed: Boolean): Task
         deleteTask(id: ID!): Task
     }
 `;
