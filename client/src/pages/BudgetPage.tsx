@@ -3,7 +3,6 @@ import BudgetTracker from '../components/projects/BudgetTracker';
 import { BudgetItem } from '../types/project';
 
 export default function BudgetPage() {
-  // Initialize with sample budget items
   const [budgetItems, setBudgetItems] = useState<BudgetItem[]>([
     {
       id: '1',
@@ -24,15 +23,23 @@ export default function BudgetPage() {
       name: 'Labor',
       estimatedCost: 200,
       category: 'labor'
+    },
+    {
+      id: '4',
+      name: 'Tools',
+      estimatedCost: 50,
+      actualCost: 65,
+      category: 'tools'
     }
   ]);
 
-  // Handler for budget item updates
-  const handleItemUpdate = (
-    id: string, 
-    field: keyof BudgetItem, 
-    value: any
-  ) => {
+  // Calculate totals
+  const totalEstimated = budgetItems.reduce((sum, item) => sum + item.estimatedCost, 0);
+  const totalActual = budgetItems.reduce((sum, item) => sum + (item.actualCost || 0), 0);
+  const difference = totalEstimated - totalActual;
+  const percentUsed = totalEstimated > 0 ? (totalActual / totalEstimated) * 100 : 0;
+
+  const handleItemUpdate = (id: string, field: keyof BudgetItem, value: any) => {
     setBudgetItems(prevItems =>
       prevItems.map(item =>
         item.id === id ? { ...item, [field]: value } : item
@@ -40,7 +47,6 @@ export default function BudgetPage() {
     );
   };
 
-  // Handler for adding new budget items
   const handleAddItem = () => {
     setBudgetItems(prevItems => [
       ...prevItems,
@@ -53,19 +59,73 @@ export default function BudgetPage() {
     ]);
   };
 
+  const handleDeleteItem = (id: string) => {
+    setBudgetItems(prevItems => prevItems.filter(item => item.id !== id));
+  };
+
   return (
     <div className="budget-page">
       <h2>Project Budget</h2>
+      
+      {/* Total Cost Summary */}
+      <div className="budget-summary-card">
+        <h3>Total Project Cost</h3>
+        <div className="summary-grid">
+          <div className="summary-item">
+            <span className="summary-label">Estimated:</span>
+            <span className="summary-value estimated">${totalEstimated.toFixed(2)}</span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Actual:</span>
+            <span className="summary-value actual">${totalActual.toFixed(2)}</span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Difference:</span>
+            <span className={`summary-value ${
+              difference >= 0 ? 'under-budget' : 'over-budget'
+            }`}>
+              ${Math.abs(difference).toFixed(2)} {difference >= 0 ? 'under' : 'over'}
+            </span>
+          </div>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="budget-progress">
+          <div 
+            className="progress-bar" 
+            style={{
+              width: `${Math.min(100, percentUsed)}%`,
+              backgroundColor: totalActual > totalEstimated ? '#e74c3c' : '#2ecc71'
+            }}
+          ></div>
+          <span>
+            {percentUsed.toFixed(1)}% of budget used
+          </span>
+        </div>
+      </div>
+
+      {/* Budget Tracker Table */}
       <BudgetTracker 
         items={budgetItems} 
         onItemUpdate={handleItemUpdate} 
+        onItemDelete={handleDeleteItem}
       />
-      <button 
-        onClick={handleAddItem}
-        className="add-budget-item"
-      >
-        + Add Budget Item
-      </button>
+
+      {/* Action Buttons */}
+      <div className="budget-actions">
+        <button 
+          onClick={handleAddItem}
+          className="btn btn-add"
+        >
+          + Add Budget Item
+        </button>
+        <button 
+          onClick={() => console.log('Save to backend')}
+          className="btn btn-save"
+        >
+          Save Budget
+        </button>
+      </div>
     </div>
   );
 }

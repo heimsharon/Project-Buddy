@@ -4,6 +4,7 @@ import { BudgetItem } from '../../types/project';
 interface BudgetTrackerProps {
   items: BudgetItem[];
   onItemUpdate: (id: string, field: keyof BudgetItem, value: any) => void;
+  onItemDelete: (id: string) => void;
 }
 
 export default function BudgetTracker({
