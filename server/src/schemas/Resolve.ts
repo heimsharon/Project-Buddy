@@ -17,9 +17,9 @@ interface BudgetItem {
    _id: string;
     projectId: string;
     name: string;
-    cost: number;
+    estimatedCost: number;
+    actualCost?: number;
     quantity: number;
-    notes?: string;
 }
 
 interface Dimensions {
@@ -153,9 +153,8 @@ const resolvers = {
         createBudgetItem: async (_: any, args:
             { 
                 name: string; 
-                cost: number; 
-                quantity: number; 
-                notes?: string; 
+                estimatedCost: number; 
+                quantity: number;
                 projectId: string 
             }
         ) => {
@@ -166,15 +165,16 @@ const resolvers = {
             : { 
                 id: string; 
                 name?: string; 
-                cost?: number; 
+                estimatedCost?: number;
+                actualCost?: number;
                 quantity?: number; 
-                notes?: string 
             }) => BudgetItem.findByIdAndUpdate(args.id,
             {
                     name: args.name,
-                    cost: args.cost,
-                    quantity: args.quantity,
-                    notes: args.notes
+                    estimatedCost: args.estimatedCost,
+                    actualCost: args.actualCost,
+                    quantity: args.quantity
+                    
                 },
                 { new: true }
             ),

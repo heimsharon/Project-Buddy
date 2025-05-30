@@ -10,9 +10,9 @@ const typeDefs = `
     type BudgetItem {
         _id: ID!
         name: String!
-        cost: Float!
+        estimatedCost: Float!
+        actualCost: Float
         quantity: Int!
-        notes: String
     }
 
     type Dimensions {
@@ -114,17 +114,16 @@ const typeDefs = `
 
         createBudgetItem(
             name: String!,
-            cost: Float!,
+            estimatedCost: Float!,
             quantity: Int!,
-            notes: String
             projectId: ID!,
         ): BudgetItem
         updateBudgetItem(
             id: ID!,
             name: String,
-            cost: Float,
-            quantity: Int,
-            notes: String
+            estimatedCost: Float,
+            actualCost: Float,
+            quantity: Int
             ): BudgetItem
         deleteBudgetItem(id: ID!): BudgetItem
 
