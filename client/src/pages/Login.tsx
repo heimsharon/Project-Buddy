@@ -4,6 +4,8 @@ import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 import React from 'react';
+import '../assets/styles/login.css';
+import logo from '../../public/android-chrome-192x192.png';
 
 const Login = () => {
     const [formState, setFormState] = useState({ email: '', password: '' });
@@ -38,52 +40,56 @@ const Login = () => {
     };
 
     return (
-        <main className="flex-row justify-center mb-4">
-            <div className="col-12 col-lg-10">
-                <div className="card">
-                    <h4 className="card-header bg-dark text-light p-2">
-                        Login
-                    </h4>
-                    <div className="card-body">
-                        {data ? (
-                            <p>
-                                Success! You may now head{' '}
-                                <Link to="/">back to the homepage.</Link>
-                            </p>
-                        ) : (
-                            <form onSubmit={handleFormSubmit}>
-                                <input
-                                    className="form-input"
-                                    placeholder="Your email"
-                                    name="email"
-                                    type="email"
-                                    value={formState.email}
-                                    onChange={handleChange}
-                                />
-                                <input
-                                    className="form-input"
-                                    placeholder="******"
-                                    name="password"
-                                    type="password"
-                                    value={formState.password}
-                                    onChange={handleChange}
-                                />
-                                <button
-                                    className="btn btn-block btn-primary"
-                                    style={{ cursor: 'pointer' }}
-                                    type="submit"
-                                >
-                                    Submit
-                                </button>
-                            </form>
-                        )}
+        <main className="login-background">
+            <div className="login">
+                <h4 className="card-header">Project Buddy Login</h4>
+                <img
+                    src={logo}
+                    alt="Project Buddy Logo"
+                    className="login-logo"
+                />
+                <div className="form-input">
+                    {data ? (
+                        <p>
+                            Success! You may now head{' '}
+                            <Link to="/">back to the homepage.</Link>
+                        </p>
+                    ) : (
+                        <form onSubmit={handleFormSubmit}>
+                            <input
+                                className="form-input"
+                                placeholder="Your email"
+                                name="email"
+                                type="email"
+                                value={formState.email}
+                                onChange={handleChange}
+                            />
+                            <input
+                                className="form-input"
+                                placeholder="Your password"
+                                name="password"
+                                type="password"
+                                value={formState.password}
+                                onChange={handleChange}
+                            />
+                            <button
+                                className="btn btn-block btn-primary"
+                                type="submit"
+                            >
+                                Submit
+                            </button>
+                            <Link
+                                className="btn btn-block btn-secondary"
+                                to="/signup"
+                            >
+                                Sign Up
+                            </Link>
+                        </form>
+                    )}
 
-                        {error && (
-                            <div className="my-3 p-3 bg-danger text-white">
-                                {error.message}
-                            </div>
-                        )}
-                    </div>
+                    {error && (
+                        <div className="error-message">{error.message}</div>
+                    )}
                 </div>
             </div>
         </main>

@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client';
 import { CREATE_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 import React from 'react';
+import '../assets/styles/signup.css';
 
 const Signup = () => {
     const [formState, setFormState] = useState({
@@ -39,13 +40,12 @@ const Signup = () => {
     };
 
     return (
-        <main className="flex-row justify-center mb-4">
-            <div className="col-12 col-lg-10">
-                <div className="card">
-                    <h4 className="card-header bg-dark text-light p-2">
+        <main className="signup-background">
+            <div className="signup">
+                    <h4 className="card-header">
                         Sign Up
                     </h4>
-                    <div className="card-body">
+                    <div className="form-input">
                         {data ? (
                             <p>
                                 Success! You may now head{' '}
@@ -71,7 +71,7 @@ const Signup = () => {
                                 />
                                 <input
                                     className="form-input"
-                                    placeholder="******"
+                                    placeholder="Your Password"
                                     name="password"
                                     type="password"
                                     value={formState.password}
@@ -94,7 +94,7 @@ const Signup = () => {
                         )}
                     </div>
                 </div>
-            </div>
+
         </main>
     );
 };

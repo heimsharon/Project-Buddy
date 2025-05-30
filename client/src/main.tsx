@@ -6,7 +6,7 @@ import App from './App';
 import HomePage from './pages/Homepage';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import AccountPage from './pages/AccountManagementPage';
+import AccountPage from './pages/ProfilePage';
 import ErrorPage from './pages/ErrorPage';
 import CalculatorPage from './pages/CalculatorPage';
 import CreateProjectPage from './pages/CreateProjectPage';
