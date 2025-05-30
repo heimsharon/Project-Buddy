@@ -10,7 +10,6 @@ interface IUnitCoverage {
     weight_lb: number;
     weight_ton: number;
     sqft: number;
-    quantity: number;
 }
 
 interface IMaterial extends Document {
@@ -18,10 +17,10 @@ interface IMaterial extends Document {
     category: 'fencing' | 'paint' | 'drywall' | 'lumber' | 'concrete' | 'roofing' | 'plumbing' | 'electrical' | 'flooring' | 'insulation' | 'decking' | 'stain' | 'landscaping' | 'hardware' | 'tools' | 'HVAC' | 'siding' | 'masonry';
     unit: string;  
     unitCoverage: IUnitCoverage;
+    quantity: number;
     priceUSD: number;
     vendor?: string;
     lastUpdated: Date;
-    projectId?: Number;
 }
 
 
@@ -50,8 +49,7 @@ const materialSchema = new Schema<IMaterial>({
       weight_lb: { type: Number },
       weight_ton: { type: Number },
       sqft: { type: Number },
-      quantity: { type: Number }
-    }),
+    }),    
     default: {
         length_ft: 0,
         width_ft: 0,
@@ -65,6 +63,9 @@ const materialSchema = new Schema<IMaterial>({
         quantity: 0
     }
   },
+  quantity: { 
+    type: Number
+  },
   priceUSD: {
     type: Number
   },
@@ -74,10 +75,6 @@ const materialSchema = new Schema<IMaterial>({
   lastUpdated: {
     type: Date,
     default: Date.now
-  },
-  projectId: {
-    type: Number,
-    ref : 'Project'
   }
 });
 

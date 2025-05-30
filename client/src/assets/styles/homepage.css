@@ -1,0 +1,52 @@
+.hero-logo {
+    width: 250px;
+    max-width: 80vw;
+    margin-bottom: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(16, 90, 91, 0.08);
+    background: #fff;
+}
+
+.hero {
+    text-align: center;
+    font-size: large;
+    font: bold 1.5rem 'Poppins', sans-serif;
+    margin-bottom: 2.5rem;
+}
+
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.feature-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    width: 250px;
+}
+
+.home {
+    min-height: 100vh;
+    background: url('../man-and-dog.png') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    padding-top: 4rem;
+}
+
+.home::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.469);
+    z-index: 0;
+}
+
+.home>* {
+    position: relative;
+    z-index: 3;
+}

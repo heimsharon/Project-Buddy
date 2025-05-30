@@ -1,0 +1,1 @@
+// This file would contain this like support contact, frequently asked questions, etc.

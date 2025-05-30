@@ -1,0 +1,141 @@
+/* Reset some default browser styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* App-wide body styles */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f7fa;
+    color: #222;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* Main container for pages */
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.app-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #105a5b;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Links */
+a {
+    color: #0077cc;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #105a5b;
+    text-decoration: underline;
+}
+
+/* Buttons */
+button {
+    background: #35b487;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #105a5b;
+}
+
+/* Forms */
+input,
+textarea,
+select {
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    width: 100%;
+    background: #fff;
+}
+
+label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    display: block;
+    color: #105a5b;
+}
+
+/* Cards */
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+.mb-2 {
+    margin-bottom: 2rem;
+}
+
+.p-2 {
+    padding: 2rem;
+}
+
+/* Error message styles */
+.error-message {
+    background: #ffebee;
+    color: #b71c1c;
+    border-left: 4px solid #f44336;
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+    font-weight: 500;
+}
+
+/* Logout button styles */
+.logout-btn {
+    background: #e53935;
+    color: #fff;
+}
+
+.logout-btn:hover {
+    background: #b71c1c;
+}

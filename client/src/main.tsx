@@ -1,39 +1,46 @@
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './assets/styles/index.css';
 
-
-import App from './App.jsx';
-import Home from './pages/Homepage';
+import App from './App';
+import HomePage from './pages/Homepage';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import Profile from './pages/Profile.js';
-import ErrorPage from './pages/Error';
+import AccountPage from './pages/ProfilePage';
+import ErrorPage from './pages/ErrorPage';
+import CalculatorPage from './pages/CalculatorPage';
+import CreateProjectPage from './pages/CreateProjectPage';
+import BudgetPage from './pages/BudgetPage';
+import ListProjectsPage from './pages/ListProjectsPage';
+import CreateTasksPage from './pages/CreateTasksPage';
+import ListTasksPage from './pages/ListTasksPage';
+import ListMaterialsPage from './pages/ListMaterialsPage';
+import ChatbotPage from './pages/ChatbotPage';
 import React from 'react';
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        index: true,
-        element: <Home />
-      }, {
-        path: '/login',
-        element: <Login />
-      }, {
-        path: '/signup',
-        element: <Signup />
-      }, {
-        path: '/profiles/:username',
-        element: <Profile />
-      }
-    ]
-  },
+    {
+        path: '/',
+        element: <App />,
+        errorElement: <ErrorPage />,
+        children: [
+            { index: true, element: <HomePage /> },
+            { path: '/login', element: <Login /> },
+            { path: '/signup', element: <Signup /> },
+            { path: '/accountpage', element: <AccountPage /> },
+            { path: '/calculatorpage', element: <CalculatorPage /> },
+            { path: '/createprojectpage', element: <CreateProjectPage /> },
+            { path: '/budgetpage', element: <BudgetPage /> },
+            { path: '/listprojectspage', element: <ListProjectsPage /> },
+            { path: '/createtaskspage', element: <CreateTasksPage /> },
+            { path: '/listtaskspage', element: <ListTasksPage /> },
+            { path: '/listmaterialspage', element: <ListMaterialsPage /> },
+            { path: '/chatbotpage', element: <ChatbotPage /> },
+        ],
+    },
 ]);
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(<RouterProvider router={router} />);
+    ReactDOM.createRoot(rootElement).render(<RouterProvider router={router} />);
 }
