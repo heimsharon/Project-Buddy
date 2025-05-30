@@ -23,9 +23,6 @@ export default function HomePage() {
                         <Link to="/signup" className="cta-btn primary">
                             Sign Up Free
                         </Link>
-                        <Link to="/projects" className="cta-btn secondary">
-                            View Demo Projects
-                        </Link>
                     </div>
                 </div>
             </section>
@@ -52,7 +49,7 @@ export default function HomePage() {
                 </Link>
 
                 {/* Budget Tracking */}
-                <Link to="/projects" className="feature-card">
+                <Link to="/budgetpage" className="feature-card">
                     <span role="img" aria-label="budget" className="feature-icon">
                         💰
                     </span>
