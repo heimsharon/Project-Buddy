@@ -4,6 +4,7 @@ import { expressMiddleware } from '@apollo/server/express4';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { typeDefs, resolvers } from './schemas/index.js';
+import chatRouter from './routes/chat.js';
 import db from './config/connection.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +23,8 @@ const startApolloServer = async () => {
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
+
+  app.use('/api/chat', chatRouter);
 
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../../client/dist')));
