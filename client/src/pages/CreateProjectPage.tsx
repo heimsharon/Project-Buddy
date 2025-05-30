@@ -28,7 +28,11 @@ export default function CreateProjectPage() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Submitting project:', project);
+          const existingProjects = JSON.parse(localStorage.getItem('projects') || '[]');
+    const updatedProjects = [...existingProjects, project];
+    localStorage.setItem('projects', JSON.stringify(updatedProjects));
+
+    console.log('Project saved:', project);
         // Will replace with GraphQL mutation
     };
 
