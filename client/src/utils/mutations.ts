@@ -26,53 +26,33 @@ export const CREATE_USER = gql`
 
 export const CREATE_PROJECT = gql`
   mutation createProject(
-  title: String!, 
-  description: String, 
-  type: String, 
-  dinmensions: [Float!],
-  dueDate: String,
-  materialIds: [ID!],
-  userId: ID!) 
-{
-  createProject(
-    title: $title, 
-    description: $description, 
-    type: $type, 
-    dimensions: $dimensions,
-    dueDate: $dueDate,
-    materialIds: $materialIds,
-    userId: $userId) {
-    _id
-    title
-    description
-    type
-    dimensions {
-      length
-      width
-      height
-    }
-    dueDate
-    materials {
+    $title: String!,
+    $description: String,
+    $type: String,
+    $dimensions: DimensionsInput,
+    $dueDate: String,
+    $materialIds: [ID!]
+  ) {
+    createProject(
+      title: $title,
+      description: $description,
+      type: $type,
+      dimensions: $dimensions,
+      dueDate: $dueDate,
+      materialIds: $materialIds
+    ) {
       _id
-      name
-      category
-      unitCoverage {
-        length_ft
-        width_ft
-        height_ft
-        width_in
-        length_in
-        thickness_in
-        weight_lb
-        weight_ton
-        sqft 
+      title
+      description
+      type
+      dimensions {
+        length
+        width
+        height
       }
-      quntity
-      priceUSD
-      vendor
+      dueDate
     }
   }
-}
 `;
 
 export const UPDATE_PROJECT = gql`

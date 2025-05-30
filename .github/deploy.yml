@@ -2,12 +2,10 @@ name: Deploy to Development
 on:
   push:
     branches:
-      - main
-      - development
+      - actions
   pull_request:
     branches:
-      - main
-      - development
+      - actions
 
 jobs:
     ci:
