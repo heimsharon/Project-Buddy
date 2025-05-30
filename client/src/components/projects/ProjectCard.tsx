@@ -5,7 +5,6 @@ interface ProjectCardProps {
     budget: number;
     status: 'planning' | 'in-progress' | 'completed' | 'not-started';
     onClick?: (id: string) => void;
-    isSelected: boolean;
 }
 
 export default function ProjectCard({
