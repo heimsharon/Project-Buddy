@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 
 // Define an interface for the Profile document
 interface IUser extends Document {
+  avatar?: string;
   username: string;
   email: string;
   password:string;
@@ -13,6 +14,10 @@ interface IUser extends Document {
 // Define the schema for the Profile document
 const userSchema = new Schema<IUser>(
   {
+    avatar: {
+      type: String,
+      default: 'https://example.com/default-avatar.png', // Default avatar URL
+    },
     username: {
       type: String,
       required: true,
