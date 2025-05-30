@@ -32,6 +32,7 @@ export const CREATE_PROJECT = gql`
     $dimensions: DimensionsInput,
     $dueDate: String,
     $materialIds: [ID!]
+    $userId: ID!
   ) {
     createProject(
       title: $title,
@@ -40,6 +41,7 @@ export const CREATE_PROJECT = gql`
       dimensions: $dimensions,
       dueDate: $dueDate,
       materialIds: $materialIds
+      userId: $userId
     ) {
       _id
       title

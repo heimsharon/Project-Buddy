@@ -1,13 +1,16 @@
 import express, { Request, Response } from 'express';
 import OpenAI from 'openai';
 import Material from '../models/Material.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Load the assistant ID from environment variables
-const assistantId = process.env.OPENAI_ASSISTANT_ID;
+console.log(process.env.OPENAI_ASSISTANT_ID);  
+const assistantId = process.env.OPENAI_ASSISTANT_ID || '';
 
-if (!assistantId) {
-    throw new Error('OPENAI_ASSISTANT_ID is not set in environment variables!');
-}
+//if (!assistantId) {
+  //  throw new Error('OPENAI_ASSISTANT_ID is not set in environment variables!');
+//}
 
 const router = express.Router();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY as string });
