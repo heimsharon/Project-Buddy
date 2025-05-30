@@ -19,7 +19,7 @@ export interface Project {
     name: string;
     description: string;
     budget: number;
-    status: 'in-progress' | 'completed' | 'not-started';
+    status: 'in-progress' | 'completed' | 'not-started' | 'planning';
     materials: Material[];
     budgetItems: BudgetItem[];
     tasks: Task[];
