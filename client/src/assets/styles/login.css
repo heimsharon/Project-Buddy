@@ -1,0 +1,116 @@
+.login-background {
+    min-height: 100vh;
+    background: url('../multiple-measures.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    padding-top: 4rem;
+}
+
+.login-background:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.387);
+    z-index: 0;
+}
+
+.login > * {
+    position: relative;
+    z-index: 3;
+}
+
+.login {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #222e3c;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.login .card-header {
+    background: #222e3c;
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+.login .form-input {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.login .btn-primary {
+    display: inline-block;
+    background: #de9115;
+    color: #fff;
+    border: 1.7px solid #0e7364;
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 0.5rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.login .btn-primary:hover {
+    background: #0c0a8d;
+}
+
+.login .btn-secondary {
+    display: inline-block;
+    background: #13907d;
+    color: #ffffff;
+    border: 1.7px solid #de9115;
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 0.5rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.login .btn-secondary:hover {
+    background: #bf570c;
+}
+
+.login .bg-danger {
+    background: #d32f2f !important;
+    color: #fff !important;
+    border-radius: 4px;
+    margin-top: 1rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.login .error-message {
+    color: #d32f2f;
+    background: #fff0f0;
+    border: 1px solid #d32f2f;
+    border-radius: 4px;
+    margin-top: 1rem;
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.login-logo {
+    display: block;
+    margin: -1.2rem auto 1.2rem auto;
+    max-width: 120px;
+    border-radius: 8px;
+}

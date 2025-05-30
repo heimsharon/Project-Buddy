@@ -11,7 +11,7 @@ export interface Task {
     description: string;
     dueDate?: Date;
     completed: boolean;
-    assignedTo?: string; // User ID if you have collaborators
+    assignedTo?: string;
 }
 
 export interface Project {
@@ -22,7 +22,7 @@ export interface Project {
     status: 'in-progress' | 'completed' | 'not-started';
     materials: Material[];
     budgetItems: BudgetItem[];
-    tasks: Task[]; // Added tasks property
+    tasks: Task[];
 }
 
 export interface Material {

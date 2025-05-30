@@ -1,1 +1,0 @@
-//This file would contain the Settings component
