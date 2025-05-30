@@ -150,11 +150,34 @@ const resolvers = {
             ),        
         deleteUser: async (_: any, { id }: { id: string }) => User.findByIdAndDelete(id),
 
-        createBudgetItem: async (_: any, { budgetItem }: { budgetItem: BudgetItem }) => {
-            const newBudgetItem = new BudgetItem(budgetItem);
+        createBudgetItem: async (_: any, args:
+            { 
+                name: string; 
+                cost: number; 
+                quantity: number; 
+                notes?: string; 
+                projectId: string 
+            }
+        ) => {
+            const newBudgetItem = new BudgetItem(args);
             return await newBudgetItem.save();
         },
-        updateBudgetItem: async (_: any, { id, budgetItem }: { id: string; budgetItem: BudgetItem }) => BudgetItem.findByIdAndUpdate(id, budgetItem, { new: true }),
+        updateBudgetItem: async (_: any, args
+            : { 
+                id: string; 
+                name?: string; 
+                cost?: number; 
+                quantity?: number; 
+                notes?: string 
+            }) => BudgetItem.findByIdAndUpdate(args.id,
+            {
+                    name: args.name,
+                    cost: args.cost,
+                    quantity: args.quantity,
+                    notes: args.notes
+                },
+                { new: true }
+            ),
         deleteBudgetItem: async (_: any, { id }: { id: string }) => BudgetItem.findByIdAndDelete(id),
 
         createProject: async (_: any, args: 

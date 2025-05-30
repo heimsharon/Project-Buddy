@@ -112,8 +112,20 @@ const typeDefs = `
         updateUser(id: ID!, username: String!, email: String!, password: String!, skills: [String]): User
         deleteUser(id: ID!): User
 
-        createBudgetItem(name: String!, cost: Float!, quantity: Int!, notes: String): BudgetItem
-        updateBudgetItem(id: ID!, name: String, cost: Float, quantity: Int, notes: String): BudgetItem
+        createBudgetItem(
+            name: String!,
+            cost: Float!,
+            quantity: Int!,
+            notes: String
+            projectId: ID!,
+        ): BudgetItem
+        updateBudgetItem(
+            id: ID!,
+            name: String,
+            cost: Float,
+            quantity: Int,
+            notes: String
+            ): BudgetItem
         deleteBudgetItem(id: ID!): BudgetItem
 
         createProject(
@@ -157,8 +169,19 @@ const typeDefs = `
         ): Material
         deleteMaterial(id: ID!): Material
 
-        createTask(title: String!, notes: String!, projectId: ID!, dueDate: String): Task
-        updateTask(id: ID!, title: String, notes: String, projectId: ID, completed: Boolean): Task
+        createTask(
+            title: String!,
+            notes: String!,
+            projectId: ID!,
+            dueDate: String
+        ): Task
+            updateTask(
+            id: ID!,
+            title: String,
+            notes: String,
+            projectId: ID,
+            completed: Boolean
+        ): Task
         deleteTask(id: ID!): Task
     }
 `;
