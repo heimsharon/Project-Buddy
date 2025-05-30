@@ -9,6 +9,8 @@ interface IProject extends Document {
       width: number;
       height: number;
     };
+    estimatedBudget: number;
+    actualBudget?: number;
     userId: ObjectId;
     materialIds: ObjectId[];
     createdAt: Date;
@@ -40,6 +42,14 @@ interface IProject extends Document {
         type: Number,
         default: null
       }
+    },
+    estimatedBudget: {
+      type: Number,
+      default: 0
+    },
+    actualBudget: {
+      type: Number,
+      default: 0
     },
     userId: {
       type: Schema.Types.ObjectId,

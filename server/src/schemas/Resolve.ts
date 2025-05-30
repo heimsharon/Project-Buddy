@@ -34,6 +34,8 @@ interface Project {
     description?: string;
     type: string;
     dimensions: Dimensions;
+    estimatedBudget: number;
+    actualBudget?: number;
     userId: string;
     createdAt: Date;
     dueDate?: Date;
@@ -186,6 +188,7 @@ const resolvers = {
                 description: string, 
                 userId: string, 
                 dimensions: Dimensions, 
+                estimatedBudget: number,
                 dueDate: string,
                 type: string,
                 materialIds?: string[]
@@ -201,6 +204,7 @@ const resolvers = {
                 description: string, 
                 type: string, 
                 materialIds?: string[], 
+                actualBudget?: number,
                 dimensions: Dimensions, 
                 dueDate: string
             }) => Project.findByIdAndUpdate(
@@ -210,6 +214,7 @@ const resolvers = {
                 description: args.description,
                 type: args.type,
                 dimensions: args.dimensions,
+                actualBudget: args.actualBudget,
                 dueDate: args.dueDate,
                 materialIds: args.materialIds
             },
