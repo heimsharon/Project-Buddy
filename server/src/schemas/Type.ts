@@ -33,6 +33,8 @@ const typeDefs = `
         description: String
         type: String
         dimensions: Dimensions
+        estimatedBudget: Float
+        actualBudget: Float
         userId: ID!
         materialIds: [ID]
         createdAt: String!
@@ -132,6 +134,7 @@ const typeDefs = `
             description: String,
             type: String,
             dimensions: DimensionsInput,
+            estimatedBudget: Float,
             dueDate: String,
             materialIds: [ID],
             userId: ID!
@@ -142,6 +145,7 @@ const typeDefs = `
             description: String,
             type: String,
             dimensions: DimensionsInput,
+            actualBudget: Float,
             dueDate: String,
             materialIds: [ID],
         ): Project
