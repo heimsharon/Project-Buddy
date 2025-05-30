@@ -11,8 +11,9 @@ import ErrorPage from './pages/ErrorPage';
 import CalculatorPage from './pages/CalculatorPage';
 import CreateProjectPage from './pages/CreateProjectPage';
 import BudgetPage from './pages/BudgetPage';
+import ListProjectsPage from './pages/ListProjectsPage';
 import CreateTasksPage from './pages/CreateTasksPage';
-import ProjectDetailsPage from './pages/ProjectDetailsPage';
+import ListTasksPage from './pages/ListTasksPage';
 import ListMaterialsPage from './pages/ListMaterialsPage';
 import ChatbotPage from './pages/ChatbotPage';
 import React from 'react';
@@ -30,8 +31,9 @@ const router = createBrowserRouter([
             { path: '/calculatorpage', element: <CalculatorPage /> },
             { path: '/createprojectpage', element: <CreateProjectPage /> },
             { path: '/budgetpage', element: <BudgetPage /> },
-            { path: '/projects', element: <ProjectDetailsPage /> },
+            { path: '/listprojectspage', element: <ListProjectsPage /> },
             { path: '/createtaskspage', element: <CreateTasksPage /> },
+            { path: '/listtaskspage', element: <ListTasksPage /> },
             { path: '/listmaterialspage', element: <ListMaterialsPage /> },
             { path: '/chatbotpage', element: <ChatbotPage /> },
         ],

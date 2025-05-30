@@ -6,7 +6,7 @@ import projectBuddyLogo from '../assets/project-buddy-logo.png';
 export default function HomePage() {
     return (
         <div className="home">
-            {/* Hero Section */}
+            {/* Hero Section: App logo, headline, and call-to-action */}
             <section className="hero">
                 <img
                     src={projectBuddyLogo}
@@ -17,53 +17,83 @@ export default function HomePage() {
                 <div className="hero-content">
                     <h1>Plan DIY Projects Like a Pro</h1>
                     <p>
-                        All-in-one workspace to plan, track, and budget your DIY projects
+                        A DIY Project Organizer - Plan, Estimate & Track your
+                        Projects with optional AI Chatbot assistance.
                     </p>
-                    <div className="hero-buttons">
-                        <Link to="/signup" className="cta-btn primary">
-                            Sign Up Free
-                        </Link>
-                    </div>
+
+                    {/* Signup button for new users */}
+                    <Link to="/signup" className="cta-btn">
+                        Get Started
+                    </Link>
                 </div>
             </section>
 
-            {/* Features Grid */}
+            {/* Project Gallery Features: Quick links to main app features */}
             <h2 style={{ textAlign: 'center' }}>Features</h2>
             <div className="features">
-                {/* Project Dashboard */}
-                <Link to="/projects" className="feature-card">
-                    <span role="img" aria-label="projects" className="feature-icon">
-                        🛠️
-                    </span>
-                    <h3>Project Dashboard</h3>
-                    <p>Manage tasks, materials, and budgets for all your projects.</p>
-                </Link>
-
-                {/* Material Calculator */}
+                {/* Material Calculator Feature */}
                 <Link to="/calculatorpage" className="feature-card">
-                    <span role="img" aria-label="calculator" className="feature-icon">
+                    <span
+                        role="img"
+                        aria-label="calculator"
+                        className="feature-icon"
+                    >
                         🧮
                     </span>
                     <h3>Material Calculator</h3>
                     <p>Estimate paint, lumber, and more for your projects.</p>
                 </Link>
 
-                {/* Budget Tracking */}
-                <Link to="/budgetpage" className="feature-card">
-                    <span role="img" aria-label="budget" className="feature-icon">
-                        💰
+                {/* Create Project Feature */}
+                <Link to="/createprojectpage" className="feature-card">
+                    <span
+                        role="img"
+                        aria-label="tasks"
+                        className="feature-icon"
+                    >
+                        ✅
                     </span>
-                    <h3>Budget Tracking</h3>
-                    <p>Monitor expenses with real-time calculations.</p>
+                    <h3>Create a Project</h3>
+                    <p>Break down your project into manageable steps.</p>
                 </Link>
 
-                {/* AI Assistant */}
+                {/* Budget Feature */}
+                <Link to="/budgetpage" className="feature-card">
+                    <span
+                        role="img"
+                        aria-label="budget"
+                        className="feature-icon"
+                    >
+                        💰
+                    </span>
+                    <h3>Budget</h3>
+                    <p>Track and manage your project expenses.</p>
+                </Link>
+
+                {/* Task List Feature */}
+                <Link to="/listtaskspage" className="feature-card">
+                    <span
+                        role="img"
+                        aria-label="task list"
+                        className="feature-icon"
+                    >
+                        📝
+                    </span>
+                    <h3>Task List</h3>
+                    <p>View and manage all your project tasks in one place.</p>
+                </Link>
+
+                {/* AI Chatbot Feature */}
                 <Link to="/chatbotpage" className="feature-card">
-                    <span role="img" aria-label="chatbot" className="feature-icon">
+                    <span
+                        role="img"
+                        aria-label="chatbot"
+                        className="feature-icon"
+                    >
                         🤖
                     </span>
-                    <h3>AI Assistant</h3>
-                    <p>Get personalized project guidance.</p>
+                    <h3>AI Chatbot Assistant</h3>
+                    <p>Get instant DIY advice and project guidance.</p>
                 </Link>
             </div>
         </div>
