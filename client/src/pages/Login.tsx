@@ -5,7 +5,7 @@ import { LOGIN_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 import React from 'react';
 import '../assets/styles/login.css';
-import logo from '../../public/android-chrome-192x192.png';
+import logo from '../assets/project-buddy-with-tagline.png';
 
 const Login = () => {
     const [formState, setFormState] = useState({ email: '', password: '' });

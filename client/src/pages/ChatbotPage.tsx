@@ -5,7 +5,7 @@ import '../assets/styles/chatbot.css';
 export default function ChatbotPage() {
     return (
         <div className="background">
-            <div className="chatbot-page">
+            <div className="bot-container">
                 <h1>Project Buddy Chatbot</h1>
                 <p>
                     Welcome to the Project Buddy Chatbot! Ask me anything about

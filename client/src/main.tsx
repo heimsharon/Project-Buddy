@@ -1,3 +1,4 @@
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './assets/styles/index.css';
@@ -16,7 +17,6 @@ import CreateTasksPage from './pages/CreateTasksPage';
 import ListTasksPage from './pages/ListTasksPage';
 import ListMaterialsPage from './pages/ListMaterialsPage';
 import ChatbotPage from './pages/ChatbotPage';
-import React from 'react';
 
 const router = createBrowserRouter([
     {

@@ -29,23 +29,32 @@ interface ProjectData {
 }
 
 export default function CreateProjectPage() {
-    const user= auth.getProfile();
-    console.log(user);
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState<'details' | 'materials' | 'calculator'>('details');
+    let user;
+    try {
+        user = auth.getProfile();
+    } catch (e) {
+        // If token is invalid, redirect to login
+        navigate('/login');
+        return null;
+    }
+
+    const [activeTab, setActiveTab] = useState<
+        'details' | 'materials' | 'calculator'
+    >('details');
     const [project, setProject] = useState<ProjectData>({
-        userId: user.data._id,
+        userId: user?.data?._id || '',
         title: '',
         description: '',
         type: '',
         dimensions: {
             length: 0,
             width: 0,
-            height: 0
+            height: 0,
         },
         materials: [],
         dueDate: new Date().toISOString().split('T')[0],
-        budgetItems: []
+        budgetItems: [],
     });
 
     const [createproject] = useMutation(CREATE_PROJECT);
@@ -62,7 +71,8 @@ export default function CreateProjectPage() {
         console.log('Hello!');
         // Calculate total budget
         const totalBudget = project.materials.reduce(
-            (sum, material) => sum + (material.cost * material.quantity), 0
+            (sum, material) => sum + material.cost * material.quantity,
+            0
         );
 
         // Prepare project data for API
@@ -70,20 +80,19 @@ export default function CreateProjectPage() {
             ...project,
             userId: user.data._id,
             budget: totalBudget,
-            materialIds: project.materials.map(m => m.id),
-            budgetItems: project.materials.map(material => ({
+            materialIds: project.materials.map((m) => m.id),
+            budgetItems: project.materials.map((material) => ({
                 name: material.name,
                 estimatedCost: material.cost * material.quantity,
-                category: material.category
-            }))
+                category: material.category,
+            })),
         };
-console.log(projectData);
+        console.log(projectData);
         try {
-            const { data} = await createproject({
-                variables: { ...projectData }
+            const { data } = await createproject({
+                variables: { ...projectData },
             });
-            
-           
+
             console.log('Project created:', data.createProject);
             navigate('/projects');
         } catch (error) {
@@ -93,8 +102,8 @@ console.log(projectData);
 
     const addCalculatorResult = () => {
         if (!calculatorResult) return;
-        
-        setProject(prev => ({
+
+        setProject((prev) => ({
             ...prev,
             materials: [
                 ...prev.materials,
@@ -103,33 +112,35 @@ console.log(projectData);
                     name: calculatorResult.material,
                     quantity: calculatorResult.quantity,
                     unit: 'pieces',
-                    cost: calculatorResult.estimatedCost / calculatorResult.quantity,
-                    category: 'construction'
-                }
-            ]
+                    cost:
+                        calculatorResult.estimatedCost /
+                        calculatorResult.quantity,
+                    category: 'construction',
+                },
+            ],
         }));
-        
+
         setCalculatorResult(null);
     };
 
     return (
         <div className="create-project-page">
             <h1>Create New Project</h1>
-            
+
             <div className="tabs">
-                <button 
+                <button
                     className={activeTab === 'details' ? 'active' : ''}
                     onClick={() => setActiveTab('details')}
                 >
                     Project Details
                 </button>
-                <button 
+                <button
                     className={activeTab === 'materials' ? 'active' : ''}
                     onClick={() => setActiveTab('materials')}
                 >
                     Materials
                 </button>
-                <button 
+                <button
                     className={activeTab === 'calculator' ? 'active' : ''}
                     onClick={() => setActiveTab('calculator')}
                 >
@@ -144,17 +155,21 @@ console.log(projectData);
                             values={{
                                 title: project.title,
                                 description: project.description,
-                                type: project.type, 
+                                type: project.type,
                                 dimensions: project.dimensions,
                                 dueDate: project.dueDate,
                                 budget: project.materials.reduce(
-                                    (sum, material) => sum + (material.cost * material.quantity), 0
-                                ) // Calculating budget based on materials
+                                    (sum, material) =>
+                                        sum + material.cost * material.quantity,
+                                    0
+                                ), // Calculating budget based on materials
                             }}
-                            onChange={(values) => setProject(prev => ({
-                                ...prev,
-                                ...values
-                            }))}
+                            onChange={(values) =>
+                                setProject((prev) => ({
+                                    ...prev,
+                                    ...values,
+                                }))
+                            }
                         />
                     </div>
                 )}
@@ -168,16 +183,23 @@ console.log(projectData);
                                     ...prev,
                                     materials: materials.map((material) => ({
                                         ...material,
-                                        category: material.category || 'default', // Provide a default category if missing
+                                        category:
+                                            material.category || 'default', // Provide a default category if missing
                                     })),
                                 }))
                             }
                         />
                         <div className="budget-summary">
-                            <h3>Estimated Budget: $
-                                {project.materials.reduce(
-                                    (sum, material) => sum + (material.cost * material.quantity), 0
-                                ).toFixed(2)}
+                            <h3>
+                                Estimated Budget: $
+                                {project.materials
+                                    .reduce(
+                                        (sum, material) =>
+                                            sum +
+                                            material.cost * material.quantity,
+                                        0
+                                    )
+                                    .toFixed(2)}
                             </h3>
                         </div>
                     </div>
@@ -185,17 +207,21 @@ console.log(projectData);
 
                 {activeTab === 'calculator' && (
                     <div className="calculator-section">
-                        <MaterialCalculator 
-                            onCalculate={(result) => setCalculatorResult(result)}
+                        <MaterialCalculator
+                            onCalculate={(result) =>
+                                setCalculatorResult(result)
+                            }
                         />
                         {calculatorResult && (
                             <div className="calculator-result">
                                 <p>
-                                    {calculatorResult.quantity} {calculatorResult.material} 
-                                    (Est. ${calculatorResult.estimatedCost.toFixed(2)})
+                                    {calculatorResult.quantity}{' '}
+                                    {calculatorResult.material}
+                                    (Est. $
+                                    {calculatorResult.estimatedCost.toFixed(2)})
                                 </p>
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     onClick={addCalculatorResult}
                                     className="add-result-btn"
                                 >
@@ -207,21 +233,26 @@ console.log(projectData);
                 )}
 
                 <div className="form-actions">
-                    <button 
-                        type="button" 
-                        onClick={() => activeTab === 'details' 
-                            ? setActiveTab('materials') 
-                            : setActiveTab('details')
+                    <button
+                        type="button"
+                        onClick={() =>
+                            activeTab === 'details'
+                                ? setActiveTab('materials')
+                                : setActiveTab('details')
                         }
                         className="nav-button"
                     >
-                        {activeTab === 'details' ? 'Next: Materials' : 'Back to Details'}
+                        {activeTab === 'details'
+                            ? 'Next: Materials'
+                            : 'Back to Details'}
                     </button>
-                    
-                    <button 
-                        type="submit" 
+
+                    <button
+                        type="submit"
                         className="submit-button"
-                        disabled={!project.title || project.materials.length === 0}
+                        disabled={
+                            !project.title || project.materials.length === 0
+                        }
                     >
                         Create Project
                     </button>
