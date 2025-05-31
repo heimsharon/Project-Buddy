@@ -1,9 +1,22 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../assets/styles/homepage.css';
 import projectBuddyLogo from '../assets/project-buddy-logo.png';
 
+// Dummy authentication check function (replace with your real auth logic)
+function isUserSignedIn() {
+    return !!localStorage.getItem('token'); // Example: check for auth token
+}
+
 export default function HomePage() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isUserSignedIn()) {
+            navigate('/login');
+        }
+    }, [navigate]);
+
     return (
         <div className="home">
             {/* Hero Section: App logo, headline, and call-to-action */}

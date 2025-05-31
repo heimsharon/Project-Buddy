@@ -8,7 +8,7 @@ const Header: React.FC = () => {
     const navigate = useNavigate();
 
     const hideUserActionsOn = ['/login', '/signup'];
-    const isAuthenticated = !!localStorage.getItem('id_token');
+    const isAuthenticated = !!localStorage.getItem('token');
 
     return (
         <header className="header">
@@ -31,7 +31,7 @@ const Header: React.FC = () => {
                         <button
                             className="logout-btn"
                             onClick={() => {
-                                localStorage.removeItem('id_token');
+                                localStorage.removeItem('token');
                                 navigate('/');
                             }}
                         >

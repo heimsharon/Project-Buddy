@@ -4,6 +4,7 @@ export const QUERY_ALL_USERS = gql`
   query GetAllUsers {
     getAllUsers {
       _id
+      avatar
       email
       password
       skills
@@ -13,15 +14,29 @@ export const QUERY_ALL_USERS = gql`
 `;
 
 export const QUERY_USER = gql`
-  query GetUserById($getUserByIdId: ID!) {
-  getUserById(id: $getUserByIdId) {
+  query GetUserById($id: ID!) {
+  getUserById(id: $id) {
     _id
+    avatar
     email
     password
     skills
     username
   }
 }
+`;
+
+export const QUERY_CURRENT_USER = gql`
+  query {
+    currentUser {
+      _id
+      avatar
+      email
+      password
+      skills
+      username
+    }
+  }
 `;
 
 export const QUERY_ALL_PROJECTS = gql`
@@ -98,9 +113,9 @@ export const QUERY_ALL_BUDGET_ITEMS = gql`
   query GetAllBudgetItems {
   getAllBudgetItems {
     _id
-    cost
     name
-    notes
+    estimatedCost
+    actualCost
     quantity
   }
 }
@@ -110,9 +125,9 @@ export const QUERY_SINGLE_BUDGET_ITEM = gql`
   query GetBudgetItemById($getBudgetItemByIdId: ID!) {
   getBudgetItemById(id: $getBudgetItemByIdId) {
     _id
-    cost
     name
-    notes
+    estimatedCost
+    actualCost
     quantity
   }
 }

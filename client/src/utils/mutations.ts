@@ -17,11 +17,38 @@ export const CREATE_USER = gql`
   createUser(username: $username, email: $email, password: $password) {
     user {
       username
+      email
       _id
     }
     token
   }
 }
+`;
+
+export const UPDATE_USER = gql`
+  mutation updateUser(
+    $avatar: String,
+    $username: String,
+    $email: String,
+    $password: String
+  ) {
+    updateUser(avatar: $avatar, username: $username, email: $email, password: $password) {
+      _id
+      avatar
+      username
+      email
+    }
+  }
+`;
+
+export const DELETE_USER = gql`
+  mutation deleteUser {
+    deleteUser {
+      _id
+      username
+      email
+    }
+  }
 `;
 
 export const CREATE_PROJECT = gql`
@@ -31,7 +58,7 @@ export const CREATE_PROJECT = gql`
     $type: String,
     $dimensions: DimensionsInput,
     $dueDate: String,
-    $materialIds: [ID!]
+    $materialIds: [ID],
     $userId: ID!
   ) {
     createProject(
@@ -40,7 +67,7 @@ export const CREATE_PROJECT = gql`
       type: $type,
       dimensions: $dimensions,
       dueDate: $dueDate,
-      materialIds: $materialIds
+      materialIds: $materialIds,
       userId: $userId
     ) {
       _id

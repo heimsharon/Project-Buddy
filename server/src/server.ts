@@ -34,7 +34,15 @@ const startApolloServer = async () => {
     });
     console.log('Running in production mode at http://localhost:3001');
   }
-  app.use('/graphql', expressMiddleware(server));
+
+  app.use('/graphql', expressMiddleware(server, {
+    context: async ({ req, res }) => {
+      if (!req) {
+        console.error('Request object missing from context');
+      }
+      return { req, res };
+    }
+  }));
 
   app.listen(PORT, () => {
     console.log(`API server running on port ${PORT}!`);
