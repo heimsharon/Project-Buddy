@@ -1,37 +1,58 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function MaterialCalculator() {
+interface MaterialCalculatorProps {
+    onCalculate?: (result: { material: string; quantity: number; estimatedCost: number }) => void;
+}
+
+function MaterialCalculator({ onCalculate }: MaterialCalculatorProps) {
     const [material, setMaterial] = useState('concrete');
     const [length, setLength] = useState<number>(0);
     const [width, setWidth] = useState<number>(0);
     const [depth, setDepth] = useState<number>(0);
-    const [result, setResult] = useState<string | null>(null);
 
     const calculate = () => {
-        let volume, area, value;
+        let volume, area, value, estimatedCost;
 
         switch (material) {
             case 'concrete':
                 volume = length * width * depth; // in cubic feet
                 value = volume / 0.6; // 1 bag = 0.6 cu ft (80 lb bag)
-                setResult(`${Math.ceil(value)} bags of concrete`);
+                estimatedCost = Math.ceil(value) * 5; // Assume $5 per bag
+                onCalculate?.({
+                    material: 'Concrete',
+                    quantity: Math.ceil(value),
+                    estimatedCost,
+                });
                 break;
 
             case 'paint':
                 area = length * width;
                 value = area / 350; // 1 gallon covers ~350 sq ft
-                setResult(`${Math.ceil(value)} gallons of paint`);
+                estimatedCost = Math.ceil(value) * 25; // Assume $25 per gallon
+                onCalculate?.({
+                    material: 'Paint',
+                    quantity: Math.ceil(value),
+                    estimatedCost,
+                });
                 break;
 
             case 'tile':
                 area = length * width;
                 value = area / 1; // assume each tile covers 1 sq ft
-                setResult(`${Math.ceil(value)} tiles needed`);
+                estimatedCost = Math.ceil(value) * 2; // Assume $2 per tile
+                onCalculate?.({
+                    material: 'Tile',
+                    quantity: Math.ceil(value),
+                    estimatedCost,
+                });
                 break;
 
             default:
-                setResult(null);
+                onCalculate?.({
+                    material: '',
+                    quantity: 0,
+                    estimatedCost: 0,
+                });
         }
     };
 
@@ -42,15 +63,11 @@ function MaterialCalculator() {
             <select
                 className="w-full p-2 border mb-4"
                 value={material}
-                onChange={(e) => {
-                    setMaterial(e.target.value);
-                    setResult(null); // Reset result
-                }}
+                onChange={(e) => setMaterial(e.target.value)}
             >
                 <option value="concrete">Concrete</option>
                 <option value="paint">Paint</option>
                 <option value="tile">Tile</option>
-                {/* Add more materials as needed */}
             </select>
 
             <div className="space-y-2">
@@ -103,14 +120,9 @@ function MaterialCalculator() {
                     Calculate
                 </button>
             </div>
-
-            {result && (
-                <p className="mt-4 text-lg font-medium text-green-700">
-                    Estimated: {result}
-                </p>
-            )}
         </div>
     );
 }
 
 export default MaterialCalculator;
+

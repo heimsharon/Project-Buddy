@@ -2,9 +2,16 @@ import React from 'react';
 import { ChangeEvent } from 'react';
 
 interface ProjectFormValues {
-    name: string;
+    title: string;
     description: string;
     budget: number;
+    dimensions: {
+        length: number;
+        width: number;
+        height: number;
+    };
+    dueDate: string;
+    type: string;
 }
 
 interface ProjectFormProps {
@@ -29,9 +36,9 @@ export default function ProjectForm({ values, onChange }: ProjectFormProps) {
                 <label htmlFor="name">Project Name</label>
                 <input
                     type="text"
-                    id="name"
-                    name="name"
-                    value={values.name}
+                    id="title"
+                    name="title"
+                    value={values.title}
                     onChange={handleChange}
                     placeholder="e.g., Build a bookshelf"
                     required

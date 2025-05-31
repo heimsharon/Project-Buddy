@@ -29,6 +29,7 @@ export interface Material {
     id: string;
     name: string;
     quantity: number;
-    unit: 'sqft' | 'pieces' | 'gallons';
+    unit: 'pieces' | 'sqft' | 'gallons';
     cost: number;
+    category: string;
 }
