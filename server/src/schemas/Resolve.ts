@@ -120,7 +120,6 @@ const resolvers = {
                 console.log(projects);
                 return projects;
             } catch (err) {
-                console.error(err);
                 throw new Error('Invalid user ID format');
             }
         },

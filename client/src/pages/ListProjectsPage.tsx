@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { QUERY_PROJECTS_BY_USER } from '../utils/queries'; 
+import { useNavigate } from 'react-router-dom'; // <-- Add this
+import { QUERY_PROJECTS_BY_USER } from '../utils/queries';
 import { DELETE_PROJECT } from '../utils/mutations';
 import ProjectCard from '../components/projects/ProjectCard';
 import '../assets/styles/projectlist.css';
@@ -13,6 +14,7 @@ const BLANK_EXAMPLE = {
 
 export default function ListProjectsPage() {
   const [userId, setUserId] = useState<string | null>(null);
+  const navigate = useNavigate(); // <-- Add this
 
   // Fetch current user
   const fetchUserData = async () => {
@@ -63,22 +65,24 @@ export default function ListProjectsPage() {
     fetchPolicy: 'network-only',
   });
 
-  // Delete mutation
+  const isInvalidUserIdError = error?.graphQLErrors?.some((err) =>
+    err.message.includes('Invalid user ID format')
+  );
+
+  const projects = isInvalidUserIdError ? [] : data?.getProjectByUser || [];
+
   const [deleteProject] = useMutation(DELETE_PROJECT, {
     update(cache, { data: { deleteProject } }) {
-      // Read current projects from cache
       const existingProjects: any = cache.readQuery({
         query: QUERY_PROJECTS_BY_USER,
         variables: { userId },
       });
 
       if (existingProjects && existingProjects.getProjectByUser) {
-        // Filter out deleted project
         const newProjects = existingProjects.getProjectByUser.filter(
           (proj: any) => proj._id !== deleteProject._id
         );
 
-        // Write updated list back to cache
         cache.writeQuery({
           query: QUERY_PROJECTS_BY_USER,
           variables: { userId },
@@ -91,10 +95,12 @@ export default function ListProjectsPage() {
     },
   });
 
-  const projects = data?.getProjectByUser || [];
-
   const handleDelete = (projectId: string) => {
     deleteProject({ variables: { id: projectId } });
+  };
+
+  const handleExampleProjectClick = () => {
+    navigate('/createprojectpage');
   };
 
   return (
@@ -109,7 +115,7 @@ export default function ListProjectsPage() {
           <p>Loading user data...</p>
         ) : loading ? (
           <p>Loading projects...</p>
-        ) : error ? (
+        ) : error && !isInvalidUserIdError ? (
           <p>Error loading projects: {error.message}</p>
         ) : projects.length === 0 ? (
           <div
@@ -124,7 +130,11 @@ export default function ListProjectsPage() {
           >
             <h3>No projects found</h3>
             <p>Here’s an example project to get you started:</p>
-            <div style={{ maxWidth: 320, margin: '1.5rem auto' }}>
+            <div
+              style={{ maxWidth: 320, margin: '1.5rem auto', cursor: 'pointer' }}
+              onClick={handleExampleProjectClick}
+              title="Click to create a new project"
+            >
               <ProjectCard
                 id="example"
                 name={BLANK_EXAMPLE.name}
@@ -138,7 +148,7 @@ export default function ListProjectsPage() {
                 }
               />
             </div>
-            <p>Create a new project to see it listed here!</p>
+            <p>Click the example project above to create your own!</p>
           </div>
         ) : (
           <div

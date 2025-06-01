@@ -34,8 +34,8 @@ export default function HomePage() {
                         Projects with optional AI Chatbot assistance.
                     </p>
 
-                    {/* Signup button for new users */}
-                    <Link to="/signup" className="cta-btn">
+                    {/* Call-to-action button */}
+                    <Link to="/createprojectpage" className="cta-btn">
                         Get Started
                     </Link>
                 </div>
