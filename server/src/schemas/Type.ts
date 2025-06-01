@@ -1,6 +1,7 @@
 const typeDefs = `
     type User {
         _id: ID!
+        avatar: String
         username: String!
         email: String!
         password: String!
@@ -9,10 +10,11 @@ const typeDefs = `
 
     type BudgetItem {
         _id: ID!
+        projectId: ID!
         name: String!
-        cost: Float!
+        estimatedCost: Float!
+        actualCost: Float
         quantity: Int!
-        notes: String
     }
 
     type Dimensions {
@@ -33,6 +35,8 @@ const typeDefs = `
         description: String
         type: String
         dimensions: Dimensions
+        estimatedBudget: Float
+        actualBudget: Float
         userId: ID!
         materialIds: [ID]
         createdAt: String!
@@ -92,12 +96,13 @@ const typeDefs = `
     type Query {
         getAllUsers: [User]
         getUserById(id: ID!): User
+        currentUser: User
 
         getAllBudgetItems: [BudgetItem]
         getBudgetItemById(id: ID!): BudgetItem
 
         getAllProjects: [Project]
-        getProjectById(id: ID!): Project
+        getProjectByUser(userId: ID!): [Project]
 
         getAllMaterials: [Material]
         getMaterialById(id: ID!): Material
@@ -109,22 +114,21 @@ const typeDefs = `
     type Mutation {
         createUser(username: String!, email: String!, password: String!, skills: [String]): Auth
         login(email: String!, password: String!): Auth
-        updateUser(id: ID!, username: String!, email: String!, password: String!, skills: [String]): User
+        updateUser(id: ID!, avatar: String, username: String!, email: String!, password: String!, skills: [String]): User
         deleteUser(id: ID!): User
 
         createBudgetItem(
             name: String!,
-            cost: Float!,
+            estimatedCost: Float!,
             quantity: Int!,
-            notes: String
             projectId: ID!,
         ): BudgetItem
         updateBudgetItem(
             id: ID!,
             name: String,
-            cost: Float,
-            quantity: Int,
-            notes: String
+            estimatedCost: Float,
+            actualCost: Float,
+            quantity: Int
             ): BudgetItem
         deleteBudgetItem(id: ID!): BudgetItem
 
@@ -133,6 +137,7 @@ const typeDefs = `
             description: String,
             type: String,
             dimensions: DimensionsInput,
+            estimatedBudget: Float,
             dueDate: String,
             materialIds: [ID],
             userId: ID!
@@ -143,6 +148,7 @@ const typeDefs = `
             description: String,
             type: String,
             dimensions: DimensionsInput,
+            actualBudget: Float,
             dueDate: String,
             materialIds: [ID],
         ): Project
@@ -177,9 +183,9 @@ const typeDefs = `
         ): Task
             updateTask(
             id: ID!,
-            title: String,
-            notes: String,
-            projectId: ID,
+            title: String!,
+            notes: String!,
+            projectId: ID!,
             completed: Boolean
         ): Task
         deleteTask(id: ID!): Task

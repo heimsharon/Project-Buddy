@@ -10,6 +10,7 @@ import {
     FaBoxes,
     FaMoneyBillWave,
     FaUser,
+    FaLifeRing,
 } from 'react-icons/fa';
 
 export default function Navbar() {
@@ -28,7 +29,7 @@ export default function Navbar() {
                             icon: <FaProjectDiagram />,
                         },
                         {
-                            title: 'List Projects',
+                            title: 'Projects List',
                             url: '/listprojectspage',
                             icon: <FaProjectDiagram />,
                         },
@@ -73,7 +74,7 @@ export default function Navbar() {
                             icon: <FaCalculator />,
                         },
                         {
-                            title: 'Chatbot',
+                            title: 'Project Buddy AI',
                             url: '/chatbotpage',
                             icon: <FaComments />,
                         },
@@ -88,8 +89,18 @@ export default function Navbar() {
                             url: '/accountpage',
                             icon: <FaUser />,
                         },
+                        {
+                            title: 'Support',
+                            url: '/supportpage',
+                            icon: <FaLifeRing />,
+                        },
+
                     ]}
                 />
+
+
+
+
             </div>
         </nav>
     );

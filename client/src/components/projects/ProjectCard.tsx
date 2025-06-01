@@ -3,7 +3,7 @@ interface ProjectCardProps {
     id: string;
     name: string;
     budget: number;
-    status: 'planning' | 'in-progress' | 'completed';
+    status: 'planning' | 'in-progress' | 'completed' | 'not-started';
     onClick?: (id: string) => void;
 }
 

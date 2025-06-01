@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-export const authenticateToken = ({ req }: any) => {
+const authenticateToken = ({ req }: any) => {
   // Allows token to be sent via req.body, req.query, or headers
   let token = req.body.token || req.query.token || req.headers.authorization;
 
@@ -32,7 +32,7 @@ export const authenticateToken = ({ req }: any) => {
   return req;
 };
 
-export const signToken = (username: string, email: string, _id: unknown) => {
+const signToken = (username: string, email: string, _id: unknown) => {
   // Create a payload with the user information
   const payload = { username, email, _id };
   const secretKey: any = process.env.JWT_SECRET_KEY; // Get the secret key from environment variables
@@ -41,9 +41,43 @@ export const signToken = (username: string, email: string, _id: unknown) => {
   return jwt.sign({ data: payload }, secretKey, { expiresIn: '2h' });
 };
 
-export class AuthenticationError extends GraphQLError {
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || '';
+
+const verifyToken = (req: { headers: { authorization: string; }; user: any; }) => {
+  if (!req || !req.headers) {
+    throw new Error('Request headers are missing');
+  }
+
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+
+  if (!token) {
+    throw new Error('No token provided');
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET_KEY);
+    req.user = (typeof decoded === 'object' && decoded !== null && 'data' in decoded)
+      ? (decoded as any).data
+      : decoded;
+    return decoded;
+  } catch (error) {
+    throw new Error('Invalid or expired token');
+  }
+};
+
+class AuthenticationError extends GraphQLError {
   constructor(message: string) {
     super(message, undefined, undefined, undefined, ['UNAUTHENTICATED']);
     Object.defineProperty(this, 'name', { value: 'AuthenticationError' });
   }
 };
+
+const Authentication = {
+  authenticateToken,
+  signToken,
+  verifyToken,
+  AuthenticationError
+};
+
+export default Authentication;

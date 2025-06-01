@@ -322,7 +322,7 @@ Portions of this project were developed using starter code provided by [edX Boot
 
 Created by:
 
-- **Anthony Langsong** — SCRUM & Frontend
+- **Anthony Langdon** — SCRUM & Frontend
     GitHub: [TonesTheDude](https://github.com/TonesTheDude)
 - **Mark Osgood** — Frontend
     GitHub: [Osgravy](https://github.com/Osgravy)

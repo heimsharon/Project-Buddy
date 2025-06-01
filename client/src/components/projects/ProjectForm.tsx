@@ -1,10 +1,16 @@
-import React from 'react';
-import { ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 
 interface ProjectFormValues {
-    name: string;
+    title: string;
     description: string;
-    budget: number;
+    estimatedBudget: number | null;
+    dimensions: {
+        length: number | null;
+        width: number | null;
+        height: number | null;
+    };
+    dueDate?: string;
+    type?: string;
 }
 
 interface ProjectFormProps {
@@ -12,26 +18,47 @@ interface ProjectFormProps {
     onChange: (values: ProjectFormValues) => void;
 }
 
+const projectTypes = [
+    'Construction',
+    'Design',
+    'Renovation',
+    'Research',
+    'Other'
+];
+
 export default function ProjectForm({ values, onChange }: ProjectFormProps) {
     const handleChange = (
-        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+        const { name, value, type } = e.target;
+        onChange({
+            ...values,
+            [name]: type === 'number' ? Number(value) : value,
+        });
+    };
+
+    const handleDimensionsChange = (
+        e: ChangeEvent<HTMLInputElement>
     ) => {
         const { name, value } = e.target;
         onChange({
             ...values,
-            [name]: name === 'budget' ? Number(value) : value,
+            dimensions: {
+                ...values.dimensions,
+                [name]: Number(value),
+            },
         });
     };
 
     return (
         <div className="project-form">
             <div className="form-group">
-                <label htmlFor="name">Project Name</label>
+                <label htmlFor="title">Project Name</label>
                 <input
                     type="text"
-                    id="name"
-                    name="name"
-                    value={values.name}
+                    id="title"
+                    name="title"
+                    value={values.title}
                     onChange={handleChange}
                     placeholder="e.g., Build a bookshelf"
                     required
@@ -51,18 +78,105 @@ export default function ProjectForm({ values, onChange }: ProjectFormProps) {
             </div>
 
             <div className="form-group">
-                <label htmlFor="budget">Budget ($)</label>
+                <label htmlFor="type">Project Type</label>
+                <input
+                    type="text"
+                    id="type"
+                    name="type"
+                    value={values.type}
+                    onChange={handleChange}
+                    placeholder="e.g., Furniture, Renovation"
+                />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="plannedBudget">Planned Budget ($)</label>
                 <input
                     type="number"
-                    id="budget"
-                    name="budget"
-                    value={values.budget}
+                    id="plannedBudget"
+                    name="plannedBudget"
+                    value={values.estimatedBudget ?? ''}
                     onChange={handleChange}
                     min="0"
                     step="0.01"
-                    placeholder="Estimated total cost"
+                    placeholder="e.g., 5000"
                 />
             </div>
+
+            <div className="form-group">
+                <label htmlFor="estimatedBudget">Estimated Budget ($)</label>
+                <input
+                    type="number"
+                    id="estimatedBudget"
+                    name="estimatedBudget"
+                    value={values.estimatedBudget ?? ''}
+                    onChange={handleChange}
+                    min="0"
+                    step="0.01"
+                    placeholder="e.g., 4800"
+                />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="type">Project Type</label>
+                <select
+                    id="type"
+                    name="type"
+                    value={values.type}
+                    onChange={handleChange}
+                    required
+                >
+                    <option value="" disabled>Select a type</option>
+                    {projectTypes.map((typeOption) => (
+                        <option key={typeOption} value={typeOption}>
+                            {typeOption}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <fieldset className="form-group">
+                <legend>Dimensions (in meters)</legend>
+                <div>
+                    <label htmlFor="length">Length</label>
+                    <input
+                        type="number"
+                        id="length"
+                        name="length"
+                        value={values.dimensions.length ?? ''}
+                        onChange={handleDimensionsChange}
+                        min="0"
+                        step="0.01"
+                        placeholder="Length"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="width">Width</label>
+                    <input
+                        type="number"
+                        id="width"
+                        name="width"
+                        value={values.dimensions.width ?? ''}
+                        onChange={handleDimensionsChange}
+                        min="0"
+                        step="0.01"
+                        placeholder="Width"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="height">Height</label>
+                    <input
+                        type="number"
+                        id="height"
+                        name="height"
+                        value={values.dimensions.height ?? ''}
+                        onChange={handleDimensionsChange}
+                        min="0"
+                        step="0.01"
+                        placeholder="Height"
+                    />
+                </div>
+            </fieldset>
         </div>
     );
 }

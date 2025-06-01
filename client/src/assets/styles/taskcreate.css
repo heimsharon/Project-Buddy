@@ -1,0 +1,20 @@
+.create-tasks-background {
+    min-height: 100vh;
+    background: url('../paint-brushes.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    padding-top: 4rem;
+}
+
+.create-tasks-background:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.469);
+    z-index: 0;
+}
+
+.task-page > * {
+    position: relative;
+    z-index: 3;
+}

@@ -1,9 +1,22 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../assets/styles/homepage.css';
 import projectBuddyLogo from '../assets/project-buddy-logo.png';
 
+// Dummy authentication check function (replace with your real auth logic)
+function isUserSignedIn() {
+    return !!localStorage.getItem('token'); // Example: check for auth token
+}
+
 export default function HomePage() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isUserSignedIn()) {
+            navigate('/login');
+        }
+    }, [navigate]);
+
     return (
         <div className="home">
             {/* Hero Section: App logo, headline, and call-to-action */}
@@ -21,8 +34,8 @@ export default function HomePage() {
                         Projects with optional AI Chatbot assistance.
                     </p>
 
-                    {/* Signup button for new users */}
-                    <Link to="/signup" className="cta-btn">
+                    {/* Call-to-action button */}
+                    <Link to="/createprojectpage" className="cta-btn">
                         Get Started
                     </Link>
                 </div>
@@ -71,16 +84,16 @@ export default function HomePage() {
                 </Link>
 
                 {/* Task List Feature */}
-                <Link to="/listtaskspage" className="feature-card">
+                <Link to="/listprojectspage" className="feature-card">
                     <span
                         role="img"
-                        aria-label="task list"
+                        aria-label="project list"
                         className="feature-icon"
                     >
                         📝
                     </span>
-                    <h3>Task List</h3>
-                    <p>View and manage all your project tasks in one place.</p>
+                    <h3>Projects List</h3>
+                    <p>View all your projects in one place.</p>
                 </Link>
 
                 {/* AI Chatbot Feature */}

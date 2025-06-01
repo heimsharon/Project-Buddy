@@ -3,10 +3,12 @@ import Project from '../models/Projects.js';
 import Material from '../models/Material.js';
 import Task from '../models/Task.js';
 import User from '../models/User.js';
-import { signToken } from '../utils/auth.js';
+import Authentication from '../utils/auth.js';
+import mongoose from 'mongoose';
 
 interface User {
     _id: string;
+    avatar?: string;
     username: string;
     email: string;
     password: string;
@@ -17,9 +19,9 @@ interface BudgetItem {
    _id: string;
     projectId: string;
     name: string;
-    cost: number;
+    estimatedCost: number;
+    actualCost?: number;
     quantity: number;
-    notes?: string;
 }
 
 interface Dimensions {
@@ -34,6 +36,8 @@ interface Project {
     description?: string;
     type: string;
     dimensions: Dimensions;
+    estimatedBudget: number;
+    actualBudget?: number;
     userId: string;
     createdAt: Date;
     dueDate?: Date;
@@ -84,18 +88,40 @@ const resolvers = {
             console.log(user);
             return user;
         },
+        currentUser: async (_parent: any, _args: any, context: { req: any }) => {
+            try {
+                const decoded = Authentication.verifyToken(context.req);
+                if (decoded && typeof decoded === 'object' && 'data' in decoded) {
+                    const userId = (decoded as any).data._id;
+                    const user = await User.findById(userId);
+                    if (!user) {
+                        throw new Error('User not found');
+                    }
+                    return user;
+                }
+                return null;
+            } catch (error) {
+                console.error(error instanceof Error ? error.message : error);
+                throw new Error('Authentication failed');
+            }
+        },
 
         getAllBudgetItems: async () => BudgetItem.find(),
         getBudgetItemById: async (_: any, { id }: { id: string }) => BudgetItem.findById(id),
 
         getAllProjects: async () => Project.find(),
-        getProjectById: async (_: any, { id }: { id: string }) => {
-            const project = await Project.findById(id).populate('materialIds');
-            if (!project) {
-                throw new Error('Project not found');
+        getProjectByUser: async (_: any, { userId }: { userId: string }) => {
+            try {
+                const objectUserId = new mongoose.Types.ObjectId(userId);
+                const projects = await Project.find({ userId: objectUserId });
+                if (!projects || projects.length === 0) {
+                throw new Error('No projects found for this user');
+                }
+                console.log(projects);
+                return projects;
+            } catch (err) {
+                throw new Error('Invalid user ID format');
             }
-            console.log(project)
-            return project;
         },
 
         getAllMaterials: async () => Material.find(),
@@ -119,7 +145,7 @@ const resolvers = {
         ) => {
             const newUser = new User(args);
             await newUser.save();
-            const token = signToken(newUser.username, newUser.email, newUser._id);
+            const token = Authentication.signToken(newUser.username, newUser.email, newUser._id);
 
             console.log(token)
             return { user: newUser, token };
@@ -133,13 +159,14 @@ const resolvers = {
             if (!user) {
                 throw new Error('Invalid credentials');
             }
-            const token = signToken(user.username, user.email, user._id);
+            const token = Authentication.signToken(user.username, user.email, user._id);
             return { user, token };
         },
-        updateUser: async (_: any, args: { id: string; username: string; email: string; password: string, skills: string[] }) => 
+        updateUser: async (_: any, args: { id: string; avatar: string; username: string; email: string; password: string, skills: string[] }) => 
             await User.findByIdAndUpdate(
                 args.id,
                 {
+                    avatar: args.avatar,
                     username: args.username,
                     email: args.email,
                     password: args.password,
@@ -153,9 +180,8 @@ const resolvers = {
         createBudgetItem: async (_: any, args:
             { 
                 name: string; 
-                cost: number; 
-                quantity: number; 
-                notes?: string; 
+                estimatedCost: number; 
+                quantity: number;
                 projectId: string 
             }
         ) => {
@@ -166,15 +192,16 @@ const resolvers = {
             : { 
                 id: string; 
                 name?: string; 
-                cost?: number; 
+                estimatedCost?: number;
+                actualCost?: number;
                 quantity?: number; 
-                notes?: string 
             }) => BudgetItem.findByIdAndUpdate(args.id,
             {
                     name: args.name,
-                    cost: args.cost,
-                    quantity: args.quantity,
-                    notes: args.notes
+                    estimatedCost: args.estimatedCost,
+                    actualCost: args.actualCost,
+                    quantity: args.quantity
+                    
                 },
                 { new: true }
             ),
@@ -186,6 +213,7 @@ const resolvers = {
                 description: string, 
                 userId: string, 
                 dimensions: Dimensions, 
+                estimatedBudget: number,
                 dueDate: string,
                 type: string,
                 materialIds?: string[]
@@ -201,6 +229,7 @@ const resolvers = {
                 description: string, 
                 type: string, 
                 materialIds?: string[], 
+                actualBudget?: number,
                 dimensions: Dimensions, 
                 dueDate: string
             }) => Project.findByIdAndUpdate(
@@ -210,6 +239,7 @@ const resolvers = {
                 description: args.description,
                 type: args.type,
                 dimensions: args.dimensions,
+                actualBudget: args.actualBudget,
                 dueDate: args.dueDate,
                 materialIds: args.materialIds
             },
@@ -260,25 +290,17 @@ const resolvers = {
             await newTask.save();
             return newTask;
         },
-        updateTask: async (_: any, args:
-            {
-                id: string;
-                task: {
-                    title?: string;
-                    dueDate?: Date;
-                    completed?: boolean;
-                    notes?: string;
-                    projectId?: string;
-            }}) => {
-            const { id, ...updateTask } = args;
+        updateTask: async (
+            _: any,
+            args: { id: string; title?: string; dueDate?: Date; completed?: boolean; notes?: string; projectId?: string }
+        ) => {
+            const { id, title, dueDate, completed, notes, projectId } = args;
             const updatedTask = await Task.findByIdAndUpdate(
                 id,
-                updateTask,
+                { title, dueDate, completed, notes, projectId },
                 { new: true }
             );
-            if (!updatedTask) {
-                throw new Error('Task not found');
-            }
+            if (!updatedTask) throw new Error('Task not found');
             return updatedTask;
         },
         deleteTask: async (_: any, { id }: { id: string }) => Task.findByIdAndDelete(id)
