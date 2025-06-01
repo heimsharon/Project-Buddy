@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../assets/styles/calculator.css';
 
 interface MaterialCalculatorProps {
     onCalculate?: (result: { material: string; quantity: number; estimatedCost: number }) => void;
@@ -57,6 +58,7 @@ function MaterialCalculator({ onCalculate }: MaterialCalculatorProps) {
     };
 
     return (
+        <main className="calculator-background">
         <div className="max-w-md mx-auto p-4 border rounded shadow">
             <h2 className="text-xl font-semibold mb-4">Material Calculator</h2>
 
@@ -121,6 +123,7 @@ function MaterialCalculator({ onCalculate }: MaterialCalculatorProps) {
                 </button>
             </div>
         </div>
+        </main>
     );
 }
 

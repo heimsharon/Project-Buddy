@@ -1,6 +1,7 @@
 const typeDefs = `
     type User {
         _id: ID!
+        avatar: String
         username: String!
         email: String!
         password: String!
@@ -9,6 +10,7 @@ const typeDefs = `
 
     type BudgetItem {
         _id: ID!
+        projectId: ID!
         name: String!
         estimatedCost: Float!
         actualCost: Float
@@ -94,12 +96,13 @@ const typeDefs = `
     type Query {
         getAllUsers: [User]
         getUserById(id: ID!): User
+        currentUser: User
 
         getAllBudgetItems: [BudgetItem]
         getBudgetItemById(id: ID!): BudgetItem
 
         getAllProjects: [Project]
-        getProjectById(id: ID!): Project
+        getProjectByUser(userId: ID!): [Project]
 
         getAllMaterials: [Material]
         getMaterialById(id: ID!): Material
@@ -111,7 +114,7 @@ const typeDefs = `
     type Mutation {
         createUser(username: String!, email: String!, password: String!, skills: [String]): Auth
         login(email: String!, password: String!): Auth
-        updateUser(id: ID!, username: String!, email: String!, password: String!, skills: [String]): User
+        updateUser(id: ID!, avatar: String, username: String!, email: String!, password: String!, skills: [String]): User
         deleteUser(id: ID!): User
 
         createBudgetItem(
@@ -180,9 +183,9 @@ const typeDefs = `
         ): Task
             updateTask(
             id: ID!,
-            title: String,
-            notes: String,
-            projectId: ID,
+            title: String!,
+            notes: String!,
+            projectId: ID!,
             completed: Boolean
         ): Task
         deleteTask(id: ID!): Task

@@ -1,7 +1,8 @@
 export interface UserData {
-    id: string | null;
-    username: string | null;
-    email: string | null;
+    _id: string | null;
+    username: string;
+    email: string;
+    password: string;
     avatar?: string | null;
     createdAt?: Date;
     updatedAt?: Date;

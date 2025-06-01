@@ -1,0 +1,20 @@
+.calculator-background {
+    min-height: 100vh;
+    background: url('../screws-drillbits.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    padding-top: 4rem;
+}
+
+.calculator-background:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.469);
+    z-index: 0;
+}
+
+.calculator> * {
+    position: relative;
+    z-index: 3;
+}

@@ -1,90 +1,95 @@
 import React from 'react';
+import { Material } from '../../types/project';
 
 interface MaterialInputProps {
-  materials: Array<{
-    id: string;
-    name: string;
-    quantity: number;
-    unit: 'sqft' | 'pieces' | 'gallons';
-    cost: number;
-    category?: string; 
-  }>;
-  onMaterialsChange: (
-    materials: MaterialInputProps['materials']
-  ) => void;
+  materials: Material[];
+  materialOptions: Material[];
+  onMaterialsChange: (updatedMaterials: Material[]) => void;
 }
 
-export default function MaterialInput({
+const MaterialInput: React.FC<MaterialInputProps> = ({
   materials,
+  materialOptions,
   onMaterialsChange,
-}: MaterialInputProps) {
-  const addMaterial = () => {
-    onMaterialsChange([
-      ...materials,
-      {
-        id: Date.now().toString(),
-        name: '',
-        quantity: 1,
-        unit: 'pieces',
-        cost: 0,
-      },
-    ]);
+}) => {
+  // Update quantity for material with _id
+  const updateQuantity = (_id: string, quantity: number) => {
+    const updated = materials.map((mat) =>
+      mat._id === _id ? { ...mat, quantity } : mat
+    );
+    onMaterialsChange(updated);
   };
 
-  const updateMaterial = (id: string, field: keyof MaterialInputProps['materials'][0], value: any) => {
-    onMaterialsChange(
-      materials.map((material) =>
-        material.id === id ? { ...material, [field]: value } : material
-      )
-    );
+  // Remove material by _id
+  const removeMaterial = (_id: string) => {
+    onMaterialsChange(materials.filter((mat) => mat._id !== _id));
+  };
+
+  // Add material from options if not already added
+  const addMaterial = (_id: string) => {
+    if (materials.some((m) => m._id === _id)) return; // Prevent duplicates
+    const matToAdd = materialOptions.find((m) => m._id === _id);
+    if (matToAdd) {
+      onMaterialsChange([...materials, { ...matToAdd, quantity: 1 }]);
+    }
   };
 
   return (
-    <div className="materials">
-      {materials.map((material) => (
-        <div key={material.id}>
-     <select 
-            value={material.name}
-            onChange={(e) =>
-              updateMaterial(material.id, 'name', e.target.value)
-            }
-            className="material-select"
-            >
+    <div>
+      {materials.length === 0 && <p>No materials added yet.</p>}
 
-          <option value="concrete">Concrete</option>
-          <option value="paint">Paint</option>
-          <option value="tile">Tile</option>
-          <option value="wood">Wood</option>
-          <option value="steel">Steel</option>
-          <option value="drywall">Drywall</option>
-          <option value="insulation">Insulation</option>
-          <option value="roofing">Roofing</option>
-          <option value="plumbing">Plumbing</option>
-          <option value="electrical">Electrical</option>
-          <option value="landscaping">Landscaping</option>
-          <option value="hardware">Hardware</option>
-          <option value="tools">Tools</option>
-          <option value="HVAC">HVAC</option>
-          <option value="siding">Siding</option>
-          <option value="masonry">Masonry</option>
-          <option value="fencing">Fencing</option>
-          <option value="other">Other</option>
-       
-     </select>
-          <input
-            type="number"
-            value={material.quantity}
-            onChange={(e) =>
-              updateMaterial(material.id, 'quantity', Number(e.target.value))
+      {materials.map((mat) => {
+        const fullInfo = materialOptions.find((m) => m._id === mat._id);
+        return (
+          <div key={mat._id} style={{ marginBottom: 12 }}>
+            <div>
+              <strong>{mat.name || fullInfo?.name}</strong>{' '}
+              <small>({mat.unit || fullInfo?.unit})</small>
+            </div>
+            <div>
+              Quantity:{' '}
+              <input
+                type="number"
+                min={0}
+                value={mat.quantity || 0}
+                onChange={(e) =>
+                  updateQuantity(mat._id, parseFloat(e.target.value) || 0)
+                }
+              />
+              <button onClick={() => removeMaterial(mat._id)}>Remove</button>
+            </div>
+          </div>
+        );
+      })}
+
+      <hr />
+
+      <div>
+        <label htmlFor="add-material-select">Add Material:</label>{' '}
+        <select
+          id="add-material-select"
+          onChange={(e) => {
+            if (e.target.value) {
+              addMaterial(e.target.value);
+              e.target.value = '';
             }
-            min="1"
-          />
-          {/* Add unit selector and cost input */}
-        </div>
-      ))}
-      <button type="button" onClick={addMaterial}>
-        + Add Material
-      </button>
+          }}
+          defaultValue=""
+        >
+          <option value="" disabled>
+            Select a material
+          </option>
+          {materialOptions
+            .filter((m) => !materials.some((mat) => mat._id === m._id))
+            .map((mat) => (
+              <option key={mat._id} value={mat._id}>
+                {mat.name} ({mat.unit})
+              </option>
+            ))}
+        </select>
+      </div>
     </div>
   );
-}
+};
+
+export default MaterialInput;
