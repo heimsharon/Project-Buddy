@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../assets/styles/homepage.css';
-import projectBuddyLogo from '../assets/project-buddy-logo.png';
+import projectBuddyLogo from '../assets/project-buddy-logo.jpg';
 
 // Dummy authentication check function (replace with your real auth logic)
 function isUserSignedIn() {
