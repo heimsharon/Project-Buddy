@@ -1,61 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { gql } from '@apollo/client';
-
-interface MaterialOption {
-  _id: string;
-  name: string;
-}
+import { QUERY_ALL_MATERIALS } from '../../utils/queries';
+import { Material } from '../../types/project';
 
 interface MaterialInputProps {
-  materials: Array<{
-    id: string;
-    name: string;
-    quantity: number;
-    unit: 'sqft' | 'pieces' | 'gallons';
-    priceUSD: number;
-    category?: string;
-  }>;
-  onMaterialsChange: (
-    materials: MaterialInputProps['materials']
-  ) => void;
+  materials: Material[];
+  onMaterialsChange: (materials: Material[]) => void;
+  materialOptions?: Material[];
 }
 
-const QUERY_ALL_MATERIALS = gql`
-  query GetAllMaterials {
-    getAllMaterials {
-      _id
-      category
-      lastUpdated
-      name
-      priceUSD
-      quantity
-      unit
-      unitCoverage {
-        height_ft
-        length_ft
-        length_in
-        sqft
-        thickness_in
-        weight_lb
-        weight_ton
-        width_ft
-        width_in
-      }
-      vendor
-    }
-  }
-`;
-
-export default function MaterialInput({
+const MaterialInput: React.FC<MaterialInputProps> = ({
   materials,
   onMaterialsChange,
-}: MaterialInputProps) {
-  const { loading, error, data } = useQuery(QUERY_ALL_MATERIALS);
+  materialOptions = [],
+}) => {
+  const { data } = useQuery(QUERY_ALL_MATERIALS);
+  const [options, setOptions] = useState<Material[]>(materialOptions);
 
-  const materialsList: MaterialOption[] = data
-    ? data.getAllMaterials.map((m: any) => ({ _id: m._id, name: m.name }))
-    : [];
+  useEffect(() => {
+    if (data?.getAllMaterials) {
+      setOptions(data.getAllMaterials);
+    }
+  }, [data]);
+
+  // When user selects a material by id, update the whole material object in the list
+  const handleMaterialSelect = (materialId: string, id: string) => {
+    const selectedOption = options.find((opt) => opt.id === id);
+    if (!selectedOption) return;
+
+    const updated = materials.map((mat) =>
+      mat.id === materialId
+        ? {
+            ...selectedOption,
+            quantity: mat.quantity || 1, // preserve quantity if already set
+          }
+        : mat
+    );
+    onMaterialsChange(updated);
+  };
+
+  const handleQuantityChange = (materialId: string, quantity: number) => {
+    const updated = materials.map((mat) =>
+      mat.id === materialId ? { ...mat, quantity } : mat
+    );
+    onMaterialsChange(updated);
+  };
 
   const addMaterial = () => {
     onMaterialsChange([
@@ -63,94 +52,75 @@ export default function MaterialInput({
       {
         id: Date.now().toString(),
         name: '',
+        category: 'fencing',
+        unitCoverage: {} as Material['unitCoverage'],
         quantity: 1,
-        unit: 'pieces',
+        unit: '',
         priceUSD: 0,
+        lastUpdated: new Date(),
       },
     ]);
   };
 
-  const updateMaterial = (
-    id: string,
-    field: keyof MaterialInputProps['materials'][0],
-    value: any
-  ) => {
-    onMaterialsChange(
-      materials.map((material) =>
-        material.id === id ? { ...material, [field]: value } : material
-      )
-    );
-  };
-
   const removeMaterial = (id: string) => {
-    onMaterialsChange(materials.filter((material) => material.id !== id));
+    onMaterialsChange(materials.filter((mat) => mat.id !== id));
   };
-
-  const handleMaterialSelect = (
-    materialId: string,
-    currentMaterialId: string
-  ) => {
-    const selected = data?.getAllMaterials.find((m: any) => m._id === materialId);
-    if (selected) {
-      onMaterialsChange(
-        materials.map((material) =>
-          material.id === currentMaterialId
-            ? {
-                ...material,
-                name: selected.name,
-                id: selected._id,
-                priceUSD: selected.priceUSD || 0,
-              }
-            : material
-        )
-      );
-    }
-  };
-
-  if (loading) return <p>Loading materials...</p>;
-  if (error) return <p>Error loading materials: {error.message}</p>;
 
   return (
-    <div className="materials">
+    <div>
       {materials.map((material) => (
-        <div key={material.id} className="material-item">
+        <div
+          key={material.id}
+          style={{
+            display: 'flex',
+            gap: 8,
+            alignItems: 'center',
+            marginBottom: 8,
+            border: '1px solid #eee',
+            borderRadius: 8,
+            padding: 8,
+          }}
+        >
           <select
-            value={
-              materialsList.find((m) => m.name === material.name)?._id || ''
-            }
-            onChange={(e) =>
-              handleMaterialSelect(e.target.value, material.id)
-            }
-            className="material-select"
+            value={material.id || ''}
+            onChange={(e) => handleMaterialSelect(material.id, e.target.value)}
+            style={{ flex: 2 }}
           >
-            <option value="">Select Material</option>
-            {materialsList.map((option) => (
-              <option key={option._id} value={option._id}>
-                {option.name}
+            <option value="">Select material</option>
+            {options.map((opt) => (
+              <option key={opt.id} value={opt.id}>
+                {opt.name}
               </option>
             ))}
           </select>
+
           <input
             type="number"
+            min={1}
             value={material.quantity}
             onChange={(e) =>
-              updateMaterial(material.id, 'quantity', Number(e.target.value))
+              handleQuantityChange(material.id, Number(e.target.value))
             }
-            min="1"
-            className="material-quantity-input"
+            style={{ width: 60 }}
           />
+          <span style={{ minWidth: 50 }}>{material.unit}</span>
+          <span style={{ minWidth: 70 }}>${material.priceUSD.toFixed(2)}</span>
           <button
             type="button"
-            className="remove-material-button"
             onClick={() => removeMaterial(material.id)}
+            style={{ color: 'red' }}
+            aria-label="Remove material"
           >
-            Remove
+            ×
           </button>
         </div>
       ))}
-      <button type="button" onClick={addMaterial}>
-        + Add Material
+
+      <button type="button" onClick={addMaterial} style={{ marginTop: 8 }}>
+        + Add Another Material
       </button>
     </div>
   );
-}
+};
+
+export default MaterialInput;

@@ -9,8 +9,8 @@ interface ProjectFormValues {
         width: number | null;
         height: number | null;
     };
-    dueDate: string;
-    type: string;
+    dueDate?: string;
+    type?: string;
 }
 
 interface ProjectFormProps {
@@ -78,6 +78,32 @@ export default function ProjectForm({ values, onChange }: ProjectFormProps) {
             </div>
 
             <div className="form-group">
+                <label htmlFor="type">Project Type</label>
+                <input
+                    type="text"
+                    id="type"
+                    name="type"
+                    value={values.type}
+                    onChange={handleChange}
+                    placeholder="e.g., Furniture, Renovation"
+                />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="plannedBudget">Planned Budget ($)</label>
+                <input
+                    type="number"
+                    id="plannedBudget"
+                    name="plannedBudget"
+                    value={values.estimatedBudget ?? ''}
+                    onChange={handleChange}
+                    min="0"
+                    step="0.01"
+                    placeholder="e.g., 5000"
+                />
+            </div>
+
+            <div className="form-group">
                 <label htmlFor="estimatedBudget">Estimated Budget ($)</label>
                 <input
                     type="number"
@@ -87,7 +113,7 @@ export default function ProjectForm({ values, onChange }: ProjectFormProps) {
                     onChange={handleChange}
                     min="0"
                     step="0.01"
-                    placeholder="Estimated total cost"
+                    placeholder="e.g., 4800"
                 />
             </div>
 

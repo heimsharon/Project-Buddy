@@ -16,20 +16,42 @@ export interface Task {
 
 export interface Project {
     id: string;
-    name: string;
-    description: string;
-    budget: number;
-    status: 'in-progress' | 'completed' | 'not-started' | 'planning';
-    materials: Material[];
-    budgetItems: BudgetItem[];
-    tasks: Task[];
+    title: string;
+    description?: string;
+    type: string;
+    dimensions: {
+        length: number | null;
+        width: number | null;
+        height: number | null;
+    };
+    estimatedBudget: number | null;
+    actualBudget?: number;
+    userId: string;
+    materialIds: Material[];
+    createdAt: Date;
+    dueDate?: Date | null;
+}
+
+export interface unitCoverage {
+    length_ft: number;
+    width_ft: number;
+    height_ft: number;
+    width_in: number;
+    length_in: number;
+    thickness_in: number;
+    weight_lb: number;
+    weight_ton: number;
+    sqft: number;
 }
 
 export interface Material {
     id: string;
     name: string;
+    category: 'fencing' | 'paint' | 'drywall' | 'lumber' | 'concrete' | 'roofing' | 'plumbing' | 'electrical' | 'flooring' | 'insulation' | 'decking' | 'stain' | 'landscaping' | 'hardware' | 'tools' | 'HVAC' | 'siding' | 'masonry';
+    unit: string;  
+    unitCoverage: unitCoverage;
     quantity: number;
-    unit: 'pieces' | 'sqft' | 'gallons';
     priceUSD: number;
-    category: string;
+    vendor?: string;
+    lastUpdated: Date;
 }
