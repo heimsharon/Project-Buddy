@@ -15,8 +15,14 @@ jobs:
         - uses: actions/checkout@v3
 
         - name: Deploy
+          if: github.ref == 'refs/heads/development''
           env:
             DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
           run: |
             curl "$DEPLOY_URL"
+          else:
+            env:
+              DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL_PROD }}
+            run: |
+              curl "$DEPLOY_URL"
   
