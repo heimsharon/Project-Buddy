@@ -22,7 +22,7 @@
 
 /* === Summary Card === */
 .budget-summary-card {
-    background: #fff;
+ background: #222e3c;
     border-radius: 1rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     padding: 2rem;
@@ -52,14 +52,31 @@
 .summary-value {
     font-size: 1.2rem;
     font-weight: bold;
+    padding: 0.25em 0.8em;
+    border-radius: 0.7em;
+    background: #e3f2fd; /* Light blue as default */
+    display: inline-block;
+    margin-top: 0.2em;
 }
 
 .summary-value.under-budget {
     color: #2ecc71;
+    background: #e8f5e9; /* Light green background */
 }
 
 .summary-value.over-budget {
     color: #e74c3c;
+    background: #fdecea; /* Light red background */
+}
+
+.summary-value.estimated {
+    color: #1976d2;
+    background: #e3f2fd; /* Light blue background */
+}
+
+.summary-value.actual {
+    color: #f9a825;
+    background: #fffde7; /* Light yellow background */
 }
 
 .budget-progress {
@@ -78,7 +95,7 @@
 
 /* === Budget Table Section === */
 .budget-table-container {
-    background: #fff;
+    background: #222e3c;
     border-radius: 1rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     padding: 2rem;

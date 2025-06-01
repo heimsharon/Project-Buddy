@@ -15,7 +15,6 @@ import BudgetPage from './pages/BudgetPage';
 import ListProjectsPage from './pages/ListProjectsPage';
 import CreateTasksPage from './pages/CreateTasksPage';
 import ListTasksPage from './pages/ListTasksPage';
-import ListMaterialsPage from './pages/ListMaterialsPage';
 import ChatbotPage from './pages/ChatbotPage';
 import Support from './pages/SupportPage';
 
@@ -35,9 +34,8 @@ const router = createBrowserRouter([
             { path: '/listprojectspage', element: <ListProjectsPage /> },
             { path: '/createtaskspage', element: <CreateTasksPage /> },
             { path: '/listtaskspage', element: <ListTasksPage /> },
-            { path: '/listmaterialspage', element: <ListMaterialsPage /> },
             { path: '/chatbotpage', element: <ChatbotPage /> },
-            { path: '/supportpage', element: <Support />},
+            { path: '/supportpage', element: <Support /> },
         ],
     },
 ]);

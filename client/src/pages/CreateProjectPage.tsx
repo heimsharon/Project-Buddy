@@ -5,6 +5,7 @@ import MaterialInput from '../components/projects/MaterialInput';
 import { QUERY_ALL_MATERIALS } from '../utils/queries';
 import MaterialCalculator from '../components/projects/MaterialCalculator';
 import { CREATE_PROJECT } from '../utils/mutations';
+import '../assets/styles/createproject.css';
 
 const steps = ['Project Details', 'Materials', 'Material Calculator'];
 
@@ -123,190 +124,192 @@ const CreateProjectPage: React.FC = () => {
             alert('Project created successfully!');
             setProject(initialProject); // Reset form
             setStep(0);
-
         } catch (error) {
             console.error('Error creating project:', error);
             alert('Failed to create project. Please try again.');
         }
     };
 
-
     return (
-        <div style={{ maxWidth: 600, margin: '0 auto', padding: 24 }}>
-            <ProgressStepper steps={steps} currentStep={step} />
+        <div className="project-background">
 
-            {step === 0 && (
-                <div>
-                    <h2>Project Details</h2>
-                    <label>
-                        Name
-                        <input
-                            type="text"
-                            value={project.name || ''}
-                            onChange={(e) =>
-                                setProject({ ...project, name: e.target.value })
-                            }
-                            placeholder="Project name"
-                            required
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Type
-                        <input
-                            type="text"
-                            value={project.type || ''}
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    type: e.target.value,
-                                })
-                            }
-                            placeholder="e.g. Furniture, Renovation"
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Description
-                        <textarea
-                            value={project.description || ''}
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    description: e.target.value,
-                                })
-                            }
-                            placeholder="Short description"
-                            required
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Planned Budget (USD)
-                        <input
-                            type="number"
-                            value={project.plannedBudget || ''}
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    plannedBudget: e.target.value,
-                                })
-                            }
-                            placeholder="e.g. 10000"
-                            min={0}
-                            required
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Due Date
-                        <input
-                            type="date"
-                            value={project.dueDate || ''}
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    dueDate: e.target.value,
-                                })
-                            }
-                            required
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Dimensions
-                        <input
-                            type="text"
-                            value={project.dimensions || ''}
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    dimensions: e.target.value,
-                                })
-                            }
-                            placeholder="e.g. 10x20 ft"
-                        />
-                    </label>
-                </div>
-            )}
+            <div style={{ maxWidth: 600, margin: '0 auto', padding: 24 }}>
+                <ProgressStepper steps={steps} currentStep={step} />
 
-
-
-            {step === 1 && (
-                <div>
-                    <h2>Material Calculator</h2>
-                    <MaterialCalculator
-                        onAddMaterial={handleAddMaterial}
-                        materialOptions={materialOptions}
-                    />
-                </div>
-            )}
-
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginTop: 32,
-                }}
-            >
-                <button
-                    type="button"
-                    onClick={handleBack}
-                    disabled={step === 0}
-                >
-                    Back
-                </button>
-                {step < steps.length - 1 ? (
-                    <button
-                        type="button"
-                        onClick={handleNext}
-                        disabled={
-                            (step === 0 && !isProjectDetailsValid) ||
-                            (step === 1 && project.materials.length === 0)
-                        }
-                    >
-                        Next
-                    </button>
-                ) : null}
-
-                {step === 2 && (
+                {step === 0 && (
                     <div>
-                        <h2>Materials</h2>
-                        <MaterialInput
-                            materials={project.materials}
-                            onMaterialsChange={(materials) =>
-                                setProject({ ...project, materials })
-                            }
-                            materialOptions={materialOptions}
-                        />
-                        <div style={{ marginTop: 16 }}>
-                            <strong>Estimated Materials Cost:</strong>{' '}
-                            <span
-                                style={{
-                                    color:
-                                        estimatedBudget >
-                                            Number(project.plannedBudget)
-                                            ? 'red'
-                                            : 'green',
-                                }}
-                            >
-                                ${estimatedBudget.toFixed(2)}
-                            </span>
-                            {' / '}
-                            Planned Budget: ${project.plannedBudget}
-                        </div>
-                        <button
-                            type="submit"
-                            disabled={
-                                !isProjectDetailsValid ||
-                                project.materials.length === 0
-                            }
-                            onClick={handleSubmit}
-                        >
-                            Create Project
-                        </button>
+                        <h2>Project Details</h2>
+                        <label>
+                            Name
+                            <input
+                                type="text"
+                                value={project.name || ''}
+                                onChange={(e) =>
+                                    setProject({
+                                        ...project,
+                                        name: e.target.value,
+                                    })
+                                }
+                                placeholder="Project name"
+                                required
+                            />
+                        </label>
+                        <br />
+                        <label>
+                            Type
+                            <input
+                                type="text"
+                                value={project.type || ''}
+                                onChange={(e) =>
+                                    setProject({
+                                        ...project,
+                                        type: e.target.value,
+                                    })
+                                }
+                                placeholder="e.g. Furniture, Renovation"
+                            />
+                        </label>
+                        <br />
+                        <label>
+                            Description
+                            <textarea
+                                value={project.description || ''}
+                                onChange={(e) =>
+                                    setProject({
+                                        ...project,
+                                        description: e.target.value,
+                                    })
+                                }
+                                placeholder="Short description"
+                                required
+                            />
+                        </label>
+                        <br />
+                        <label>
+                            Planned Budget (USD)
+                            <input
+                                type="number"
+                                value={project.plannedBudget || ''}
+                                onChange={(e) =>
+                                    setProject({
+                                        ...project,
+                                        plannedBudget: e.target.value,
+                                    })
+                                }
+                                placeholder="e.g. 10000"
+                                min={0}
+                                required
+                            />
+                        </label>
+                        <br />
+                        <label>
+                            Due Date
+                            <input
+                                type="date"
+                                value={project.dueDate || ''}
+                                onChange={(e) =>
+                                    setProject({
+                                        ...project,
+                                        dueDate: e.target.value,
+                                    })
+                                }
+                                required
+                            />
+                        </label>
+                        <br />
+                        <label>
+                            Dimensions
+                            <input
+                                type="text"
+                                value={project.dimensions || ''}
+                                onChange={(e) =>
+                                    setProject({
+                                        ...project,
+                                        dimensions: e.target.value,
+                                    })
+                                }
+                                placeholder="e.g. 10x20 ft"
+                            />
+                        </label>
                     </div>
                 )}
+
+                {step === 1 && (
+                    <div>
+                        <h2>Material Calculator</h2>
+                        <MaterialCalculator
+                            onAddMaterial={handleAddMaterial}
+                            materialOptions={materialOptions}
+                        />
+                    </div>
+                )}
+
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginTop: 32,
+                    }}
+                >
+                    <button
+                        type="button"
+                        onClick={handleBack}
+                        disabled={step === 0}
+                    >
+                        Back
+                    </button>
+                    {step < steps.length - 1 ? (
+                        <button
+                            type="button"
+                            onClick={handleNext}
+                            disabled={
+                                (step === 0 && !isProjectDetailsValid) ||
+                                (step === 1 && project.materials.length === 0)
+                            }
+                        >
+                            Next
+                        </button>
+                    ) : null}
+
+                    {step === 2 && (
+                        <div>
+                            <h2>Materials</h2>
+                            <MaterialInput
+                                materials={project.materials}
+                                onMaterialsChange={(materials) =>
+                                    setProject({ ...project, materials })
+                                }
+                                materialOptions={materialOptions}
+                            />
+                            <div style={{ marginTop: 16 }}>
+                                <strong>Estimated Materials Cost:</strong>{' '}
+                                <span
+                                    style={{
+                                        color:
+                                            estimatedBudget >
+                                            Number(project.plannedBudget)
+                                                ? 'red'
+                                                : 'green',
+                                    }}
+                                >
+                                    ${estimatedBudget.toFixed(2)}
+                                </span>
+                                {' / '}
+                                Planned Budget: ${project.plannedBudget}
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={
+                                    !isProjectDetailsValid ||
+                                    project.materials.length === 0
+                                }
+                                onClick={handleSubmit}
+                            >
+                                Create Project
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
