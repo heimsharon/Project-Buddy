@@ -5,7 +5,7 @@ import { LOGIN_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 import React from 'react';
 import '../assets/styles/login.css';
-import logo from '../assets/project-buddy-with-tagline.png';
+import logo from '../assets/project-buddy-with-tagline.jpg';
 
 const Login = () => {
     const [formState, setFormState] = useState({ email: '', password: '' });
