@@ -4,6 +4,7 @@ import Material from '../models/Material.js';
 import Task from '../models/Task.js';
 import User from '../models/User.js';
 import Authentication from '../utils/auth.js';
+import mongoose from 'mongoose';
 
 interface User {
     _id: string;
@@ -109,13 +110,19 @@ const resolvers = {
         getBudgetItemById: async (_: any, { id }: { id: string }) => BudgetItem.findById(id),
 
         getAllProjects: async () => Project.find(),
-        getProjectById: async (_: any, { id }: { id: string }) => {
-            const project = await Project.findById(id).populate('materialIds');
-            if (!project) {
-                throw new Error('Project not found');
+        getProjectByUser: async (_: any, { userId }: { userId: string }) => {
+            try {
+                const objectUserId = new mongoose.Types.ObjectId(userId);
+                const projects = await Project.find({ userId: objectUserId });
+                if (!projects || projects.length === 0) {
+                throw new Error('No projects found for this user');
+                }
+                console.log(projects);
+                return projects;
+            } catch (err) {
+                console.error(err);
+                throw new Error('Invalid user ID format');
             }
-            console.log(project)
-            return project;
         },
 
         getAllMaterials: async () => Material.find(),

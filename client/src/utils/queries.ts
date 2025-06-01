@@ -59,24 +59,24 @@ query GetAllProjects {
 }
 `;
 
-export const QUERY_SINGLE_PROJECT = gql`
-  query GetProjectById($getProjectByIdId: ID!) {
-  getProjectById(id: $getProjectByIdId) {
-    _id
-    createdAt
-    description
-    dimensions {
-      height
-      length
-      width
+export const QUERY_PROJECTS_BY_USER = gql`
+  query GetProjectByUser($userId: ID!) {
+    getProjectByUser(userId: $userId) {
+      _id
+      createdAt
+      description
+      dimensions {
+        height
+        length
+        width
+      }
+      dueDate
+      materialIds
+      title
+      type
+      userId
     }
-    dueDate
-    materialIds
-    title
-    type
-    userId
   }
-}
 `;
 
 export const QUERY_ALL_TASKS = gql`

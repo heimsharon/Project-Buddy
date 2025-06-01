@@ -102,7 +102,7 @@ const typeDefs = `
         getBudgetItemById(id: ID!): BudgetItem
 
         getAllProjects: [Project]
-        getProjectById(id: ID!): Project
+        getProjectByUser(userId: ID!): [Project]
 
         getAllMaterials: [Material]
         getMaterialById(id: ID!): Material
