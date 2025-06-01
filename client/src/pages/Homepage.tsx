@@ -84,16 +84,16 @@ export default function HomePage() {
                 </Link>
 
                 {/* Task List Feature */}
-                <Link to="/listtaskspage" className="feature-card">
+                <Link to="/listprojectspage" className="feature-card">
                     <span
                         role="img"
-                        aria-label="task list"
+                        aria-label="project list"
                         className="feature-icon"
                     >
                         📝
                     </span>
-                    <h3>Task List</h3>
-                    <p>View and manage all your project tasks in one place.</p>
+                    <h3>Projects List</h3>
+                    <p>View all your projects in one place.</p>
                 </Link>
 
                 {/* AI Chatbot Feature */}

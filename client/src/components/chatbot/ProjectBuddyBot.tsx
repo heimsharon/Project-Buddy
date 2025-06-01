@@ -13,19 +13,19 @@ interface Message {
 
 function MessageRow({ msg }: { msg: Message }) {
     return (
-        <div className="message-row">
-            <div className={`message ${msg.sender}`}>
+        <div className="chat-message-row">
+            <div className={`chat-message ${msg.sender}`}>
                 <span
-                    className="avatar"
+                    className="chat-avatar"
                     role="img"
                     aria-label={msg.sender === 'bot' ? 'robot' : 'user'}
                 >
                     {msg.sender === 'bot' ? '🤖' : '👤'}
                 </span>
-                <div className="message-content">
+                <div className="chat-message-content">
                     <ReactMarkdown>{msg.text}</ReactMarkdown>
                 </div>
-                <div className="timestamp">
+                <div className="chat-timestamp">
                     {msg.timestamp.toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -100,64 +100,69 @@ const ProjectBuddyBot = () => {
     };
 
     return (
-        <div className="bot-container">
-            <h3>Ask Project Buddy</h3>
-            <div
-                className="chat-box"
-                ref={chatBoxRef}
-                aria-live="polite"
-                aria-label="Chat messages"
-            >
-                {messages.map((msg, idx) => (
-                    <MessageRow key={msg.id + idx} msg={msg} />
-                ))}
-                {loading && (
-                    <div className="message-row">
-                        <div className="message bot">
-                            <span
-                                className="avatar"
-                                role="img"
-                                aria-label="robot"
-                            >
-                                🤖
-                            </span>
-                            <span className="typing-indicator">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </span>
+        <section className="chat-bot-root">
+            <div className="chat-body">
+                <div className="chat-conversation-outer">
+                    <div className="chat-conversation-box">
+                        <div
+                            className="chat-box"
+                            ref={chatBoxRef}
+                            aria-live="polite"
+                            aria-label="Chat messages"
+                        >
+                            {messages.map((msg, idx) => (
+                                <MessageRow key={msg.id + idx} msg={msg} />
+                            ))}
+                            {loading && (
+                                <div className="chat-message-row">
+                                    <div className="chat-message bot">
+                                        <span
+                                            className="chat-avatar"
+                                            role="img"
+                                            aria-label="robot"
+                                        >
+                                            🤖
+                                        </span>
+                                        <span className="typing-indicator">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
+                    </div>
+                </div>
+                <form
+                    className="chat-footer"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        if (!loading) sendMessage();
+                    }}
+                    aria-label="Send a message to Project Buddy"
+                >
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Ask me something about your project..."
+                        aria-label="Type your message"
+                        disabled={loading}
+                        onKeyDown={handleKeyDown}
+                        autoComplete="off"
+                    />
+                    <button type="submit" disabled={loading || !input.trim()}>
+                        {loading ? 'Sending...' : 'Send'}
+                    </button>
+                </form>
+                {error && (
+                    <div className="chatbot-toast" role="alert">
+                        {error}
                     </div>
                 )}
             </div>
-            <form
-                className="chat-input"
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    if (!loading) sendMessage();
-                }}
-                aria-label="Send a message to Project Buddy"
-            >
-                <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Ask me something about your project..."
-                    aria-label="Type your message"
-                    disabled={loading}
-                    onKeyDown={handleKeyDown}
-                    autoComplete="off"
-                />
-                <button type="submit" disabled={loading || !input.trim()}>
-                    {loading ? 'Sending...' : 'Send'}
-                </button>
-            </form>
-            {error && (
-                <div className="chatbot-toast" role="alert">
-                    {error}
-                </div>
-            )}
-        </div>
+        </section>
     );
 };
 
