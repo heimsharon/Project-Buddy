@@ -22,8 +22,9 @@ function MessageRow({ msg }: { msg: Message }) {
                 >
                     {msg.sender === 'bot' ? '🤖' : '👤'}
                 </span>
-                {/* ReactMarkdown escapes HTML by default for XSS safety */}
-                <ReactMarkdown>{msg.text}</ReactMarkdown>
+                <div className="message-content">
+                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                </div>
                 <div className="timestamp">
                     {msg.timestamp.toLocaleTimeString([], {
                         hour: '2-digit',

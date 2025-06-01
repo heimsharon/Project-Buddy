@@ -16,45 +16,37 @@ interface ProjectData {
     tasks?: any[];
 }
 
-export default function ProjectListPage() {
+export default function ListProjectsPage() {
     const [projects, setProjects] = useState<ProjectData[]>([]);
 
     useEffect(() => {
-        const savedProjects = JSON.parse(localStorage.getItem('projects') || '[]');
+        const savedProjects = JSON.parse(
+            localStorage.getItem('projects') || '[]'
+        );
         setProjects(savedProjects);
     }, []);
 
     const handleDelete = (indexToRemove: number) => {
-        const updatedProjects = projects.filter((_, index) => index !== indexToRemove);
+        const updatedProjects = projects.filter(
+            (_, index) => index !== indexToRemove
+        );
         setProjects(updatedProjects);
         localStorage.setItem('projects', JSON.stringify(updatedProjects));
     };
 
     return (
-        <div className="project-list-page">
-            <h1>Project List</h1>
+        <div>
+            <h2>Projects List</h2>
             {projects.length === 0 ? (
                 <p>No projects found.</p>
             ) : (
                 <ul>
-                    {projects.map((project, index) => (
-                        <li key={index} style={{ marginBottom: '1.5rem' }}>
-                            <h2>{project.name}</h2>
-                            <p>{project.description}</p>
-                            <p><strong>Budget:</strong> ${project.budget}</p>
-                            <h4>Materials:</h4>
-                            <ul>
-                                {project.materials.map((mat) => (
-                                    <li key={mat.id}>
-                                        {mat.name} - {mat.quantity} {mat.unit} (${mat.cost})
-                                    </li>
-                                ))}
-                            </ul>
-                            <button
-                                style={{ marginTop: '0.5rem', backgroundColor: '#e74c3c', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px' }}
-                                onClick={() => handleDelete(index)}
-                            >
-                                Delete Project
+                    {projects.map((project, idx) => (
+                        <li key={idx}>
+                            <strong>{project.name}</strong>:{' '}
+                            {project.description} (Budget: ${project.budget})
+                            <button onClick={() => handleDelete(idx)}>
+                                Delete
                             </button>
                         </li>
                     ))}
