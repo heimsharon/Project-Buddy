@@ -8,337 +8,338 @@ import { useNavigate } from 'react-router-dom';
 import { Project, Material } from '../types/project';
 import { CREATE_PROJECT } from '../utils/mutations';
 import auth from '../utils/auth';
-import { unitCoverage } from '../types/project';
 
 const steps = ['Project Details', 'Material Calculator', 'Materials'];
 
 export default function CreateProjectPage() {
-    const navigate = useNavigate();
-    let user;
+  const navigate = useNavigate();
+  let user;
+  try {
+    user = auth.getProfile();
+  } catch (e) {
+    navigate('/login');
+    return null;
+  }
+
+  const [step, setStep] = useState(0);
+  const { data } = useQuery(QUERY_ALL_MATERIALS);
+  const materialOptions = data?.getAllMaterials || [];
+
+  // Updated: project.materials stores Material[] objects, not just IDs
+  const [project, setProject] = useState<Project>({
+    id: '',
+    title: '',
+    description: '',
+    type: '',
+    dimensions: {
+      length: null,
+      width: null,
+      height: null,
+    },
+    estimatedBudget: null,
+    userId: user.data._id,
+    materialIds: [], // <-- Changed from materialIds to materials
+    createdAt: new Date(),
+    dueDate: null,
+  });
+
+  const isProjectDetailsValid =
+    !!project.title &&
+    !!project.description &&
+    !!project.dimensions &&
+    !!project.dimensions.length &&
+    !!project.dimensions.width &&
+    !!project.dimensions.height &&
+    !!project.dueDate &&
+    !!project.type &&
+    !!project.estimatedBudget;
+
+  const [createproject] = useMutation(CREATE_PROJECT);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const totalBudget = project.materialIds
+      .reduce(
+        (sum, material) =>
+          sum + (material.priceUSD ?? 0) * (material.quantity ?? 0),
+        0
+      )
+      .toFixed(2);
+
+    // Prepare data for backend: materialIds is array of string IDs
+    const projectData = {
+      ...project,
+      userId: user.data._id,
+      budget: totalBudget,
+      materialIds: project.materialIds.map((m) => m._id),
+      budgetItems: project.materialIds.map((material) => ({
+        name: material.name,
+        estimatedCost:
+          (material.priceUSD ?? 0) * (material.quantity ?? 0),
+        category: material.category,
+      })),
+    };
+
     try {
-        user = auth.getProfile();
-    } catch (e) {
-        navigate('/login');
-        return null;
+      const { data } = await createproject({
+        variables: { ...projectData },
+      });
+      console.log('Project created:', data.createProject);
+      navigate('/projects');
+    } catch (error) {
+      console.error('Error creating project:', error);
     }
+  };
 
-    const [step, setStep] = useState(0);
-    const { data } = useQuery(QUERY_ALL_MATERIALS);
-    const materialOptions = data?.getAllMaterials || [];
+  // Add full Material object to materials array
+  const handleAddMaterial = (material: Material) => {
+    setProject((prev) => ({
+      ...prev,
+      materialIds: [
+        ...prev.materialIds,
+        material,
+      ],
+    }));
+  };
 
-    const [project, setProject] = useState<Project>({
-        id: '',
-        title: '',
-        description: '',
-        type: '',
-        dimensions: {
-            length: null,
-            width: null,
-            height: null,
-        },
-        estimatedBudget: null,
-        userId: user.data._id,
-        materialIds: [],
-        createdAt: new Date(),
-        dueDate: null,
-    });
+  // Stepper controls
+  const handleNext = () => {
+    setStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
+  };
 
-    const isProjectDetailsValid =
-        !!project.title &&
-        !!project.description &&
-        !!project.dimensions &&
-        !!project.dueDate &&
-        !!project.type &&
-        !!project.estimatedBudget;
+  const handleBack = () => {
+    setStep((prevStep) => Math.max(prevStep - 1, 0));
+  };
 
-    const [createproject] = useMutation(CREATE_PROJECT);
+  return (
+    <div style={{ maxWidth: 600, margin: '0 auto', padding: 24 }}>
+      <ProgressStepper steps={steps} currentStep={step} />
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+      {step === 0 && (
+        <div>
+          <h2>Project Details</h2>
 
-        const totalBudget = project.materialIds
-            .reduce(
-                (sum, material) =>
-                    sum +
-                    ((material.priceUSD ?? 0) * (material.quantity ?? 0)),
-                0
-            )
-            .toFixed(2);
+          <label>
+            Name
+            <input
+              type="text"
+              value={project.title || ''}
+              onChange={(e) =>
+                setProject({
+                  ...project,
+                  title: e.target.value,
+                })
+              }
+              placeholder="Project name"
+              required
+            />
+          </label>
+          <br />
 
-        const projectData = {
-            ...project,
-            userId: user.data._id,
-            budget: totalBudget,
-            materialIds: project.materialIds.map((m) => m.id),
-            budgetItems: project.materialIds.map((material) => ({
-                name: material.name,
-                estimatedCost:
-                    (material.priceUSD ?? 0) * (material.quantity ?? 0),
-                category: material.category,
-            })),
-        };
+          <label>
+            Type
+            <input
+              type="text"
+              value={project.type || ''}
+              onChange={(e) =>
+                setProject({
+                  ...project,
+                  type: e.target.value,
+                })
+              }
+              placeholder="e.g. Furniture, Renovation"
+            />
+          </label>
+          <br />
 
-        try {
-            const { data } = await createproject({
-                variables: { ...projectData },
-            });
-            console.log('Project created:', data.createProject);
-            navigate('/projects');
-        } catch (error) {
-            console.error('Error creating project:', error);
-        }
-    };
+          <label>
+            Description
+            <textarea
+              value={project.description || ''}
+              onChange={(e) =>
+                setProject({
+                  ...project,
+                  description: e.target.value,
+                })
+              }
+              placeholder="Short description"
+              required
+            />
+          </label>
+          <br />
 
-    const handleAddMaterial = (material: {
-        name: string;
-        category: string;
-        unit: string;
-        unitCoverage: unitCoverage;
-        quantity: number;
-        priceUSD: number;
-        vendor?: string;
-        lastUpdated: Date;
-    }) => {
-        setProject((prev) => ({
-            ...prev,
-            materialIds: [
-                ...prev.materialIds,
-                {
-                    id: Date.now().toString(),
-                    name: material.name,
-                    quantity: material.quantity,
-                    unit: material.unit,
-                    priceUSD: material.priceUSD,
-                    category: material.category as Material['category'],
-                    vendor: material.vendor,
-                    unitCoverage: material.unitCoverage,
-                    lastUpdated: material.lastUpdated,
-                } as Material,
-            ],
-        }));
-    };
+          <label>
+            Planned Budget (USD)
+            <input
+              type="number"
+              value={project.estimatedBudget || ''}
+              onChange={(e) =>
+                setProject({
+                  ...project,
+                  estimatedBudget: parseFloat(e.target.value),
+                })
+              }
+              placeholder="e.g. 10000"
+              min={0}
+              required
+            />
+          </label>
+          <br />
 
-    const handleNext = () => {
-        setStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
-    };
+          <label>
+            Due Date
+            <input
+              type="date"
+              value={
+                project.dueDate
+                  ? project.dueDate.toISOString().split('T')[0]
+                  : ''
+              }
+              onChange={(e) =>
+                setProject({
+                  ...project,
+                  dueDate: new Date(e.target.value),
+                })
+              }
+              required
+            />
+          </label>
+          <br />
 
-    const handleBack = () => {
-        setStep((prevStep) => Math.max(prevStep - 1, 0));
-    };
+          <label>
+            Length
+            <input
+              type="number"
+              min={0}
+              value={project.dimensions.length ?? ''}
+              onChange={(e) =>
+                setProject({
+                  ...project,
+                  dimensions: {
+                    ...project.dimensions,
+                    length: e.target.value ? parseFloat(e.target.value) : null,
+                  },
+                })
+              }
+              placeholder="Length"
+              required
+            />
+          </label>
+          <br />
 
-    return (
-        <div style={{ maxWidth: 600, margin: '0 auto', padding: 24 }}>
-            <ProgressStepper steps={steps} currentStep={step} />
+          <label>
+            Width
+            <input
+              type="number"
+              min={0}
+              value={project.dimensions.width ?? ''}
+              onChange={(e) =>
+                setProject({
+                  ...project,
+                  dimensions: {
+                    ...project.dimensions,
+                    width: e.target.value ? parseFloat(e.target.value) : null,
+                  },
+                })
+              }
+              placeholder="Width"
+              required
+            />
+          </label>
+          <br />
 
-            {step === 0 && (
-                <div>
-                    <h2>Project Details</h2>
-                    <label>
-                        Name
-                        <input
-                            type="text"
-                            value={project.title || ''}
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    title: e.target.value,
-                                })
-                            }
-                            placeholder="Project name"
-                            required
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Type
-                        <input
-                            type="text"
-                            value={project.type || ''}
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    type: e.target.value,
-                                })
-                            }
-                            placeholder="e.g. Furniture, Renovation"
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Description
-                        <textarea
-                            value={project.description || ''}
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    description: e.target.value,
-                                })
-                            }
-                            placeholder="Short description"
-                            required
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Planned Budget (USD)
-                        <input
-                            type="number"
-                            value={project.estimatedBudget || ''}
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    estimatedBudget: parseFloat(e.target.value),
-                                })
-                            }
-                            placeholder="e.g. 10000"
-                            min={0}
-                            required
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Due Date
-                        <input
-                            type="date"
-                            value={
-                                project.dueDate
-                                    ? project.dueDate.toISOString().split('T')[0]
-                                    : ''
-                            }
-                            onChange={(e) =>
-                                setProject({
-                                    ...project,
-                                    dueDate: new Date(e.target.value),
-                                })
-                            }
-                            required
-                        />
-                    </label>
-                    <br />
-                    <div>
-                        <label>
-                            Length (m)
-                            <input
-                                type="number"
-                                value={project.dimensions?.length ?? ''}
-                                onChange={(e) =>
-                                    setProject({
-                                        ...project,
-                                        dimensions: {
-                                            ...project.dimensions,
-                                            length:
-                                                parseFloat(e.target.value) || null,
-                                        },
-                                    })
-                                }
-                                placeholder="e.g. 10"
-                                min={0}
-                            />
-                        </label>
-                        <br />
-                        <label>
-                            Width (m)
-                            <input
-                                type="number"
-                                value={project.dimensions?.width ?? ''}
-                                onChange={(e) =>
-                                    setProject({
-                                        ...project,
-                                        dimensions: {
-                                            ...project.dimensions,
-                                            width:
-                                                parseFloat(e.target.value) || null,
-                                        },
-                                    })
-                                }
-                                placeholder="e.g. 20"
-                                min={0}
-                            />
-                        </label>
-                        <br />
-                        <label>
-                            Height (m)
-                            <input
-                                type="number"
-                                value={project.dimensions?.height ?? ''}
-                                onChange={(e) =>
-                                    setProject({
-                                        ...project,
-                                        dimensions: {
-                                            ...project.dimensions,
-                                            height:
-                                                parseFloat(e.target.value) || null,
-                                        },
-                                    })
-                                }
-                                placeholder="e.g. 30"
-                                min={0}
-                            />
-                        </label>
-                    </div>
-                </div>
-            )}
-
-            {step === 1 && (
-                <div>
-                    <h2>Material Calculator</h2>
-                    <MaterialCalculator
-                        materialOptions={materialOptions}
-                        onAddMaterial={handleAddMaterial}
-                    />
-                </div>
-            )}
-
-            {step === 2 && (
-                <div>
-                    <h2>Materials</h2>
-                    <MaterialInput
-                        materials={project.materialIds}
-                        onMaterialsChange={(materials: Project['materialIds']) =>
-                            setProject({ ...project, materialIds: materials })
-                        }
-                        materialOptions={materialOptions}
-                    />
-                    <div style={{ marginTop: 16 }}>
-                        <strong>Estimated Materials Cost:</strong>{' '}
-                        <span style={{ color: 'green' }}>TBD</span>
-                    </div>
-                    <button
-                        type="submit"
-                        disabled={
-                            !isProjectDetailsValid ||
-                            project.materialIds.length === 0
-                        }
-                        onClick={handleSubmit}
-                    >
-                        Create Project
-                    </button>
-                </div>
-            )}
-
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginTop: 32,
-                }}
-            >
-                <button type="button" onClick={handleBack} disabled={step === 0}>
-                    Back
-                </button>
-                {step < steps.length - 1 && (
-                    <button
-                        type="button"
-                        onClick={handleNext}
-                        disabled={
-                            (step === 0 && !isProjectDetailsValid) ||
-                            (step === 1 && project.materialIds.length === 0)
-                        }
-                    >
-                        Next
-                    </button>
-                )}
-            </div>
+          <label>
+            Height
+            <input
+              type="number"
+              min={0}
+              value={project.dimensions.height ?? ''}
+              onChange={(e) =>
+                setProject({
+                  ...project,
+                  dimensions: {
+                    ...project.dimensions,
+                    height: e.target.value ? parseFloat(e.target.value) : null,
+                  },
+                })
+              }
+              placeholder="Height"
+              required
+            />
+          </label>
         </div>
-    );
+      )}
+
+      {step === 1 && (
+        <div>
+          <h2>Material Calculator</h2>
+          <MaterialCalculator
+            materialOptions={materialOptions}
+            onAddMaterial={handleAddMaterial}
+          />
+        </div>
+      )}
+
+      {step === 2 && (
+        <div>
+          <h2>Materials</h2>
+          <MaterialInput
+            materials={project.materialIds}
+            onMaterialsChange={(materialIds: Material[]) =>
+              setProject({ ...project, materialIds })
+            }
+            materialOptions={materialOptions}
+          />
+          <div style={{ marginTop: 16 }}>
+            <strong>Estimated Materials Cost:</strong>{' '}
+            <span style={{ color: 'green' }}>
+              {/* Calculate and display total cost */}
+              {project.materialIds
+                .reduce(
+                  (sum, material) =>
+                    sum + (material.priceUSD ?? 0) * (material.quantity ?? 0),
+                  0
+                )
+                .toFixed(2)}{' '}
+              USD
+            </span>
+          </div>
+          <button
+            type="submit"
+            disabled={
+              !isProjectDetailsValid || project.materialIds.length === 0
+            }
+            onClick={handleSubmit}
+          >
+            Create Project
+          </button>
+        </div>
+      )}
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: 32,
+        }}
+      >
+        <button type="button" onClick={handleBack} disabled={step === 0}>
+          Back
+        </button>
+        {step < steps.length - 1 && (
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={
+              (step === 0 && !isProjectDetailsValid) ||
+              (step === 1 && project.materialIds.length === 0)
+            }
+          >
+            Next
+          </button>
+        )}
+      </div>
+    </div>
+  );
 }

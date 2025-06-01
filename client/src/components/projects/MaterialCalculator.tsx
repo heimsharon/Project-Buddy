@@ -1,79 +1,82 @@
-import React, { useState } from 'react';
-import { unitCoverage } from '../../types/project';
-import { Material } from '../../types/project';
+import React, { useState, useEffect } from "react";
+import { Material } from "../../types/project";
 
-export interface MaterialCalculatorProps {
+interface MaterialCalculatorProps {
   materialOptions: Material[];
-  onAddMaterial: (material: {
-    name: string;
-    category: string;
-    unit: string;
-    unitCoverage: unitCoverage;
-    quantity: number;
-    priceUSD: number;
-    vendor?: string;
-    lastUpdated: Date;
-  }) => void;
-  selectedMaterialId?: string; // optional initial selection
+  onAddMaterial: (material: Material) => void;
 }
 
 const MaterialCalculator: React.FC<MaterialCalculatorProps> = ({
   materialOptions,
   onAddMaterial,
-  selectedMaterialId,
 }) => {
-  const [selected, setSelected] = useState<Material | null>(() => {
-    if (selectedMaterialId) {
-      return materialOptions.find((m) => m.id === selectedMaterialId) || null;
-    }
-    return null;
-  });
-  const [area, setArea] = useState<number | ''>('');
+  const [selectedMaterialId, setSelectedMaterialId] = useState<string>("");
+  const [selected, setSelected] = useState<Material | null>(null);
+  const [area, setArea] = useState<number | "">("");
   const [quantity, setQuantity] = useState<number | null>(null);
 
+  // Debug: Log the materialOptions when component renders
+  useEffect(() => {
+    console.log("materialOptions:", materialOptions);
+  }, [materialOptions]);
+
+  const handleSelectChange = (id: string) => {
+    console.log("Selected ID:", id);
+    setSelectedMaterialId(id);
+    // Try matching by both `id` and `_id` for robustness
+    const mat =
+      materialOptions.find(
+        (m) => m._id === id || (m as any)._id === id
+      ) || null;
+    console.log("Selected material:", mat);
+    setSelected(mat);
+    setQuantity(null);
+  };
+
   const calculate = () => {
-    if (!selected || !area) return;
-    const coveragePerUnit = selected.unitCoverage?.sqft ?? 10; // fallback to 10 sqft
-    const qty = Math.ceil(Number(area) / Number(coveragePerUnit));
+    if (!selected || !area) {
+      console.warn("Calculate failed: selected or area is missing");
+      return;
+    }
+
+    const coveragePerUnit: number = selected.unitCoverage?.sqft ?? 10;
+    console.log("Coverage per unit:", coveragePerUnit);
+
+    const qty = Math.ceil(Number(area) / coveragePerUnit);
+    console.log("Calculated quantity:", qty);
     setQuantity(qty);
   };
 
   const handleAdd = () => {
-    if (!selected || quantity === null) return;
+    if (!selected || quantity === null) {
+      console.warn("Add failed: selected or quantity is missing");
+      return;
+    }
 
     onAddMaterial({
-      name: selected.name,
-      category: selected.category,
-      unit: selected.unit,
-      unitCoverage: selected.unitCoverage,
+      ...selected,
       quantity,
-      priceUSD: selected.priceUSD,
-      vendor: selected.vendor,
-      lastUpdated: selected.lastUpdated,
     });
 
     setSelected(null);
-    setArea('');
+    setSelectedMaterialId("");
+    setArea("");
     setQuantity(null);
   };
 
   return (
-    <div style={{ border: '1px solid #eee', borderRadius: 8, padding: 16 }}>
+    <div style={{ border: "1px solid #eee", borderRadius: 8, padding: 16 }}>
       <h3>Quick Material Calculator</h3>
       <label>
         Material:
         <select
-          value={selected ? selected.id : ''}
-          onChange={(e) => {
-            const mat = materialOptions.find((m) => m.id === e.target.value) || null;
-            setSelected(mat);
-            setQuantity(null);
-          }}
+          value={selectedMaterialId}
+          onChange={(e) => handleSelectChange(e.target.value)}
           style={{ marginLeft: 8 }}
         >
           <option value="">Select material</option>
           {materialOptions.map((opt) => (
-            <option key={opt.id} value={opt.id}>
+            <option key={opt._id || (opt as any)._id} value={opt._id || (opt as any)._id}>
               {opt.name}
             </option>
           ))}
@@ -87,7 +90,7 @@ const MaterialCalculator: React.FC<MaterialCalculatorProps> = ({
           min={1}
           value={area}
           onChange={(e) =>
-            setArea(e.target.value === '' ? '' : Number(e.target.value))
+            setArea(e.target.value === "" ? "" : Number(e.target.value))
           }
           style={{ width: 100, marginLeft: 8 }}
         />
@@ -95,12 +98,16 @@ const MaterialCalculator: React.FC<MaterialCalculatorProps> = ({
       <br />
       <button
         type="button"
-        onClick={calculate}
-        disabled={!selected || !area}
+        onClick={() => {
+          console.log("Calculate button clicked");
+          calculate();
+        }}
+        disabled={!selected || !area || isNaN(Number(area))}
         style={{ marginTop: 8 }}
       >
         Calculate
       </button>
+
       {quantity !== null && selected && (
         <div style={{ marginTop: 12 }}>
           <strong>
