@@ -6,14 +6,12 @@ import Auth from '../utils/auth';
 import React from 'react';
 import '../assets/styles/login.css';
 
-
 const Login = () => {
     const [formState, setFormState] = useState({ email: '', password: '' });
-    const [login, { error, data }] = useMutation(LOGIN_USER);
+    const [login, { error, data, loading }] = useMutation(LOGIN_USER);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-
         setFormState({
             ...formState,
             [name]: value,
@@ -22,17 +20,14 @@ const Login = () => {
 
     const handleFormSubmit = async (event: FormEvent) => {
         event.preventDefault();
-        console.log(formState);
         try {
             const { data } = await login({
                 variables: { ...formState },
             });
-
             Auth.login(data.login.token);
         } catch (e) {
-            console.error(e);
+            // error handled below
         }
-
         setFormState({
             email: '',
             password: '',
@@ -43,7 +38,6 @@ const Login = () => {
         <main className="login-background">
             <div className="login">
                 <h4 className="card-header">Project Buddy Login</h4>
-
                 <div className="form-input">
                     {data ? (
                         <p>
@@ -51,28 +45,40 @@ const Login = () => {
                             <Link to="/">back to the homepage.</Link>
                         </p>
                     ) : (
-                        <form onSubmit={handleFormSubmit}>
+                        <form onSubmit={handleFormSubmit} autoComplete="on">
+                            <label htmlFor="email" className="sr-only">
+                                Email
+                            </label>
                             <input
+                                id="email"
                                 className="form-input"
                                 placeholder="Your email"
                                 name="email"
                                 type="email"
                                 value={formState.email}
                                 onChange={handleChange}
+                                autoFocus
+                                required
                             />
+                            <label htmlFor="password" className="sr-only">
+                                Password
+                            </label>
                             <input
+                                id="password"
                                 className="form-input"
                                 placeholder="Your password"
                                 name="password"
                                 type="password"
                                 value={formState.password}
                                 onChange={handleChange}
+                                required
                             />
                             <button
                                 className="btn btn-block btn-primary"
                                 type="submit"
+                                disabled={loading}
                             >
-                                Submit
+                                {loading ? 'Logging in...' : 'Submit'}
                             </button>
                             <Link
                                 className="btn btn-block btn-secondary"
@@ -80,11 +86,18 @@ const Login = () => {
                             >
                                 Sign Up
                             </Link>
+                            <Link
+                                className="forgot-password-link"
+                                to="/forgot-password"
+                            >
+                                Forgot password?
+                            </Link>
                         </form>
                     )}
-
                     {error && (
-                        <div className="error-message">{error.message}</div>
+                        <div className="error-message" aria-live="polite">
+                            {error.message}
+                        </div>
                     )}
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom'; // <-- Add this
+import { useNavigate } from 'react-router-dom';
 import { QUERY_PROJECTS_BY_USER } from '../utils/queries';
 import { DELETE_PROJECT } from '../utils/mutations';
 import ProjectCard from '../components/projects/ProjectCard';
@@ -14,14 +14,14 @@ const BLANK_EXAMPLE = {
 
 export default function ListProjectsPage() {
     const [userId, setUserId] = useState<string | null>(null);
-    const navigate = useNavigate(); // <-- Add this
+    const navigate = useNavigate();
 
     // Fetch current user
     const fetchUserData = async () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                console.error('No authentication token found');
+                navigate('/login');
                 return;
             }
             const response = await fetch('/graphql', {
@@ -32,34 +32,35 @@ export default function ListProjectsPage() {
                 },
                 body: JSON.stringify({
                     query: `
-            query {
-              currentUser {
-                _id
-                username
-                email
-              }
-            }
-          `,
+                        query {
+                            currentUser {
+                                _id
+                                username
+                                email
+                            }
+                        }
+                    `,
                 }),
             });
             const result = await response.json();
-
             if (result.data && result.data.currentUser) {
                 setUserId(result.data.currentUser._id);
             } else {
-                console.error('No user data found');
+                navigate('/login');
             }
         } catch (error) {
             console.error('Failed to fetch user data:', error);
+            navigate('/login');
         }
     };
 
     useEffect(() => {
         fetchUserData();
+        // eslint-disable-next-line
     }, []);
 
     // Query projects
-    const { loading, error, data } = useQuery(QUERY_PROJECTS_BY_USER, {
+    const { loading, error, data, refetch } = useQuery(QUERY_PROJECTS_BY_USER, {
         variables: { userId },
         skip: !userId,
         fetchPolicy: 'network-only',
@@ -91,57 +92,71 @@ export default function ListProjectsPage() {
             }
         },
         onError(err) {
+            alert('Failed to delete project.');
             console.error('Failed to delete project:', err);
         },
     });
 
     const handleDelete = (projectId: string) => {
-        deleteProject({ variables: { id: projectId } });
+        if (window.confirm('Are you sure you want to delete this project?')) {
+            deleteProject({ variables: { id: projectId } }).then(() =>
+                refetch()
+            );
+        }
     };
 
     const handleExampleProjectClick = () => {
         navigate('/createprojectpage');
     };
 
+    const handleAddProject = () => {
+        navigate('/createprojectpage');
+    };
+
     return (
         <div className="project-list-background">
-            <h1 className="page-title">Your Projects</h1>
-            <p className="page-description">
-                Here you can view and manage your projects.
-            </p>
+            <div className="project-list-container">
+                <h1 className="page-title">Your Projects</h1>
+                <p className="page-description">
+                    Here you can view and manage your projects.
+                </p>
+                <button
+                    className="add-project-btn"
+                    onClick={handleAddProject}
+                    aria-label="Add new project"
+                >
+                    + Add New Project
+                </button>
 
-            <div style={{ maxWidth: 800, margin: '0 auto', padding: '2rem' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    Projects List
-                </h2>
+                <h2 className="projects-list-title">Projects List</h2>
 
                 {!userId ? (
-                    <p>Loading user data...</p>
+                    <div className="project-list-loading">
+                        Loading user data...
+                    </div>
                 ) : loading ? (
-                    <p>Loading projects...</p>
+                    <div className="project-list-loading">
+                        Loading projects...
+                    </div>
                 ) : error && !isInvalidUserIdError ? (
-                    <p>Error loading projects: {error.message}</p>
+                    <div className="project-list-error">
+                        Error loading projects: {error.message}
+                    </div>
                 ) : projects.length === 0 ? (
-                    <div
-                        style={{
-                            border: '2px dashed #bbb',
-                            borderRadius: 12,
-                            padding: '2rem',
-                            textAlign: 'center',
-                            color: '#888',
-                            background: '#f9f9fb',
-                        }}
-                    >
+                    <div className="project-list-empty">
                         <h3>No projects found</h3>
                         <p>Here’s an example project to get you started:</p>
                         <div
+                            className="project-list-example"
+                            onClick={handleExampleProjectClick}
+                            title="Click to create a new project"
+                            tabIndex={0}
+                            role="button"
                             style={{
                                 maxWidth: 320,
                                 margin: '1.5rem auto',
                                 cursor: 'pointer',
                             }}
-                            onClick={handleExampleProjectClick}
-                            title="Click to create a new project"
                         >
                             <ProjectCard
                                 id="example"
@@ -161,74 +176,26 @@ export default function ListProjectsPage() {
                         </p>
                     </div>
                 ) : (
-                    <div
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns:
-                                'repeat(auto-fit, minmax(260px, 1fr))',
-                            gap: '1.5rem',
-                        }}
-                    >
-                        {projects.map(
-                            (
-                                project: {
-                                    _id: string;
-                                    title: string;
-                                    estimatedBudget: number;
-                                    status?: string;
-                                    description?: string;
-                                    type?: string;
-                                    dueDate?: string;
-                                },
-                                idx: number
-                            ) => (
-                                <div
-                                    key={project._id || idx}
-                                    style={{ position: 'relative' }}
-                                >
-                                    <ProjectCard
-                                        id={project._id || idx.toString()}
-                                        name={project.title}
-                                        budget={project.estimatedBudget || 0}
-                                        status={
-                                            (project.status as
-                                                | 'planning'
-                                                | 'in-progress'
-                                                | 'completed'
-                                                | 'not-started') || 'planning'
-                                        }
-                                        description={project.description}
-                                        type={project.type}
-                                        dueDate={project.dueDate}
-                                    />
-                                    <button
-                                        onClick={() =>
-                                            handleDelete(project._id)
-                                        }
-                                        style={{
-                                            position: 'absolute',
-                                            top: 12,
-                                            right: 12,
-                                            background: '#e74c3c',
-                                            color: '#fff',
-                                            border: 'none',
-                                            borderRadius: '50%',
-                                            width: 28,
-                                            height: 28,
-                                            cursor: 'pointer',
-                                            fontWeight: 'bold',
-                                            fontSize: 16,
-                                            boxShadow:
-                                                '0 1px 4px rgba(0,0,0,0.08)',
-                                        }}
-                                        title="Delete Project"
-                                        aria-label="Delete Project"
-                                    >
-                                        ×
-                                    </button>
-                                </div>
-                            )
-                        )}
+                    <div className="project-list-grid">
+                        {projects.map((project: { _id: any; title: string; estimatedBudget: any; status: string; description: string | undefined; type: string | undefined; dueDate: string | undefined; }, idx: { toString: () => any; }) => (
+                            <ProjectCard
+                                key={project._id || idx}
+                                id={project._id || idx.toString()}
+                                name={project.title}
+                                budget={project.estimatedBudget || 0}
+                                status={
+                                    (project.status as
+                                        | 'planning'
+                                        | 'in-progress'
+                                        | 'completed'
+                                        | 'not-started') || 'planning'
+                                }
+                                description={project.description}
+                                type={project.type}
+                                dueDate={project.dueDate}
+                                onDelete={handleDelete}
+                            />
+                        ))}
                     </div>
                 )}
             </div>
