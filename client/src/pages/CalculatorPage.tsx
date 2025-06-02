@@ -57,23 +57,20 @@ function MaterialCalculator() {
           type="number"
           placeholder="Length (ft)"
           className="w-full border p-2"
-          value={length}
-          onChange={(e) => setLength(parseFloat(e.target.value) || 0)}
+          onChange={(e) => setLength(parseFloat(e.target.value))}
         />
         <input
           type="number"
           placeholder="Width (ft)"
           className="w-full border p-2"
-          value={width}
-          onChange={(e) => setWidth(parseFloat(e.target.value) || 0)}
+          onChange={(e) => setWidth(parseFloat(e.target.value))}
         />
         {material === 'concrete' && (
           <input
             type="number"
             placeholder="Depth (ft)"
             className="w-full border p-2"
-            value={depth}
-            onChange={(e) => setDepth(parseFloat(e.target.value) || 0)}
+            onChange={(e) => setDepth(parseFloat(e.target.value))}
           />
         )}
 
