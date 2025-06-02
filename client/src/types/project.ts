@@ -26,7 +26,7 @@ export interface Project {
   description?: string;
   type: string;
   dimensions: Dimensions;
-  estimatedBudget: number | null;
+  estimatedBudget: number;
   actualBudget?: number;
   userId: string;
   materialIds: Material[]; // <-- array of material IDs (string), NOT full Material[]

@@ -36,7 +36,7 @@ export default function CreateProjectPage() {
             width: null,
             height: null,
         },
-        estimatedBudget: null,
+        estimatedBudget: 0,
         userId: user.data._id,
         materialIds: [],
         createdAt: new Date(),
@@ -59,18 +59,21 @@ export default function CreateProjectPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const totalBudget = project.materialIds
-            .reduce(
-                (sum, material) =>
-                    sum + (material.priceUSD ?? 0) * (material.quantity ?? 0),
-                0
-            )
-            .toFixed(2);
+        const totalBudget = project.materialIds.reduce(
+            (sum, material) =>
+                sum + (material.priceUSD ?? 0) * (material.quantity ?? 0),
+            0
+        );if (totalBudget > project.estimatedBudget) {
+            alert(
+                'Total estimated material cost exceeds planned budget. Please adjust your materials or budget.'
+            );
+            return;
+        }
 
         const projectData = {
             ...project,
             userId: user.data._id,
-            budget: totalBudget,
+            estimatedBudget: totalBudget, // ✅ Send as number
             materialIds: project.materialIds.map((m) => m._id),
             budgetItems: project.materialIds.map((material) => ({
                 name: material.name,
@@ -105,6 +108,13 @@ export default function CreateProjectPage() {
     const handleBack = () => {
         setStep((prevStep) => Math.max(prevStep - 1, 0));
     };
+
+    // Calculate total estimated material cost for display
+    const estimatedMaterialsCost = project.materialIds.reduce(
+        (sum, material) =>
+            sum + (material.priceUSD ?? 0) * (material.quantity ?? 0),
+        0
+    );
 
     return (
         <div className="project-background">
@@ -184,7 +194,7 @@ export default function CreateProjectPage() {
                                 Planned Budget (USD)
                                 <input
                                     type="number"
-                                    value={project.estimatedBudget || ''}
+                                    value={project.estimatedBudget}
                                     onChange={(e) =>
                                         setProject({
                                             ...project,
@@ -316,17 +326,7 @@ export default function CreateProjectPage() {
                         <div style={{ marginTop: 16 }}>
                             <strong>Estimated Materials Cost:</strong>{' '}
                             <span style={{ color: 'green' }}>
-                                {/* Calculate and display total cost */}
-                                {project.materialIds
-                                    .reduce(
-                                        (sum, material) =>
-                                            sum +
-                                            (material.priceUSD ?? 0) *
-                                                (material.quantity ?? 0),
-                                        0
-                                    )
-                                    .toFixed(2)}{' '}
-                                USD
+                                {estimatedMaterialsCost.toFixed(2)} USD
                             </span>
                         </div>
                     </div>

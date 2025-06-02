@@ -3,7 +3,7 @@ import React from 'react';
 interface ProjectCardProps {
     id: string;
     name: string;
-    budget: number;
+    estimatedBudget: number;
     status: 'planning' | 'in-progress' | 'completed' | 'not-started';
     description?: string;
     type?: string;
@@ -16,7 +16,7 @@ interface ProjectCardProps {
 export default function ProjectCard({
     id,
     name,
-    budget,
+    estimatedBudget,
     status,
     description,
     type,
@@ -45,7 +45,7 @@ export default function ProjectCard({
             </button>
             <h3>{name}</h3>
             <div className="project-budget">
-                <strong>Budget:</strong> ${budget?.toLocaleString()}
+                <strong>Budget:</strong> ${estimatedBudget}
             </div>
             {description && (
                 <div className="project-description">
