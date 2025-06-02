@@ -4,15 +4,17 @@ on:
     push:
       branches: [main, development]
     pull_request:
-      branches:
-        - main
-        - development
+      branches: [main, development]
        
 jobs:
     ci:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v3
+
+        - name: install dependencies
+          run: |
+            npm install
 
         - name: Deploy
           env:
