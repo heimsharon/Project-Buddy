@@ -12,11 +12,10 @@ const Signup = () => {
         email: '',
         password: '',
     });
-    const [createUser, { error, data }] = useMutation(CREATE_USER);
+    const [createUser, { error, data, loading }] = useMutation(CREATE_USER);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-
         setFormState({
             ...formState,
             [name]: value,
@@ -25,76 +24,96 @@ const Signup = () => {
 
     const handleFormSubmit = async (event: FormEvent) => {
         event.preventDefault();
-
         try {
             const { data } = await createUser({
                 variables: { ...formState },
             });
-            console.log(data);
-            console.log(data.createUser.token);
             Auth.login(data.createUser.token);
         } catch (e) {
-            console.error(e);
-            console.log(error);
+            // error handled below
         }
     };
 
     return (
         <main className="signup-background">
             <div className="signup">
-                    <h4 className="card-header">
-                        Sign Up
-                    </h4>
-                    <div className="form-input">
-                        {data ? (
-                            <p>
-                                Success! You may now head{' '}
-                                <Link to="/">back to the homepage.</Link>
-                            </p>
-                        ) : (
-                            <form onSubmit={handleFormSubmit}>
-                                <input
-                                    className="form-input"
-                                    placeholder="Your username"
-                                    name="username"
-                                    type="text"
-                                    value={formState.username}
-                                    onChange={handleChange}
-                                />
-                                <input
-                                    className="form-input"
-                                    placeholder="Your email"
-                                    name="email"
-                                    type="email"
-                                    value={formState.email}
-                                    onChange={handleChange}
-                                />
-                                <input
-                                    className="form-input"
-                                    placeholder="Your Password"
-                                    name="password"
-                                    type="password"
-                                    value={formState.password}
-                                    onChange={handleChange}
-                                />
-                                <button
-                                    className="btn btn-block btn-primary"
-                                    style={{ cursor: 'pointer' }}
-                                    type="submit"
-                                >
-                                    Submit
-                                </button>
-                            </form>
-                        )}
-
-                        {error && (
-                            <div className="my-3 p-3 bg-danger text-white">
-                                {error.message}
-                            </div>
-                        )}
-                    </div>
+                <h4 className="card-header">Sign Up</h4>
+                <div className="form-input">
+                    {data ? (
+                        <p>
+                            Success! You may now head{' '}
+                            <Link to="/">back to the homepage.</Link>
+                        </p>
+                    ) : (
+                        <form onSubmit={handleFormSubmit} autoComplete="on">
+                            <label htmlFor="username" className="sr-only">
+                                Username
+                            </label>
+                            <input
+                                id="username"
+                                className="form-input"
+                                placeholder="Your username"
+                                name="username"
+                                type="text"
+                                value={formState.username}
+                                onChange={handleChange}
+                                autoFocus
+                                required
+                            />
+                            <label htmlFor="email" className="sr-only">
+                                Email
+                            </label>
+                            <input
+                                id="email"
+                                className="form-input"
+                                placeholder="Your email"
+                                name="email"
+                                type="email"
+                                value={formState.email}
+                                onChange={handleChange}
+                                required
+                            />
+                            <label htmlFor="password" className="sr-only">
+                                Password
+                            </label>
+                            <input
+                                id="password"
+                                className="form-input"
+                                placeholder="Your password"
+                                name="password"
+                                type="password"
+                                value={formState.password}
+                                onChange={handleChange}
+                                required
+                            />
+                            <button
+                                className="btn btn-block btn-primary"
+                                type="submit"
+                                disabled={loading}
+                            >
+                                {loading ? 'Signing up...' : 'Submit'}
+                            </button>
+                            <Link
+                                className="btn btn-block btn-secondary"
+                                to="/login"
+                            >
+                                Sign In
+                            </Link>
+                            <Link
+                                className="forgot-password-link"
+                                to="/forgot-password"
+                            >
+                                Forgot password?
+                            </Link>
+                        </form>
+                    )}
+                    {error && (
+                        <div className="error-message" aria-live="polite">
+                            {error.message}
+                        </div>
+                    )}
                 </div>
-
+            </div>
         </main>
     );
 };

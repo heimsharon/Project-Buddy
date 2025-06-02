@@ -1,3 +1,4 @@
+/* === Background === */
 .signup-background {
     min-height: 100vh;
     background: url('../yellow-tool-board.jpg') no-repeat center center fixed;
@@ -14,11 +15,7 @@
     z-index: 0;
 }
 
-.signup > * {
-    position: relative;
-    z-index: 3;
-}
-
+/* === Signup Card === */
 .signup {
     max-width: 400px;
     margin: 0 auto;
@@ -30,24 +27,49 @@
     z-index: 2;
 }
 
-.signup.card-header {
+.signup > * {
+    position: relative;
+    z-index: 3;
+}
+
+/* === Card Header === */
+.signup .card-header {
     background: #222e3c;
-    color: #fff;
+    color: #2d7c78;
     border-radius: 8px 8px 0 0;
-    font-size: 1.25rem;
+    font-size: 1.55rem;
     font-weight: bold;
     padding: 1rem 2rem;
     text-align: center;
 }
 
+/* === Form Inputs === */
 .signup .form-input {
     width: 100%;
     margin-bottom: 1rem;
     padding: 0.75rem;
     border-radius: 4px;
     border: 1px solid #ccc;
+    font-size: 1rem;
+    background: #ecebeb;
+    box-sizing: border-box;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    caret-color: #1976d2;
 }
 
+.signup .form-input:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.15);
+    outline: none;
+    background: #fff;
+}
+
+.signup .form-input:hover {
+    border-color: #de9115;
+    background: #f7f7f7;
+}
+
+/* === Buttons === */
 .signup .btn-primary {
     display: inline-block;
     background: #de9115;
@@ -88,22 +110,46 @@
     background: #bf570c;
 }
 
-.signup .bg-danger {
+/* === Error Messages === */
+.signup .bg-danger,
+.signup .error-message {
     background: #d32f2f !important;
     color: #fff !important;
     border-radius: 4px;
     margin-top: 1rem;
     padding: 1rem;
     text-align: center;
+    font-weight: bold;
+    border: 1px solid #d32f2f;
 }
 
 .signup .error-message {
-    color: #d32f2f;
     background: #fff0f0;
+    color: #d32f2f;
     border: 1px solid #d32f2f;
-    border-radius: 4px;
-    margin-top: 1rem;
-    padding: 1rem;
-    text-align: center;
-    font-weight: bold;
+}
+
+/* === Accessibility & Links === */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.forgot-password-link {
+    display: block;
+    margin-top: 0.7rem;
+    color: #1976d2;
+    text-align: right;
+    text-decoration: underline;
+    font-size: 0.98rem;
+}
+
+.forgot-password-link:hover {
+    color: #0e7364;
 }

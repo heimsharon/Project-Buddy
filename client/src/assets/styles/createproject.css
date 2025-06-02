@@ -14,7 +14,32 @@
     z-index: 0;
 }
 
-.project>* {
+.project > * {
     position: relative;
     z-index: 3;
+}
+
+.project-inputs-container {
+    background: #ecebeb;
+    border-radius: 12px;
+    padding: 1.2rem 0.8rem;
+    box-shadow: 0 1px 6px rgba(25, 118, 210, 0.06);
+    margin-bottom: 1.2rem;
+    margin-top: 1rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.project-inputs-container h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+    color: #1976d2;
+}
+.create-project-container h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+    color: #2d7c78;
 }

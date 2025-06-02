@@ -1,3 +1,4 @@
+/* === Background === */
 .calculator-background {
     min-height: 100vh;
     background: url('../screws-drillbits.jpg') no-repeat center center fixed;
@@ -5,21 +6,101 @@
     position: relative;
     padding-top: 4rem;
 }
-
 .calculator-background:before {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.469);
+    background: rgba(255, 255, 255, 0.387);
     z-index: 0;
 }
-
-.calculator> * {
+.calculator-background > * {
     position: relative;
     z-index: 3;
 }
 
-.max-w-md {
-    position: relative;
-    z-index: 1;
+/* === Calculator Card === */
+.calculator-card {
+    max-width: 420px;
+    margin: 6vh auto 0 auto;
+    background: #222e3c;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(25, 118, 210, 0.12);
+    padding: 2.5rem 2rem 2rem 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.calculator-card h2 {
+    font-size: 2rem;
+    color: #de9115;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+/* === Form Inputs (match login/signup) === */
+.form-input {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    background: #ecebeb;
+    box-sizing: border-box;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    caret-color: #1976d2;
+    color: #222e3c;
+}
+.form-input:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.15);
+    outline: none;
+    background: #fff;
+}
+.form-input:hover {
+    border-color: #de9115;
+    background: #f7f7f7;
+}
+
+/* === Calculator Fields === */
+.calculator-fields {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+}
+
+/* === Button (match login) === */
+.calculator-btn {
+    background: #de9115;
+    color: #fff;
+    border: 1.7px solid #0e7364;
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 0.5rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background 0.2s;
+}
+.calculator-btn:hover {
+    background: #0c0a8d;
+}
+
+/* === Result === */
+.calculator-result {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+    color: #388e3c;
+    font-weight: 700;
+    background: #e8f5e9;
+    border-radius: 8px;
+    padding: 0.7em 1em;
+    display: inline-block;
 }

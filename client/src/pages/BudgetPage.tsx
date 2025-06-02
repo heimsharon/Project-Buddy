@@ -95,61 +95,68 @@ export default function BudgetPage() {
 
     return (
         <div className="budget-background">
-            <div className="budget-main">
-                <h2>Project Budget</h2>
+            <main className="budget-main">
+                <section className="budget-header-section">
+                    <h1 className="budget-page-title">Project Budget</h1>
+                </section>
 
-                {/* Total Cost Summary */}
-                <BudgetSummaryCard
-                    totalEstimated={totalEstimated}
-                    totalActual={totalActual}
-                    difference={difference}
-                    percentUsed={percentUsed}
-                />
+                <section className="budget-summary-section">
+                    <BudgetSummaryCard
+                        totalEstimated={totalEstimated}
+                        totalActual={totalActual}
+                        difference={difference}
+                        percentUsed={percentUsed}
+                    />
+                </section>
 
-                {/* Budget Tracker Table */}
-                <BudgetTracker
-                    items={budgetItems}
-                    onItemUpdate={handleItemUpdate}
-                    onItemDelete={handleDeleteItem}
-                />
+                <section className="budget-table-section">
+                    <BudgetTracker
+                        items={budgetItems}
+                        onItemUpdate={handleItemUpdate}
+                        onItemDelete={handleDeleteItem}
+                    />
+                </section>
 
-                {/* Action Buttons */}
-                <div className="budget-actions">
-                    <button
-                        onClick={handleAddItem}
-                        className="btn btn-add"
-                        aria-label="Add budget item"
-                        disabled={isSaving}
-                    >
-                        ➕ Add Budget Item
-                    </button>
-                    <button
-                        onClick={handleSave}
-                        className="btn btn-save"
-                        aria-label="Save budget"
-                        disabled={isSaving}
-                    >
-                        💾 {isSaving ? 'Saving...' : 'Save Budget'}
-                    </button>
-                    <button
-                        onClick={handleReset}
-                        className="btn btn-reset"
-                        aria-label="Reset budget"
-                        disabled={isSaving}
-                    >
-                        🔄 Reset
-                    </button>
-                </div>
-                {showSaved && <div className="budget-toast">Budget saved!</div>}
-                {budgetItems.length === 0 && (
-                    <div className="budget-empty-state">
-                        <p>
-                            No budget items yet. Click "Add Budget Item" to get
-                            started!
-                        </p>
+                <section className="budget-actions-section">
+                    <div className="budget-actions">
+                        <button
+                            onClick={handleAddItem}
+                            className="btn btn-add"
+                            aria-label="Add budget item"
+                            disabled={isSaving}
+                        >
+                            ➕ Add Budget Item
+                        </button>
+                        <button
+                            onClick={handleSave}
+                            className="btn btn-save"
+                            aria-label="Save budget"
+                            disabled={isSaving}
+                        >
+                            💾 {isSaving ? 'Saving...' : 'Save Budget'}
+                        </button>
+                        <button
+                            onClick={handleReset}
+                            className="btn btn-reset"
+                            aria-label="Reset budget"
+                            disabled={isSaving}
+                        >
+                            🔄 Reset
+                        </button>
                     </div>
-                )}
-            </div>
+                    {showSaved && (
+                        <div className="budget-toast">Budget saved!</div>
+                    )}
+                    {budgetItems.length === 0 && (
+                        <div className="budget-empty-state">
+                            <p>
+                                No budget items yet. Click "Add Budget Item" to
+                                get started!
+                            </p>
+                        </div>
+                    )}
+                </section>
+            </main>
         </div>
     );
 }
@@ -172,7 +179,7 @@ function BudgetSummaryCard({
             role="region"
             aria-label="Budget summary"
         >
-            <h3>Total Project Cost</h3>
+            <h2 className="budget-summary-title">Total Project Cost</h2>
             <div className="summary-grid">
                 <div className="summary-item">
                     <span className="summary-label">Estimated:</span>
@@ -207,10 +214,17 @@ function BudgetSummaryCard({
                             totalActual > totalEstimated
                                 ? '#e74c3c'
                                 : '#2ecc71',
+                        position: 'relative',
                     }}
-                ></div>
-                <span>{percentUsed.toFixed(1)}% of budget used</span>
+                >
+                    <span className="progress-label">
+                        {percentUsed.toFixed(1)}%
+                    </span>
+                </div>
             </div>
+            <span className="progress-helper-label">
+                {percentUsed.toFixed(1)}% of budget used
+            </span>
         </div>
     );
 }
