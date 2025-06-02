@@ -294,7 +294,7 @@ export default function CreateProjectPage() {
                 )}
 
                 {step === 1 && (
-                    <div>
+                    <div className="material-calculator-section">
                         <h2>Material Calculator</h2>
                         <MaterialCalculator
                             materialOptions={materialOptions}
@@ -304,7 +304,7 @@ export default function CreateProjectPage() {
                 )}
 
                 {step === 2 && (
-                    <div>
+                    <div className="material-input-section">
                         <h2>Materials</h2>
                         <MaterialInput
                             materials={project.materialIds}
@@ -329,24 +329,19 @@ export default function CreateProjectPage() {
                                 USD
                             </span>
                         </div>
-                        <button
-                            type="submit"
-                            disabled={
-                                !isProjectDetailsValid ||
-                                project.materialIds.length === 0
-                            }
-                            onClick={handleSubmit}
-                        >
-                            Create Project
-                        </button>
                     </div>
                 )}
 
+                {/* BUTTONS ALWAYS AT THE BOTTOM */}
                 <div
                     style={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         marginTop: 32,
+                        width: '100%',
+                        maxWidth: 500,
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
                     }}
                 >
                     <button
@@ -356,7 +351,7 @@ export default function CreateProjectPage() {
                     >
                         Back
                     </button>
-                    {step < steps.length - 1 && (
+                    {step < steps.length - 1 ? (
                         <button
                             type="button"
                             onClick={handleNext}
@@ -366,6 +361,17 @@ export default function CreateProjectPage() {
                             }
                         >
                             Next
+                        </button>
+                    ) : (
+                        <button
+                            type="submit"
+                            disabled={
+                                !isProjectDetailsValid ||
+                                project.materialIds.length === 0
+                            }
+                            onClick={handleSubmit}
+                        >
+                            Create Project
                         </button>
                     )}
                 </div>
