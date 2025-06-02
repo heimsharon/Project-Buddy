@@ -18,3 +18,8 @@
     position: relative;
     z-index: 3;
 }
+
+.max-w-md {
+    position: relative;
+    z-index: 1;
+}
