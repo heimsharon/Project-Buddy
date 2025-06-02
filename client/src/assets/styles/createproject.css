@@ -43,3 +43,23 @@
     margin-bottom: 0.8rem;
     color: #2d7c78;
 }
+
+/* Step 2: Material Calculator */
+.material-calculator-section {
+    background: #e3f2fd; /* Light blue */
+    border-radius: 12px;
+    padding: 1.2rem 1rem;
+    box-shadow: 0 1px 6px rgba(25, 118, 210, 0.1);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Step 3: Materials */
+.material-input-section {
+    background: #f1f8e9; /* Light green */
+    border-radius: 12px;
+    padding: 1.2rem 1rem;
+    box-shadow: 0 1px 6px rgba(76, 175, 80, 0.1);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
