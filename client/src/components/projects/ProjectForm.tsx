@@ -3,7 +3,7 @@ import React, { ChangeEvent } from 'react';
 interface ProjectFormValues {
     title: string;
     description: string;
-    estimatedBudget: number | null;
+    estimatedBudget: number;
     dimensions: {
         length: number | null;
         width: number | null;
@@ -109,7 +109,7 @@ export default function ProjectForm({ values, onChange }: ProjectFormProps) {
                     type="number"
                     id="estimatedBudget"
                     name="estimatedBudget"
-                    value={values.estimatedBudget ?? ''}
+                    value={values.estimatedBudget}
                     onChange={handleChange}
                     min="0"
                     step="0.01"

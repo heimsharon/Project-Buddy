@@ -161,7 +161,7 @@ export default function ListProjectsPage() {
                             <ProjectCard
                                 id="example"
                                 name={BLANK_EXAMPLE.name}
-                                budget={Number(BLANK_EXAMPLE.plannedBudget)}
+                                estimatedBudget={Number(BLANK_EXAMPLE.plannedBudget)}
                                 status={
                                     BLANK_EXAMPLE.status as
                                         | 'planning'
@@ -177,12 +177,12 @@ export default function ListProjectsPage() {
                     </div>
                 ) : (
                     <div className="project-list-grid">
-                        {projects.map((project: { _id: any; title: string; estimatedBudget: any; status: string; description: string | undefined; type: string | undefined; dueDate: string | undefined; }, idx: { toString: () => any; }) => (
+                        {projects.map((project: { _id: any; title: string; estimatedBudget: number; status: string; description: string | undefined; type: string | undefined; dueDate: string; }, idx: { toString: () => any; }) => (
                             <ProjectCard
                                 key={project._id || idx}
                                 id={project._id || idx.toString()}
                                 name={project.title}
-                                budget={project.estimatedBudget || 0}
+                                estimatedBudget={project.estimatedBudget}
                                 status={
                                     (project.status as
                                         | 'planning'

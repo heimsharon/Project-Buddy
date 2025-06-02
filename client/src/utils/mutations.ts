@@ -56,6 +56,7 @@ export const CREATE_PROJECT = gql`
     $title: String!,
     $description: String,
     $type: String,
+    $estimatedBudget: Float,
     $dimensions: DimensionsInput,
     $dueDate: String,
     $materialIds: [ID],
@@ -65,6 +66,7 @@ export const CREATE_PROJECT = gql`
       title: $title,
       description: $description,
       type: $type,
+      estimatedBudget: $estimatedBudget,
       dimensions: $dimensions,
       dueDate: $dueDate,
       materialIds: $materialIds,
@@ -74,6 +76,7 @@ export const CREATE_PROJECT = gql`
       title
       description
       type
+      estimatedBudget
       dimensions {
         length
         width

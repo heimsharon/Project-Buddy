@@ -65,6 +65,7 @@ export const QUERY_PROJECTS_BY_USER = gql`
       _id
       createdAt
       description
+      estimatedBudget
       dimensions {
         height
         length
