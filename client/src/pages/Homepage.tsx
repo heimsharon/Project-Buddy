@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../assets/styles/homepage.css';
-import projectBuddyLogo from '../assets/project-buddy-logo.jpg';
+
 
 // Dummy authentication check function (replace with your real auth logic)
 function isUserSignedIn() {
@@ -19,13 +19,7 @@ export default function HomePage() {
 
     return (
         <div className="home">
-            {/* Hero Section: App logo, headline, and call-to-action */}
-            <section className="hero">
-                <img
-                    src={projectBuddyLogo}
-                    alt="Project Buddy Logo"
-                    className="hero-logo"
-                />
+
 
                 <div className="hero-content">
                     <h1>Plan DIY Projects Like a Pro</h1>
@@ -39,7 +33,6 @@ export default function HomePage() {
                         Get Started
                     </Link>
                 </div>
-            </section>
 
             {/* Project Gallery Features: Quick links to main app features */}
             <h2 style={{ textAlign: 'center' }}>Features</h2>
