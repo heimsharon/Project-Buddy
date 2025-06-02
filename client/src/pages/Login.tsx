@@ -5,7 +5,7 @@ import { LOGIN_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 import React from 'react';
 import '../assets/styles/login.css';
-import logo from '../assets/project-buddy-with-tagline.jpg';
+
 
 const Login = () => {
     const [formState, setFormState] = useState({ email: '', password: '' });
@@ -43,11 +43,7 @@ const Login = () => {
         <main className="login-background">
             <div className="login">
                 <h4 className="card-header">Project Buddy Login</h4>
-                <img
-                    src={logo}
-                    alt="Project Buddy Logo"
-                    className="login-logo"
-                />
+
                 <div className="form-input">
                     {data ? (
                         <p>
