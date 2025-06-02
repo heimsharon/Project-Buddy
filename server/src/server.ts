@@ -33,14 +33,14 @@ const startApolloServer = async () => {
 
     app.use('/api/chat', chatRouter);
 
-    if (process.env.NODE_ENV === 'production') {
-        app.use(express.static(path.join(__dirname, '../../client/dist')));
+    
+    app.use(express.static(path.join(__dirname, '../../client/dist')));
 
     app.get('*', (_req, res) => {
       res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
     });
     console.log('Running in production mode at http://localhost:3001');
-  }
+  
 
   app.use('/graphql', expressMiddleware(server, {
     context: async ({ req, res }) => {
