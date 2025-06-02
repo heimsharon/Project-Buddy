@@ -86,7 +86,7 @@ export default function CreateProjectPage() {
         variables: { ...projectData },
       });
       console.log('Project created:', data.createProject);
-      navigate('/projects');
+      navigate('/listprojectspage');
     } catch (error) {
       console.error('Error creating project:', error);
     }
