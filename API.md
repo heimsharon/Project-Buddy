@@ -1,166 +1,261 @@
 # 📡 Project-Buddy API Documentation
 
-> **Note:**
-> These API endpoints are intended for use in development mode and can be tested using API clients such as [Insomnia](https://insomnia.rest/) or [Postman](https://www.postman.com/).
-> Make sure your server is running, your database is seeded with initial data, and you have a valid JWT token for authenticated routes.
+> > **Note:**
+> > Project-Buddy uses a **GraphQL API**.
+> > You can explore and test the API using [Apollo Studio](https://studio.apollographql.com/), [Insomnia](https://insomnia.rest/), or [Postman](https://www.postman.com/) with the `/graphql` endpoint.
+> > Make sure your server is running, your database is seeded with initial data, and you have a valid JWT token for authenticated operations.
 
 ---
 
 ## 🛡️ Authentication
 
-### 🔑 POST `/api/auth/login`
+All authenticated requests require a JWT token in the `Authorization` header:
 
-- **Request:**
-    `{ "email": "user@example.com", "password": "yourpassword" }`
-- **Response:**
-    `{ "token": "JWT_TOKEN", "user": { ... } }`
-- **Errors:**
-  - `401 Unauthorized`: Invalid credentials
-  - `400 Bad Request`: Missing required fields
+---
 
-### 🆕 POST `/api/auth/signup`
+### 🔑 Login Mutation
 
-- **Request:**
-    `{ "username": "newuser", "email": "user@example.com", "password": "yourpassword" }`
-- **Response:**
-    `{ "token": "JWT_TOKEN", "user": { ... } }`
-- **Errors:**
-  - `400 Bad Request`: Missing or invalid fields
-  - `409 Conflict`: Email already in use
+```graphql
+mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+        token
+        user {
+            _id
+            username
+            email
+        }
+    }
+}
+```
+
+---
+
+### 🆕 Sign Up Mutation
+
+```graphql
+mutation Signup($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
+        token
+        user {
+            _id
+            username
+            email
+        }
+    }
+}
+```
 
 ---
 
 ## 📁 Projects
 
-### 📄 GET `/api/projects`
+📄 Get All Projects
 
-- Get all projects for the authenticated user (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
-- **Errors:**
-  - `401 Unauthorized`: Missing or invalid token
+```graphql
 
-### ➕ POST `/api/projects`
+getAllProjects {
+                _id
+                    title
+                    description
+                    type
+                    dimensions { length width height }
+                    estimatedBudget
+                    dueDate
+                    materialIds { _id name quantity priceUSD }
+                    createdAt
+            }
+```
 
-- Create a new project (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
-- **Request Example:**
-    `{ "name": "New Project", "budget": 5000 }`
-- **Errors:**
-  - `400 Bad Request`: Missing required fields
+➕ Create Project
 
-### 📝 PUT `/api/projects/:id`
+```graphql
+mutation CreateProject($input: ProjectInput!) {
+    createProject(input: $input) {
+        _id
+        title
+        description
+        estimatedBudget
+        materialIds {
+            name
+            quantity
+            priceUSD
+        }
+    }
+}
+```
 
-- Update a project (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
-- **Request Example:**
-    `{ "name": "Updated Project Name" }`
-- **Errors:**
-  - `404 Not Found`: Project not found
+📝 Update Project
 
-### ❌ DELETE `/api/projects/:id`
+```graphql
+mutation UpdateProject($id: ID!, $input: ProjectInput!) {
+    updateProject(_id: $id, input: $input) {
+        _id
+        title
+        description
+    }
+}
+```
 
-- Delete a project (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
-- **Errors:**
-  - `404 Not Found`: Project not found
+❌ Delete Project
 
----
-
-## 📝 Tasks
-
-### ➕ POST `/api/projects/:projectId/tasks`
-
-- Add a task to a project (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
-- **Request Example:**
-    `{ "title": "Install drywall", "completed": false }`
-
-### 📝 PUT `/api/projects/:projectId/tasks/:taskId`
-
-- Update a task (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
-- **Request Example:**
-    `{ "title": "Paint walls", "completed": true }`
-
-### ❌ DELETE `/api/projects/:projectId/tasks/:taskId`
-
-- Delete a task (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
+```graphql
+mutation DeleteProject($id: ID!) {
+    deleteProject(_id: $id) {
+        _id
+        title
+    }
+}
+```
 
 ---
 
 ## 🛒 Materials
 
-### ➕ POST `/api/projects/:projectId/materials`
+📄 Get All Materials
 
-- Add a material to a project (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
-- **Request Example:**
-    `{ "name": "2x4 Lumber", "quantity": 10, "price": 3.50 }`
+```graphql
+query {
+    getAllMaterials {
+        _id
+        name
+        category
+        priceUSD
+    }
+}
+```
 
-### 📝 PUT `/api/projects/:projectId/materials/:materialId`
+➕ Add Material to Project
 
-- Update a material (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
-- **Request Example:**
-    `{ "quantity": 12 }`
+```graphql
+mutation AddMaterial($projectId: ID!, $materialInput: MaterialInput!) {
+    addMaterialToProject(projectId: $projectId, materialInput: $materialInput) {
+        _id
+        materialIds {
+            name
+            quantity
+            priceUSD
+        }
+    }
+}
+```
 
-### ❌ DELETE `/api/projects/:projectId/materials/:materialId`
+📝 Update Material
 
-- Delete a material (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
+```graphql
+mutation UpdateMaterial($materialId: ID!, $input: MaterialInput!) {
+    updateMaterial(_id: $materialId, input: $input) {
+        _id
+        name
+        quantity
+        priceUSD
+    }
+}
+```
+
+❌ Delete Material
+
+```graphql
+mutation DeleteMaterial($materialId: ID!) {
+    deleteMaterial(_id: $materialId) {
+        _id
+        name
+    }
+}
+```
+
+---
+
+## 📝 Tasks
+
+➕ Add Task to Project
+
+```graphql
+mutation AddTask($projectId: ID!, $taskInput: TaskInput!) {
+    addTaskToProject(projectId: $projectId, taskInput: $taskInput) {
+        _id
+        tasks {
+            _id
+            title
+            completed
+        }
+    }
+}
+```
+
+📝 Update Task
+
+```graphql
+mutation UpdateTask($taskId: ID!, $input: TaskInput!) {
+    updateTask(_id: $taskId, input: $input) {
+        _id
+        title
+        completed
+    }
+}
+```
+
+❌ Delete Task
+
+```graphql
+mutation DeleteTask($taskId: ID!) {
+    deleteTask(_id: $taskId) {
+        _id
+        title
+    }
+}
+```
 
 ---
 
 ## 👤 Users
 
-### 🙋‍♂️ GET `/api/users/me`
+🙋‍♂️ Get Current User
 
-- Get the currently authenticated user's profile (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
+```graphq
+
+query {
+  me {
+    _id
+    username
+    email
+    avatar
+    createdAt
+  }
+}
+```
 
 ---
 
 ## 🤖 Chatbot
 
-### 💬 POST `/api/chat`
+💬 Ask the Project-Buddy Chatbot
 
-- Ask the Project-Buddy chatbot a question (🔒 requires JWT)
-- **Headers:**
-    `Authorization: Bearer JWT_TOKEN`
-- **Request:**
-    `{ "message": "How much drywall do I need for a 10x12 room?" }`
-- **Response:**
-    `{ "response": "For a 10x12 room, you will need approximately..." }`
+```graphq
+
+mutation AskChatbot($message: String!) {
+  askChatbot(message: $message) {
+    response
+  }
+}
+```
 
 ---
 
-## 🚨 Common Errors
+## 🚨 Error Handling
 
-- `401 Unauthorized`: Missing or invalid JWT token.
-- `400 Bad Request`: Missing required fields or invalid data.
-- `404 Not Found`: Resource does not exist.
-- `409 Conflict`: Duplicate resource (e.g., email already registered).
+Errors are returned in the errors array of the GraphQL response.
+Common errors:
+401 Unauthorized: Invalid or missing JWT token.
+400 Bad Request: Missing or invalid fields.
+404 Not Found: Resource does not exist.
+409 Conflict: Duplicate resource (e.g., email already registered).
 
 ---
 
 ## ℹ️ Notes
 
-- All endpoints requiring authentication expect a valid JWT in the `Authorization` header.
-- Replace `:id`, `:projectId`, `:taskId`, and `:materialId` with actual IDs.
-- This is a summary; see the codebase for full details and validation rules.
-
----
+All mutations and queries requiring authentication expect a valid JWT in the Authorization header.
+Use the GraphQL Playground or Apollo Studio for schema introspection and testing.
+Replace variables in queries/mutations with your actual data.
 
 © 2025 Project-Buddy Group
