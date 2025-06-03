@@ -70,11 +70,9 @@ Built with a TypeScript/React frontend and a Node/Express/MongoDB backend.
 
 ## 🖼️ Media
 
-- **🎬 [Recorded Demo Video](#)** <!-- Replace with actual video link -->
-
 - **🖼️ Screenshots:**
 
-    ![Project Dashboard](./client/src/assets/screenshots/dashboard.png)
+    ![Project-Buddy Homepage](./images/homepage.png)
 
 ---
 
