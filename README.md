@@ -8,12 +8,6 @@ _A full-stack project management app for DIY and construction projects, featurin
 ![MongoDB](https://img.shields.io/badge/MongoDB-Database-green)
 ![Student Project](https://img.shields.io/badge/student_project-group_2-yellow)
 
-**🚀 Live Demo:** [Project-Buddy on Render](#) <!-- Add deployed link here -->
-
-> **Demo Login:**
-> Username: `DemoUser`
-> Password: `password123`
-
 ---
 
 > **This project was developed as a group assignment for a school course.**
@@ -58,13 +52,6 @@ Built with a TypeScript/React frontend and a Node/Express/MongoDB backend.
 - 💰 Budget and material tracking
 - ✅ Task and checklist management
 - 📱 Responsive design for desktop and mobile
-
-| Feature            | Status |
-| ------------------ | ------ |
-| Chatbot Assistant  | ✅     |
-| Project Management | ✅     |
-| Budget Tracking    | ✅     |
-| Responsive Design  | ✅     |
 
 ---
 
@@ -293,10 +280,10 @@ This project is licensed under the Apache 2.0 License.
     - Try running `npm install` in both 📁 [client](http://_vscodecontentref_/0) and 📁 [server](http://_vscodecontentref_/1) if you see missing module errors.
     - If you need to reset the database, you can re-run the seed command:
 
-      ```bash
-        cd server
-        npm run seed
-      ```
+            ```bash
+              cd server
+              npm run seed
+            ```
 
 ---
 
@@ -320,15 +307,15 @@ Portions of this project were developed using starter code provided by [edX Boot
 
 Created by:
 
-- **Anthony Langdon** — SCRUM & Frontend
+- **Anthony Langdon** — Frontend
     GitHub: [TonesTheDude](https://github.com/TonesTheDude)
 - **Mark Osgood** — Frontend
     GitHub: [Osgravy](https://github.com/Osgravy)
 - **Shane Anderson** — Backend
     GitHub: [Hiemdier](https://github.com/Hiemdier)
-- **Leland Mitchell** — Backend
+- **Leland Mitchell** — Backend/Frontend Pairing
     GitHub: [LealandMitchell](https://github.com/LealandMitchell)
-- **Sharon Heim** — AI Bot/Utility
+- **Sharon Heim** — AI Bot/Frontend/CSS
     GitHub: [heimsharon](https://github.com/heimsharon)
 
 ---
