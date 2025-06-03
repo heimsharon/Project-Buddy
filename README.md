@@ -59,22 +59,14 @@ Built with a TypeScript/React frontend and a Node/Express/MongoDB backend.
 - ✅ Task and checklist management
 - 📱 Responsive design for desktop and mobile
 
-| Feature            | Status |
-| ------------------ | ------ |
-| Chatbot Assistant  | ✅     |
-| Project Management | ✅     |
-| Budget Tracking    | ✅     |
-| Responsive Design  | ✅     |
-
 ---
 
 ## 🖼️ Media
 
-- **🎬 [Recorded Demo Video](#)** <!-- Replace with actual video link -->
 
 - **🖼️ Screenshots:**
 
-    ![Project Dashboard](./client/src/assets/screenshots/dashboard.png)
+    ![Project Dashboard](../Project-Buddy/client/src/assets/homepage%20cap.png)
 
 ---
 
@@ -322,15 +314,15 @@ Portions of this project were developed using starter code provided by [edX Boot
 
 Created by:
 
-- **Anthony Langdon** — SCRUM & Frontend
+- **Anthony Langdon** —  Frontend
     GitHub: [TonesTheDude](https://github.com/TonesTheDude)
 - **Mark Osgood** — Frontend
     GitHub: [Osgravy](https://github.com/Osgravy)
 - **Shane Anderson** — Backend
     GitHub: [Hiemdier](https://github.com/Hiemdier)
-- **Leland Mitchell** — Backend
+- **Leland Mitchell** — Backend/Frontend Pairing
     GitHub: [LealandMitchell](https://github.com/LealandMitchell)
-- **Sharon Heim** — AI Bot/Utility
+- **Sharon Heim** — AI Bot/Frontend/CSS
     GitHub: [heimsharon](https://github.com/heimsharon)
 
 ---
