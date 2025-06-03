@@ -59,7 +59,7 @@ Built with a TypeScript/React frontend and a Node/Express/MongoDB backend.
 
 - **🖼️ Screenshots:**
 
-    ![Project-Buddy Homepage](client/src/assets/screenshots/homepage.png)
+    ![Project-Buddy Homepage](./images/homepage.png)
 
 ---
 

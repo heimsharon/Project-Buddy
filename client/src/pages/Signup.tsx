@@ -1,36 +1,44 @@
-import { useState, type FormEvent, type ChangeEvent } from 'react';
+import React, { useState, type FormEvent, type ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { CREATE_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
-import React from 'react';
 import '../assets/styles/signup.css';
 
-const Signup = () => {
+const Signup: React.FC = () => {
     const [formState, setFormState] = useState({
         username: '',
         email: '',
         password: '',
     });
+
     const [createUser, { error, data, loading }] = useMutation(CREATE_USER);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setFormState({
-            ...formState,
+        console.log(`Changing: ${name} = ${value}`); // For debugging
+        setFormState((prevState) => ({
+            ...prevState,
             [name]: value,
-        });
+        }));
     };
 
     const handleFormSubmit = async (event: FormEvent) => {
         event.preventDefault();
+        console.log('Submitting form state:', formState); // For debugging
+
         try {
             const { data } = await createUser({
                 variables: { ...formState },
             });
-            Auth.login(data.createUser.token);
-        } catch (e) {
-            // error handled below
+
+            if (data && data.createUser && data.createUser.token) {
+                Auth.login(data.createUser.token);
+            } else {
+                console.error('No token returned from createUser mutation.');
+            }
+        } catch (err) {
+            console.error('Signup error:', err);
         }
     };
 
@@ -45,7 +53,7 @@ const Signup = () => {
                             <Link to="/">back to the homepage.</Link>
                         </p>
                     ) : (
-                        <form onSubmit={handleFormSubmit} autoComplete="on">
+                        <form onSubmit={handleFormSubmit} autoComplete="off">
                             <label htmlFor="username" className="sr-only">
                                 Username
                             </label>
@@ -60,6 +68,7 @@ const Signup = () => {
                                 autoFocus
                                 required
                             />
+
                             <label htmlFor="email" className="sr-only">
                                 Email
                             </label>
@@ -73,6 +82,7 @@ const Signup = () => {
                                 onChange={handleChange}
                                 required
                             />
+
                             <label htmlFor="password" className="sr-only">
                                 Password
                             </label>
@@ -86,6 +96,7 @@ const Signup = () => {
                                 onChange={handleChange}
                                 required
                             />
+
                             <button
                                 className="btn btn-block btn-primary"
                                 type="submit"
@@ -93,12 +104,14 @@ const Signup = () => {
                             >
                                 {loading ? 'Signing up...' : 'Submit'}
                             </button>
+
                             <Link
                                 className="btn btn-block btn-secondary"
                                 to="/login"
                             >
                                 Sign In
                             </Link>
+
                             <Link
                                 className="forgot-password-link"
                                 to="/forgot-password"
